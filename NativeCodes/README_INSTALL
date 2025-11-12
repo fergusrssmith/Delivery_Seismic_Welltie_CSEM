@@ -1,0 +1,125 @@
+These native codes, including the DeliveryMassager will in general
+need to be compiled. There are two common open-source library
+dependencies on Linux and its *nix friends: (a) glib2-dev (b) libxml2.
+Be sure to install these.
+See also README_PORTABILITY.
+
+Instructions:
+
+(1) Define the environment variable $CSIRO_OSTYPE
+    for platform specific identification: Linux-i686-unknown, 
+    Darwin-Power-Macintosh-unknown (for MacOSX) etc.
+    We do 
+
+    [csh]% setenv CSIRO_OSTYPE `uname -smp | sed 's/ /-/g;s/-[^-]*$/-unknown/g'`
+    [sh]%  export CSIRO_OSTYPE=`uname -smp | sed 's/ /-/g;s/-[^-]*$/-unknown/g'`
+
+    On common intel Linuxes, you get:  $CSIRO_OSTYPE = Linux-i686-unknown
+
+    Set this variable permanently in your .cshrc or .profile
+
+    With respect to the level of this README_INSTALL, 
+    put ./bin/$CSIRO_OSTYPE  in your path: several binaries
+    (deliveryMassager, a utility called eclipseXsection, etc)
+	end up here.
+
+    If you don't like our choice of CSIRO_OSTYPE (the string hack from % uname -smp)
+    set it as you please, but you must have a ./config/Makefile.ostype.$CSIRO_OSTYPE 
+    file with sensible choices for your platform. I suggest you copy
+    or link to an existing one in the ./config directory for a closely related platform.
+
+(2) At the level of this README, type
+
+    % cd src/lib
+    % make make depend fast install
+	% cd ../bin
+	% make make depend fast install
+
+    which should compile optimised binaries and install everything.
+    The binaries will end up in ./bin/$CSIRO_OSTYPE with respect 
+    to this level of this README (i.e. at the same level as ./src).
+    
+
+    *** I.e. you should put ./bin/$CSIRO_OSTYPE in your path. ****
+	Or link to the binaries some other way.
+
+_____________________________________________________________________________________________
+
+Compilation issues:
+
+a) Dependencies
+
+    The code uses the standard GNOME xml libraries, and ATLAS, so you need as third party stuff:
+
+    1) libxml2-devel 
+        Standard GNOME xml toolkit, defacto 
+        on most linux distributions, or google it; at last check -
+        http://xmlsoft.org/)
+        This distribution will compile against the standard RPM.
+
+    2) ATLAS linear algebra library
+        The relevant bits are distributed in this tarball for Intel 32 bit Pentium 4's,
+        and Mac OSX (PowerPC), but you will need to substitute the header and library files for different
+        architectures by pulling down prebuilt ATLAS tarballs or building your own:
+        http://math-atlas.sourceforge.net/
+        These pieces go in
+            Libraries (lib*.a): ./src/lib/ATLAS/lib/$CSIRO_OSTYPE
+            Headers (*.h):      ./src/lib/ATLAS/include/
+
+	    For OSX (Macs), ATLAS also comes as part of the development environment for those
+       	who may have trouble building ATLAS on newer macs. Provided you have the
+	    development environment and "Accelerate" framework in place, the build will detect
+        "Darwin" as part of your $CSIRO_OSTYPE and try to link against these libraries.
+        To check if you have this, see if you have the headers cblas.h, clapack.h in
+	    /System/Library/Frameworks/vecLib.framework/Headers/
+
+
+
+b)
+    Makefile targets:
+
+    To clean up...
+    % cd src
+    % make clean
+
+    Note that 
+    % make make depend 
+    builds system-dependent makefiles for your platform and should need
+    to be done only once. Once these are in place, subsequent builds require only
+    % make [fast|all|debug]  [install]
+
+    To compile unoptimised, debuggable or optimised code, various permutations of
+    % make all
+    % make debug
+    % make fast
+    should work. Try these if optimisation options give trouble (or better yet, fix
+    your platform specific options in ./config/Makefile.ostype.$CSIRO_OSTYPE).
+
+
+
+c) Altering the make files:
+
+Any unusual compilation flags appear in Makefile.base at the specific
+library or binary node of the src tree. Common (say compiler specific)
+flags appear in
+
+./config/Makefile.ostype.$CSIRO_OSTYPE 
+
+These can be rejigged if required, but the standard choices are
+probably sane.
+
+If you need to alter some particular Makefile.base, after changes, do a 
+
+% make -f Makefile.base
+
+then the usual (e.g.)
+
+% make depend all install, or
+% make depend fast install
+
+afterwards. Individual pieces can be installed with  'make install'
+at their respective levels, of course. The binaries won't build
+until a successful 'make install' of all the libraries has gone
+through also.
+
+

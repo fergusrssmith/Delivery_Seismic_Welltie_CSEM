@@ -1,0 +1,34 @@
+
+CC			= gcc
+SYS_CFLAGS		= -Wall -Wno-unused
+SYS_CFLAGS_DEBUG	= -g -p -DDEBUG
+SYS_CFLAGS_OPTIMISE	= -O3
+
+CPP			= g++
+SYS_CPPFLAGS		= -Wall
+SYS_CPPFLAGS_DEBUG	= -g -p -DDEBUG
+SYS_CPPFLAGS_OPTIMISE	= -O3
+
+FC			= g77
+SYS_FFLAGS		=
+SYS_FFLAGS_DEBUG	= -g -p
+SYS_FFLAGS_OPTIMISE	=
+
+LD			= ld
+# -Wl,--gc-sections is a gcc linking flag for eliminating unused code in object 
+# binaries, so as to reduce code size
+# It can be omitted if not supported by other compilers
+# (P.S. FC6 has a ld bug thrown when --gc-sections is used)
+
+# SYS_LDFLAGS	=  -Wl,--gc-sections
+SYS_LDFLAGS	=
+
+
+SYS_LDFLAGS_DEBUG	= -g -p
+SYS_LDFLAGS_OPTIMISE	=
+
+AR			= ar
+SYS_ARFLAGS		=
+
+RM			= rm -f
+CP			= cp -fp

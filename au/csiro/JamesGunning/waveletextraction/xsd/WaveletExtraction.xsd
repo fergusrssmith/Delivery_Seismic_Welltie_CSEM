@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <!-- String with optional "use"=boolean attribute (for optional shear logs) -->
+  <xsd:complexType name="stringPlusUseAttr">
+	<xsd:simpleContent>
+	  <xsd:extension base="xsd:string">
+<!--		<xsd:attribute name="use" type="xsd:boolean" default="true" minOccurs="0"/> -->
+	  </xsd:extension>
+	</xsd:simpleContent>
+  </xsd:complexType>
+  
+  <xsd:simpleType name="timeUnitString"> 
+        <xsd:restriction base="xsd:string"> 
+          <xsd:enumeration value="s"/> 
+          <xsd:enumeration value="ms"/> 
+        </xsd:restriction> 
+  </xsd:simpleType> 
+
+  <xsd:complexType name="filenameAndTimeUnit">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="time_unit" type="timeUnitString" default="ms"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType> 
+
+
+  <xsd:complexType name="timeUnitsType">
+        <xsd:sequence>  
+          <xsd:element name="s" type="xsd:float" default="0" minOccurs="1"/>
+          <xsd:element name="ms" type="xsd:float" default="0" minOccurs="0"/>
+        </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="wavelet_extraction">
+	<xsd:complexType>
+	  <xsd:sequence>
+		<xsd:element name="wavelet_extraction_info">
+		  <xsd:complexType> 
+			<xsd:sequence>
+			  <xsd:element name="name" type="xsd:string" default="inversion title"/>
+			  <xsd:element name="project" type="xsd:string" default="project name"/>
+			  <xsd:element name="author" type="xsd:string" default="my name"/>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+		<xsd:element name="well_info">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="well" minOccurs="1" maxOccurs="unbounded">
+				<xsd:complexType>
+				  <xsd:sequence>
+					<xsd:element name="name" type="xsd:string" default="well_name"/>
+					<xsd:element name="well_log_info">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="well_log_filename" type="xsd:string" default="well_log.txt"/>
+						  <xsd:element name="measured_depth_keyword" type="xsd:string" default="MD"/>
+						  <xsd:element name="sonic_DT_keyword" type="xsd:string" default="DT"/>
+						  <!-- <xsd:element name="shear_sonic_DT_keyword" type="xsd:string" default="MD_shear"/> -->
+						  <xsd:element name="shear_sonic_DT_keyword" type="stringPlusUseAttr" default="MD_shear" minOccurs="0"/>
+						  <xsd:element name="density_keyword" type="xsd:string" default="RHOB"/>
+						  <xsd:element name="gamma_keyword" type="xsd:string" default="GR" minOccurs="0" maxOccurs="1"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="well_survey_info">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="well_survey_filename" type="xsd:string" default="well_survey.txt"/>
+						  <xsd:element name="total_vertical_depth_keyword" type="xsd:string" default="TVD"/>
+						  <xsd:element name="measured_depth_keyword" type="xsd:string" default="MD"/>
+						  <xsd:element name="x_position_keyword" type="xsd:string" default="X"/>
+						  <xsd:element name="y_position_keyword" type="xsd:string" default="Y"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="checkshot_info">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="checkshot_filename" type="xsd:string" default="checkshots.txt"/>
+						  <xsd:element name="checkshot_time_keyword" type="xsd:string" default="T"/>
+						  <xsd:element name="sigma_checkshot_time_keyword" type="xsd:string" default="sigma_T"/>
+						  <xsd:element name="measured_depth_keyword" type="xsd:string" default="MD"/>
+						</xsd:sequence>
+						<xsd:attribute name="automake-from-sonic-log" use="optional" type="xsd:boolean" default="false"/>
+						<xsd:attribute name="model-select-knots" use="optional" type="xsd:boolean" default="false"/>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="markers_info" minOccurs="0">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="markers_filename" type="xsd:string" default="markers.txt"/>
+						  <xsd:element name="marker_time_keyword" type="xsd:string" default="delta_T"/>
+						  <xsd:element name="sigma_marker_time_keyword" type="xsd:string" default="sigma_delta_T"/>
+						  <xsd:element name="measured_depth_keyword" type="xsd:string" default="MD"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="seismic_stack_info" minOccurs="1" maxOccurs="5">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="seismic_minicube_filename" type="xsd:string" default="seismic.su"/>
+						  <xsd:element name="min_offset" type="xsd:float" default="0"/>
+						  <xsd:element name="max_offset" type="xsd:float" default="1000"/>
+						  <xsd:element name="reflector_time_ms" type="xsd:float" default="2000"/>
+						  <xsd:element name="stack_velocity" type="xsd:float" default="8000"/>
+						  <xsd:element name="time_to_depth_local_systematic_time_shift_mean_ms" minOccurs="0" maxOccurs="1" type="xsd:float" default="0"/>
+						  <xsd:element name="time_to_depth_local_systematic_time_shift_uncertainty_ms" minOccurs="0" maxOccurs="1" type="xsd:float" default="0"/>
+						  <xsd:element name="two-D-utm-conversions" minOccurs="0" maxOccurs="1">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="point" minOccurs="2" maxOccurs="2">
+								  <xsd:complexType>
+									<xsd:sequence>
+									  <xsd:element name="x" type="xsd:float" default="0"/>
+									  <xsd:element name="y" type="xsd:float" default="0"/>
+									  <xsd:element name="inline" type="xsd:float" default="0"/>
+									  <xsd:element name="xline" type="xsd:float" default="0"/>
+									</xsd:sequence>
+								  </xsd:complexType>
+								</xsd:element>
+							  </xsd:sequence>
+							  <xsd:attribute name="set-two-D-geometry-from-XY-header-words" use="optional" type="xsd:boolean" default="false"/>
+							</xsd:complexType>
+						  </xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="is-single-trace-only" use="optional" type="xsd:boolean" default="false"/>
+						<xsd:attribute name="is-constant-angle-stack-with-angle-degrees" use="optional" type="xsd:float" default="-999.0"/>
+						<xsd:attribute name="is-PS-data" use="optional" type="xsd:boolean" default="false"/>
+					  </xsd:complexType>
+					</xsd:element>	
+					<xsd:element name="time_lapse_well_info" minOccurs="0">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="base_saturation" type="xsd:float" default="0"/>
+						  <xsd:element name="mean_monitor_saturation" type="xsd:float" default="0.5"/>	
+						  <xsd:element name="sigma_monitor_saturation" type="xsd:float" default="0.5"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="well_positioning_systematic_shift_uncertainty" minOccurs="0" maxOccurs="1">
+					  <xsd:complexType>	
+						<xsd:sequence>
+						  <xsd:element name="x_position_offset" type="xsd:float" default="0"/>
+						  <xsd:element name="y_position_offset" type="xsd:float" default="0"/>
+						  <xsd:element name="sigma_x_position" type="xsd:float" default="0"/>
+						  <xsd:element name="sigma_y_position" type="xsd:float" default="0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="synchronize_shifts_with_other_well" minOccurs="0" maxOccurs="1">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="well"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="AVO_terms_prior_distribution" minOccurs="0" maxOccurs="1">
+					  <xsd:complexType>	
+						<xsd:sequence>
+						  <xsd:element name="B_coefficient_prior_mean" type="xsd:float" default="1"/>
+						  <xsd:element name="B_coefficient_prior_std_deviation" type="xsd:float" default="0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>		  
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+		<xsd:element name="petrophysics_info" minOccurs="0" maxOccurs="1">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="shale_thresholds" minOccurs="1" maxOccurs="1">
+				<xsd:complexType>
+				  <xsd:sequence>
+					<xsd:element name="GR_threshold" minOccurs="0" maxOccurs="1">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="GR_threshold_intercept" type="xsd:float" default="70.0"/>
+						  <xsd:element name="GR_threshold_TVD_slope" type="xsd:float" default="0.0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="density_threshold" minOccurs="0" maxOccurs="1">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="density_threshold_intercept" type="xsd:float" default="2.3"/>
+						  <xsd:element name="density_threshold_TVD_slope" type="xsd:float" default="0.0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			  <xsd:element name="lumped_shale_Thomsen_delta_prior_distribution" minOccurs="1" maxOccurs="1">
+				<xsd:complexType>
+				  <xsd:sequence>
+					<xsd:element name="Thomsen_delta_prior_mean" type="xsd:float" default="0.0"/>
+					<xsd:element name="Thomsen_delta_prior_std_deviation" type="xsd:float" default="0.1"/>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+
+		<xsd:element name="time_lapse_info" minOccurs="0" maxOccurs="1">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="base_contacts_filename" type="filenameAndTimeUnit" default="basehorizons.txt"/>		  
+			  <xsd:element name="monitor_contacts_filename" type="filenameAndTimeUnit" default="monitorhorizons.txt"/>
+
+			  <xsd:element name="vp_sand_representative_SI" type="xsd:float" default="3200"/>
+			  <xsd:element name="vs_sand_representative_SI" type="xsd:float" default="1400"/>
+			  <xsd:element name="phi_sand_representative" type="xsd:float" default="0.25"/>
+			  
+			  <xsd:element name="vp_shale_representative_SI" type="xsd:float" default="3000"/>
+			  <xsd:element name="vs_shale_representative_SI" type="xsd:float" default="1500"/>
+			  <xsd:element name="rho_shale_representative_SI" type="xsd:float" default="2.5"/>
+
+			  <xsd:element name="vp_h_representative_SI" type="xsd:float" default="400"/>
+			  <xsd:element name="rho_h_representative_SI" type="xsd:float" default="200"/>
+
+			  <xsd:element name="vp_brine_representative_SI" type="xsd:float" default="1600"/>
+			  <xsd:element name="rho_brine_representative_SI" type="xsd:float" default="1000"/>
+
+			  <xsd:element name="rho_grain_representative_SI" type="xsd:float" default="2650"/>
+			  <xsd:element name="K_grain_representative_SI" type="xsd:float" default="37e9"/>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+		<xsd:element name="extraction_info">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="extraction_window_start_time" type="xsd:float" default="1.0"/>
+			  <xsd:element name="extraction_window_end_time" type="xsd:float" default="2.0"/>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+		<xsd:element name="wavelet_parameters">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="maximum_coda_time_millis" type="xsd:float" default="50"/>
+			  <xsd:element name="maximum_precursor_time_millis" type="xsd:float" default="50"/>
+			  <xsd:element name="far_wavelet_stretch_prior_distribution" minOccurs="0" maxOccurs="1">
+				<xsd:complexType>	
+				  <xsd:sequence>
+					<xsd:element name="far_wavelet_time_stretch_prior_mean" type="xsd:float" default="1"/>
+					<xsd:element name="far_wavelet_time_stretch_prior_std_deviation" type="xsd:float" default="0"/>
+					<xsd:element name="far_wavelet_scale_prior_mean" type="xsd:float" default="1"/>
+					<xsd:element name="far_wavelet_scale_prior_std_deviation" type="xsd:float" default="0"/>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+		<xsd:element name="seismic_minicube_header_words">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="inline_header_keyword" type="xsd:string" default="fldr"/>
+			  <xsd:element name="xline_header_keyword" type="xsd:string" default="tracf"/>
+			  <xsd:element name="X_header_keyword" type="xsd:string" default="fldr"/>
+			  <xsd:element name="Y_header_keyword" type="xsd:string" default="tracf"/>
+			  <xsd:element name="utm-conversions" minOccurs="0" maxOccurs="1">
+				<xsd:complexType>
+				  <xsd:sequence>
+					<xsd:element name="point" minOccurs="3" maxOccurs="3">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="x" type="xsd:float" default="0"/>
+						  <xsd:element name="y" type="xsd:float" default="0"/>
+						  <xsd:element name="inline" type="xsd:float" default="0"/>
+						  <xsd:element name="xline" type="xsd:float" default="0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+		<xsd:element name="AVO_terms_prior_distribution" minOccurs="0" maxOccurs="1">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="B_coefficient_prior_mean" type="xsd:float" default="1"/>
+			  <xsd:element name="B_coefficient_prior_std_deviation" type="xsd:float" default="0"/>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+		<xsd:element name="output">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="maximum_likelihood_wavelet_filename" type="xsd:string" default="MLwavelet.MOST_LIKELY.stack.n.su"/>
+			  <xsd:element name="maximum_likelihood_parameters_filename" type="xsd:string" default="MLparameters.MOST_LIKELY.stack.n.su"/>
+			  <xsd:element name="wavelet_realisations_filename" type="xsd:string" default="wavelet_realisations.su"/>
+			  <xsd:element name="parameter_realisations_filename" type="xsd:string" default="parameter_realisations.su"/>
+			  <xsd:element name="blocked_log_file_prefix" type="xsd:string" default="blocked_"/>
+			  <xsd:element name="realisation_number_header_field" type="xsd:string" default="mark"/>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+	  </xsd:sequence>
+	</xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>

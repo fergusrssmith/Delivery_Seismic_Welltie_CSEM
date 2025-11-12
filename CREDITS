@@ -1,0 +1,40 @@
+The delivery software is chiefly the work of 
+
+James Gunning
+CSIRO Petroleum
+PO Box 3000
+Glen Waverley
+Vic. Australia
+James.Gunning@csiro.au
+
+Bugs are usually blamable on me :-)
+
+
+Overall design concept for the SU backbone architecture, 
+operating environment, and inversion modelling is due to
+
+Mike Glinsky
+BHP Billiton Petroleum, 
+1360 Post Oak Boulevard Suite 150, 
+Houston, Texas 77056, USA
+Michael.E.Glinsky@BHPBilliton.com
+
+The ECLIPSE handling library
+in the deliveryMassager code is
+largely by Chris White,
+Department of Petroleum Engineering, 
+CEBA Building Room 3516, Louisiana State University, 
+Baton Rouge, Louisiana 70803
+CDWhite@LSU.edu
+
+The optimization routines are largely hacked from translations
+of original fortran UNCMIN routines into java by
+
+Steve Verrill 
+USDA Forest Products Laboratory
+1 Gifford Pinchot Drive
+Madison, Wisconsin
+53705
+steve@ws10.fpl.fs.fed.us
+
+

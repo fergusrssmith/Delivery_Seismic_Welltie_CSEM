@@ -1,0 +1,76 @@
+This is a simple test with a set of fake well logs that produces a
+single reflection coeff. of about R=0.1 at 8000ft or 1.43 secs. The
+synthetic seismic is then a perfect snapshot of the wavelet if there
+is no noise.  With a perfect seismic data set, the wavelet extractor
+ought to be able to detect the wavelet length exactly. With noisy
+seismic, the recovery will be less exact.
+
+NB. the suswapbytes pipes below are required if you use SU on a little-endian machine (e.g.
+Linux on intels).
+
+To make a synthetic minicube with 5% noise
+(1) Edit WaveletExtraction.xml and make a wide time gate minicube (e.g. 1-2 secs), e.g. ...
+
+<extraction_info>
+    <extraction_window_start_time>1.0</extraction_window_start_time>
+    <extraction_window_end_time>2.0</extraction_window_end_time>
+</extraction_info>	
+
+
+(2) Generate the minicube:
+% waveletExtractor WaveletExtraction.xml -v 5 --make-synthetic 40 4 .05 --dump-ML-wavelets
+
+The minicube will then be in synth_seis.well_log.txt.stack.1.su
+
+
+(3) To test the extraction:
+	- Restore the WaveletExtraction.xml entry above to the desired time gate (e.g. 1.1,1.7 secs).
+
+    - Link the synthetic minicube to the named seismic in the XML:
+% ln -sf synth_seis.well_log.txt.stack.1.su stack1.su
+
+	- Run the extractor over, e.g. all "centered" wavelets
+% waveletExtractor WaveletExtraction.xml --dump-ML-parameters --dump-ML-synthetics --dump-ML-wavelets --fake-Vs -v 4 -c -NLR -N 50 | tee junk.txt
+
+	Examine junk.txt for all sorts of useful information.
+ 
+	- To plot the maximum likelihood wavelet:
+% cat MLwavelet.MOST_LIKELY.su | suswapbytes|suxgraph
+
+	- To plot the "tie"
+% extractionViewer MLgraphing-file.MOST_LIKELY.well_log.txt 
+
+	- To see scatterplot of wavelet span versus posterior likelihoods:
+% awk '/MODE:/{print $2,$3}' junk.txt |graphing-program
+
+	- To see progressively shorter ML wavelets:
+
+% cat MLwavelet.mode.* | suswapbytes |suxwigb
+
+	- To plot superposed true and synthetic seismic:
+
+% cat MLsynth_plus_true_seis.mode.0.well_log.txt.stack.1.su |suswapbytes| suwind key=mark max=1 | suxgraph 
+
+	- To show wavelet realisations from the posterior
+
+% cat wavelet_realisations.su | suswapbytes | suxgraph
+
+(4) Example of using phase constraints.
+
+-	Alter the checkshot so the time sample at 8000ft is, say, 10ms off. Perform the
+	usual centered wavelet extraction
+
+% waveletExtractor WaveletExtraction.xml --dump-ML-parameters --dump-ML-synthetics --dump-ML-wavelets --fake-Vs -v 4 -c -NLR 
+% extractionViewer MLgraphing-file.MOST_LIKELY.well_log.txt 
+
+	- Notice the wavelet is displaced in time. It's relatively probable to have an offset wavelet shape, 
+	since nothing in the prior enforces wavelet symmetry.
+	- Now repeat the extraction, insisting agressively on a zero-phase wavelet:
+
+% waveletExtractor WaveletExtraction.xml --dump-ML-parameters --dump-ML-synthetics --dump-ML-wavelets --fake-Vs -v 4 -c -NLR --constrain-phase 0 1
+% extractionViewer MLgraphing-file.MOST_LIKELY.well_log.txt 
+
+	- Note the checkshot point has now been moved about 10ms to restore the zero-phase (symmetric) character
+	of the wavelet: check out time_to_depth_knot_5_well_0 in this file:
+
+% cat MLparameters.MOST_LIKELY.txt 

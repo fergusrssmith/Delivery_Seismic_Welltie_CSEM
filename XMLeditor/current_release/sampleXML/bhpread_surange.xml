@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <parameters></parameters>
+  <bhpread>
+    <filename substitution_string="">sub_stack</filename>
+    <pathlist substitution_string="">$BHPDATA/../int_datasets/sub_stack.dat</pathlist>
+    <keys>
+      <key>
+        <name substitution_string="">ep</name>
+        <range substitution_string="">3014</range>
+      </key>
+      <key>
+        <name substitution_string="">cdp</name>
+        <range substitution_string="">1400-1410</range>
+      </key>
+    </keys>
+  </bhpread>
+  <surange></surange>
+</script>

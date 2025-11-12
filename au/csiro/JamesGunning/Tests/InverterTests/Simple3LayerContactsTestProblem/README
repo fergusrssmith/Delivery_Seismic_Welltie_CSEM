@@ -1,0 +1,44 @@
+# A simple test model with 3 layers and 2 contacts to demonstrate
+# contact-in-depth operation mode in Delivery. Described in
+# Appendix "Internal fluid-contact modelling"
+# of revised paper DeliveryPaper.pdf
+
+# The demos here use bigendian data. Su takes this directly if compiled with SUXDR on (I recommend this)
+# if your SU install is not SUXDR and little endian, insert suswapbytes at suitable pipes (|) below
+
+# Make prior model:
+
+./make_contact_model.pl
+delivery -v 4 -RWS -p -m prior_traces.su ModelDescription.xml --make-synthetic 40 4 1.9 2.4
+mv near_stack_synth.su near-stack.su 
+
+# see seismic 
+# (use --make-synthetic 200 2 1.9 2.4 in delivery call  above for high-freq detail)
+cat near-stack.su | suxwigb x1beg=2 x1end=2.3
+
+# see model in time
+
+deliveryAnalyser -i realisations.su --layer 1.8 2.5 -l -G
+
+# see model in depth
+
+deliveryAnalyser -i realisations.su -ldepth --layer 1.8 2.3 -l -G
+
+
+# Draws from prior:
+delivery -v 3 -PD -N 100 -IS -m prior_traces.su ModelDescription.xml
+
+# Inversions:
+# MAP:
+delivery -v 3 -m prior_traces.su ModelDescription.xml --MAP
+
+# realisations
+delivery -v 3 -m prior_traces.su ModelDescription.xml -RWS -N 500 --no-descent-test
+
+# see posterior realisations in depth from above
+
+deliveryAnalyser -i realisations.su -ldepth --layer 1.8 2.3 -l | suximage blockinterp=1
+
+# plot depth uncertainties, e.g. layer 2:
+deliveryAnalyser -i realisations.su --stddev d 2 | awk '{print $NF}' | graph -TX -a
+

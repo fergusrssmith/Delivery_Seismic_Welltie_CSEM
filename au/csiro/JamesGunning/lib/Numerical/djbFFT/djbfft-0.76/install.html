@@ -1,0 +1,70 @@
+<html><head></head>
+<body>
+<a href="http://cr.yp.to/djb.html">D. J. Bernstein</a>
+<br><a href="http://cr.yp.to/arith.html">Fast arithmetic</a>
+<br><a href="http://cr.yp.to/djbfft.html">djbfft</a>
+<h1>How to install djbfft</h1>
+Like any other piece of software (and information generally),
+djbfft comes with NO WARRANTY.
+<h2>System requirements</h2>
+The djbfft installation procedure
+assumes that you have a UNIX system with gcc.
+<h2>Installation</h2>
+Download the djbfft package.
+The latest published djbfft package is
+<a href="http://cr.yp.to/djbfft/djbfft-0.76.tar.gz">djbfft-0.76.tar.gz</a>.
+<p>
+Unpack the djbfft package:
+</p><pre>     gunzip djbfft-0.76.tar
+     tar -xf djbfft-0.76.tar
+     cd djbfft-0.76
+</pre>
+<p>
+Decide where to install djbfft.
+The default installation directory is <tt>/usr/local/djbfft</tt>.
+To change this directory, edit <tt>conf-home</tt> now.
+</p><p>
+Compile the djbfft library and test programs:
+</p><pre>     make
+</pre>
+<p>
+As root, install the library and include files:
+</p><pre>     make setup check
+</pre>
+Now you can use djbfft in your programs
+by compiling with <tt>-I/usr/local/djbfft/include</tt>
+and linking with <tt>/usr/local/djbfft/lib/djbfft.a</tt>.
+<h2>Testing</h2>
+Check the rms errors for some convolutions of pseudorandom data:
+<pre>     ./accuracy
+</pre>
+Single-precision (<tt>r4</tt> and <tt>c4</tt>) errors
+should be on the scale of 10^-8.
+Double-precision (<tt>r8</tt> and <tt>c8</tt>) errors
+should be on the scale of 10^-16.
+If you see any double-precision results larger than 10^-12, please let me know.
+<p>
+Check the rms errors for a spanning set of transforms:
+</p><pre>     ./accuracy2
+</pre>
+Note that this test takes a while to run.
+<p>
+Time the library:
+</p><pre>     ./speed
+</pre>
+The result is a detailed
+<a href="http://cr.yp.to/djbfft/speed.html">speed report</a>.
+<p>
+To report success:
+</p><pre>     ( echo 'First M. Last'; cat `cat SYSDEPS` ) \
+     | mail djb-qst@cr.yp.to
+</pre>
+Replace <tt>First M. Last</tt> with your name.
+<h2>Things to do if you have more time</h2>
+If you're interested in trying to extract the best possible speed
+out of djbfft,
+you can edit <tt>conf-cc</tt> and <tt>conf-ld</tt> to select a compiler,
+and <a href="http://cr.yp.to/djbfft/opt.html"><tt>conf-opt</tt></a>
+to select machine-specific optimizations;
+then recompile.
+</body></html>

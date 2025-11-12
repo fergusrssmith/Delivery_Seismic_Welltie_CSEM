@@ -1,0 +1,6 @@
+# Plat-dependent things...
+# preferred...
+CSHAREDLIBFLAG =  -dynamiclib -framework JavaVM 
+#CSHAREDLIBFLAG =  -bundle -framework JavaVM 
+INCLUDEPATH = -I/System/Library/Frameworks/JavaVM.framework/Headers
+DYLIBSUFFIX = jnilib

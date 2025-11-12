@@ -1,0 +1,59 @@
+# A simple test model with 3 layers with middle third swept in production
+
+# Prior model made thus...
+# ./make_noncontact_model.pl
+# delivery4D -v 3 -p -m prior_traces.su ModelDescription.xml --make-synthetic 40 4 1.9 2.4
+# mv synthetic_stack.V_1.S_1.su near_stack.V1.su 
+# mv synthetic_stack.V_1.S_2.su far_stack.V1.su 
+# mv synthetic_stack.V_2.S_1.su near_stack.V2.su 
+# mv synthetic_stack.V_2.S_2.su far_stack.V2.su 
+
+# see seismic , e.g.
+cat near_stack.V1.su |  suxwigb x1beg=2 x1end=2.3
+
+# see seismic near stacks superposed, old+new vintage
+cat near_stack.V[12].su |  suxwigb x1beg=2 x1end=2.3 key=tracl va=0
+
+# make "Agnostic prior" 
+./make_noncontact_model.pl -A
+
+# see model in time
+delivery4D -v 3 -p -m prior_traces.su ModelDescription.xml 
+deliveryAnalyser4D -i realisations.su --layer 1.8 2.5 -l -G
+
+# see model in depth
+
+deliveryAnalyser4D -i realisations.su -ldepth --layer 1.8 2.3 -l -G
+
+# Draws from prior:
+delivery4D -v 3 -PD -N 100 -IS -m prior_traces.su ModelDescription.xml
+
+# Inversions:
+# MAP:
+delivery4D -v 3 -m prior_traces.su ModelDescription.xml --MAP
+
+# view MAP characteristics, e.g. MAP S_oil:
+deliveryAnalyser4D -i realisation.MAP.su -lprop S_oil,1 -G
+deliveryAnalyser4D -i realisation.MAP.su -lprop S_oil,2 -G
+
+# make realisations
+delivery4D -v 3 -m prior_traces.su ModelDescription.xml -RWS -N 1000 --no-descent-test
+
+# plot stats of oil saturation, e.g. for each vintage, get p50 of Soil, layer 2
+deliveryAnalyser4D -i realisations.su --quantile S_oil,1 2 50|awk '{print $NF}' | graph -TX -a
+deliveryAnalyser4D -i realisations.su --quantile S_oil,2 2 50|awk '{print $NF}' | graph -TX -a
+
+# Histogram of S_oil, trace 10, vintage 1, then vintage 2
+deliveryAnalyser4D -i realisations.su --trace-filter 'tracl=10' --histogram S_oil,1 2 -G
+deliveryAnalyser4D -i realisations.su --trace-filter 'tracl=10' --histogram S_oil,2 2 -G
+
+# One way to pull out fluid probability
+delivery4D -v 3 -m prior_traces.su ModelDescription.xml --MAP | grep 'MAP-estimated fluid probability'
+# which is roughly comparable (they're not quite the same "question") to
+deliveryAnalyser4D -i realisations.su --mean fluid_type_1 2
+
+# Interesting challenge:
+# with Monotonicity in saturation, check out the MAP in a trick problem 
+# (swap vintages so saturations want to "fight")
+delivery4D -v 3 --MAP -m prior_traces.su ModelDescription.xml --stack-filenames \
+near_stack.V2.su,far_stack.V2.su:near_stack.V1.su,far_stack.V1.su --trace-filter 'tracl=10' --Xsections 2 

@@ -1,0 +1,41 @@
+ROOT_DIR	= ../../..
+BIN_NAME	= deliveryMassager analyseOutputCompacter eclipseXsection getCholeskySafeTest 
+
+# Third party libraries..
+# library requires  
+#                   glib-2.0, libxml2-devel  (standard with Redhat, GNOME, fink)
+# ATLAS (should be in CSIRO tree, also standard in most linuxes) 
+# ATLAS has equivalents in OSX's "Accelerate" framework
+#
+
+BIN_CFLAGS  = `xml2-config --cflags` `pkg-config --cflags glib-2.0` 
+COMMON_LIBS = `pkg-config --libs glib-2.0` `xml2-config --libs` -lECLIO -lcommandline -lkdtree -lcgeom -lNR -lm
+
+ifeq (Darwin,$(findstring Darwin,$(CSIRO_OSTYPE)))
+#   JG - not convinced this doesn't cause linking issues....
+#	BIN_LDFLAGS =  -faltivec -framework Accelerate $(COMMON_LIBS) 
+    BIN_LDFLAGS =  -framework Accelerate $(COMMON_LIBS) 	
+else
+    ifeq (x86_64,$(findstring x86_64,$(CSIRO_OSTYPE)))
+		   ATLAS_LIB = /usr/lib64/atlas
+	else
+		   ATLAS_LIB = /usr/lib/atlas
+	endif
+	BIN_LDFLAGS	= -L$(ATLAS_LIB) -llapacke -lblas -llapack_atlas $(COMMON_LIBS)
+	BIN_CFLAGS  += "" 
+#	BIN_LDFLAGS	= -L../../lib/ATLAS/lib/$(CSIRO_OSTYPE) -llapack -lcblas -latlas $(COMMON_LIBS) 
+#	BIN_CFLAGS  += -I../ATLAS/include/$(CSIRO_OSTYPE) -I../ATLAS/include/
+endif
+
+
+BIN_SOURCES	= deliveryMassager.c analyseOutputCompacter.c eclipseXsection.c getCholeskySafeTest.c
+#             also stripe_decorator.c for experiments
+
+AUX_SOURCES	= clapack_cblas_wrappers.c errorHandler.c util.c modified_left_Cholesky.c massager.c \
+			  xmlParser.c variogram.c upperTriangleMatrices.c solver.c decorator.c eclipseHandler.c \
+			  coarseGridMaker.c su_util.c
+
+
+
+
+include $(ROOT_DIR)/config/Makefile.bins

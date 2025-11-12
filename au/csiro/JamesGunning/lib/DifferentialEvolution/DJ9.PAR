@@ -1,0 +1,37 @@
+# File   :  DJ9.PAR
+# Content:  Controls and parameters for DE
+# Author :  Mikal Keenan <keenan@cis.uab.edu>
+#                   <http://www.cis.uab.edu/info/grads/mbk
+# Update :  09/11/96
+# Note that comments begin with "# ", the space is necessary for now
+# because the control object processes a file one token at a time, i.e.,
+# whatever "ifstream >> x" returns (depends on the storage type of x).
+# The control object will ignore blank lines and lines prepended with "# "
+# It will also ignore the rest of a data line beyond "# " (see below).
+# Place DE controls in any order in these files and specify any
+# combination of the available halting criteria...
+#
+#   Criterion   :  Meaning
+#   ~~~~~~~~~~~~:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   Generations :  Number of generations to run before halting
+#   Time        :  Number of seconds to run before halting
+#   Minimum     :  Target value to reach before halting
+#   Stasis      :  Number of generations without change before halting
+#
+# Mikal Keenan <keenan@cis.uab.edu>
+# <http://www.cis.uab.edu/info/grads/mbk>
+
+Minimum       0.0        # Stop upon reaching a minimum of 0.0, or
+Time          300        # Stop after 5 minutes of processing, or
+Stasis        100        # Stop after 100 generations of redundancy, or
+Generations   3000       # Stop after 3000 generations
+Refresh       100        # Display status every 100 generations
+Members       60         # Population size
+Variables     9          # Number of values to optimize
+VarMinimum   -100.0      # Minimum value for variable randomization
+VarMaximum    100.0      # Maximum value for variable randomization
+FConstant     0.9        # Gotta read the tech report for this one...
+Crossover     1.0        # Crossover rate
+Seed          9          # If 0, RNG will use current time as seed
+Strategy      ExpBest1   # Which evolution strategy to use
+

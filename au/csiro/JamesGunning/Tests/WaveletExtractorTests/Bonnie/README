@@ -1,0 +1,12 @@
+This is an example based on some real data for two wells,
+BonnieHouse and BonnieHut. There are realistic levels
+of noise in this case. Note the multi-start global 
+optimisation possibility
+
+To perform the centered extractions:
+
+% waveletExtractor BonnieHousePlusBonnieHut.xml --dump-ML-parameters --dump-ML-synthetics --dump-ML-wavelets --fake-Vs -v 4 --constrain-peak-arrival 0 1 -c -NLR
+
+% A more exhaustive global optimization might be...
+
+% waveletExtractor BonnieHousePlusBonnieHut.xml --dump-ML-parameters --dump-ML-synthetics --dump-ML-wavelets --fake-Vs -v 3 --constrain-peak-arrival 0 1 -c --multi-start -NLR

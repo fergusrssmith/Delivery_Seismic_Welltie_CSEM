@@ -1,0 +1,92 @@
+/**********************************************************************
+DELIVERY - a program for stochastic seismic inversion
+This program module Copyright (C) 2006  BHP Billiton
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License Version 2 as
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+02110-1301, USA or visit the link http://www.gnu.org/licenses/gpl.txt.
+
+PLEASE NOTE: One or more BHP Billiton patents or patent applications may
+cover this software or its use. BHP Billiton hereby grants a limited,
+personal, irrevocable, perpetual, royalty-free license under such
+patents but only for things you are allowed to do under the terms of
+the General Public License.  All other rights are expressly reserved.
+
+To contact BHP Billiton about this software you can e-mail
+James.Gunning@csiro.au or visit http://www.petroleum.csiro.au to learn
+more.
+
+*************************************************************************/
+//------------------------- EOCOPYRIGHT --------------------------------- 
+
+
+
+package au.csiro.JamesGunning.seismicinverter;
+
+import java.util.*;
+import java.lang.*;
+import au.csiro.JamesGunning.sulib.*;
+
+/**
+   Class for extracting all the bits from a SuModelFormat
+   su file.
+
+   @author james.gunning@csiro.au
+   @version 1.0, 9/8/2001 
+*/
+
+public final class SuModelFormat extends SuSegyFormat
+{
+  /** 
+	  numbers of layers to expect in model
+  */
+  int nl=0;
+  
+  /** 
+	  initialise an object known to have nl layers
+  */
+  public SuModelFormat(int nl)
+  {
+	this.nl= nl;
+  }
+
+
+  // indx = 0...nl for horizons
+  protected double get_time(int indx)
+  {
+	int i = indx;
+
+	if (i>=0 & (4*i) < get_short("ns"))
+	  return get_data_value(indx);
+	else
+	  throw new IllegalArgumentException(
+		 "indx must be legal in SuModelFormat.get_time()");
+  }
+
+  // indx = 1...nl for delta t's
+
+  protected double get_sigma_time(int indx)
+  {
+	int i = nl + indx;
+
+	if (i>=0 & (4*i) < get_short("ns"))
+	  return get_data_value(indx);
+	else
+	  throw new IllegalArgumentException(
+		 "indx must be legal in SuModelFormat.get_sigma_time()");
+  }
+
+
+  // ETC FIXME fill in rest of data getters(). Not urgent.
+}
+

@@ -1,0 +1,51 @@
+/**********************************************************************
+DELIVERY - a program for stochastic seismic inversion
+This program module Copyright (C) 2006  BHP Billiton
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License Version 2 as
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+02110-1301, USA or visit the link http://www.gnu.org/licenses/gpl.txt.
+
+PLEASE NOTE: One or more BHP Billiton patents or patent applications may
+cover this software or its use. BHP Billiton hereby grants a limited,
+personal, irrevocable, perpetual, royalty-free license under such
+patents but only for things you are allowed to do under the terms of
+the General Public License.  All other rights are expressly reserved.
+
+To contact BHP Billiton about this software you can e-mail
+James.Gunning@csiro.au or visit http://www.petroleum.csiro.au to learn
+more.
+
+*************************************************************************/
+//------------------------- EOCOPYRIGHT --------------------------------- 
+
+
+
+package au.csiro.JamesGunning.seismicinverter;
+
+  /**
+	 The inversion classes require some fundamental scaling constants for 
+	 time constants etc.
+  */
+
+public final class FundamentalScalingConstants
+{
+  /**
+	 All magic time constants in the inverter are scaled according
+	 to this time. This is a useful constant for most surface based 
+	 geophysical seismic work. Successive doubles of this number
+	 should be canonical sampling times for usual geophysical work, e.g.
+	 1mS, 2mS, 4mS...
+  */ 
+  public static final double BASE_SCALING_TIME = 0.001;
+}

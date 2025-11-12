@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+ <xsd:include schemaLocation="bhpcommon.xsd"/>
+  
+ <xsd:complexType name="suchwType">
+   <xsd:all>
+     <xsd:element name="operators" minOccurs="0">
+       <xsd:complexType>
+         <xsd:sequence>
+           <xsd:element name="operator" maxOccurs="unbounded">
+	     <xsd:complexType>
+	       <xsd:sequence>
+	         <xsd:element name="output_key" type="headerWord" default="cdp"/>
+	         <xsd:element name="input_key1" type="headerWord" default="cdp"/>
+	         <xsd:element name="input_key2" type="headerWord" default="cdp"/>
+	         <xsd:element name="a" type="subbable_integer" default="0"/>
+	         <xsd:element name="b" type="subbable_integer" default="1"/>
+	         <xsd:element name="c" type="subbable_integer" default="0"/>
+	         <xsd:element name="d" type="subbable_integer" default="1"/>
+	       </xsd:sequence>
+	     </xsd:complexType>
+	   </xsd:element>
+         </xsd:sequence>
+       </xsd:complexType>
+     </xsd:element>
+   </xsd:all>
+ </xsd:complexType>
+</xsd:schema> 

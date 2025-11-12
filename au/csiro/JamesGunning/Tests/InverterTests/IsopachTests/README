@@ -1,0 +1,12 @@
+This is a simple test of whether the thickness constraint works on the reservoir layer.
+
+# Generate models nconditional to thickness constraint:
+delivery ModelDescription.xml -m prior_traces.su -v 3 -PD -N 200 -IS -II
+# View thickness histogram
+deliveryAnalyser -i realisations.su --histogram thickness 2 | graph -TX
+
+# Generate models conditioned to thickness constraint:
+delivery ModelDescription.xml -m prior_traces.su -v 3 -PD -N 200 -IS -RWS
+# View thickness histogram
+deliveryAnalyser -i realisations.su --histogram thickness 2 | graph -TX
+

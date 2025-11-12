@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE map
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/map_1_0.dtd">
+
+<map version="1.0">
+	<mapID target="introhtml" url="other_html/introduction.html" />
+	<mapID target="adding_help" url="other_html/AddingHelp.html"/>
+	<mapID target="new_xml" url="filemenu/new_xml.html" />
+	<mapID target="open_xml" url="filemenu/open_xml.html" />
+	<mapID target="save_xml" url="filemenu/save_xml.html" />
+	<mapID target="insert_above" url="editmenu/insert_above.html" />
+	<mapID target="insert_child" url="editmenu/insert_child.html" />
+	<mapID target="insert_below" url="editmenu/insert_below.html" />
+	<mapID target="switch" url="editmenu/switch.html" />
+	<mapID target="edit_value" url="editmenu/edit_value.html" />
+	<mapID target="copy" url="editmenu/copy.html" />
+	<mapID target="cut" url="editmenu/cut.html" />
+	<mapID target="paste_above" url="editmenu/paste_above.html" />
+	<mapID target="paste_child" url="editmenu/paste_child.html" />
+	<mapID target="paste_below" url="editmenu/paste_below.html" />
+	<mapID target="tree" url="UIComponents/tree.html" />
+	<mapID target="status" url="UIComponents/status.html" />
+	<mapID target="text" url="UIComponents/text.html" />
+	<mapID target="adding_plugins" url="other_html/AddingPlugins.html"/>
+	<mapID target="schema_rambling" url="other_html/EditorSchema.html"/>
+</map>

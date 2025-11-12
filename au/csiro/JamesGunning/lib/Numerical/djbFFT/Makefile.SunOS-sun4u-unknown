@@ -1,0 +1,3 @@
+# Plat-dependent things...
+CSHAREDLIBFLAG = -G
+INCLUDEPATH = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/solaris

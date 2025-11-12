@@ -1,0 +1,11 @@
+
+ROOT_DIR	= ../../../..
+
+BIN_SOURCES	= commandline.c 
+BIN_LDFLAGS	= -lcommandline
+
+#BIN_SOURCES	= commandline.c taskgenerate.c
+#BIN_LDFLAGS	= -lprogress -lcommandline
+
+
+include $(ROOT_DIR)/config/Makefile.bins

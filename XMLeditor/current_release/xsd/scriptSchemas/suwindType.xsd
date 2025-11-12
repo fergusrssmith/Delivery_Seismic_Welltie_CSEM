@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+  <xsd:include schemaLocation="bhpcommon.xsd"/>
+  
+ <xsd:complexType name="suwindType">
+   <xsd:all>
+     <xsd:element name="verbose" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="key" type="headerWord" minOccurs="0" default="tracl"/>
+     <xsd:element name="min" type="subbable_long" minOccurs="0" default="-999999999"/> <!-- XXX long min -->
+     <xsd:element name="max" type="subbable_long" minOccurs="0" default="999999999"/> <!-- XXX long max -->
+     <xsd:element name="abs" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="j" type="subbable_integer" minOccurs="0" default="1"/>
+     <xsd:element name="s" type="subbable_integer" minOccurs="0" default="0"/>
+     <xsd:element name="count" type="subbable_integer" minOccurs="0" default="99999999"/> <!-- XXX ulong max -->
+     <xsd:element name="reject" type="subbable_string" minOccurs="0" default="none"/>
+     <xsd:element name="accept" type="subbable_string" minOccurs="0" default="none"/>
+     <xsd:element name="dt" type="headerWord" minOccurs="0" default="ep"/>
+     <xsd:element name="tmin" type="subbable_float" minOccurs="0" default="0.0"/>
+     <xsd:element name="tmax" type="subbable_float" minOccurs="0" default="0.0"/>
+     <xsd:element name="itmin" type="subbable_integer" minOccurs="0" default="0"/>
+     <xsd:element name="itmax" type="subbable_integer" minOccurs="0" default="0"/>
+     <xsd:element name="nt" type="subbable_integer" minOccurs="0" default="1"/>
+   </xsd:all>
+ </xsd:complexType>
+</xsd:schema>

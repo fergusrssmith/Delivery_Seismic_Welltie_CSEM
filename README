@@ -1,0 +1,189 @@
+INTRODUCTION
+---------------------------------------------------------------- 
+
+This is the main README for the open source trace-based Bayesian Seismic
+inversion code called "delivery" and its companion "waveletExtractor" and
+"deliveryMassager" codes.
+
+The theoretical framework for delivery and its companions is described in the
+Computers and Geosciences preprints/papers at
+Docs/*.pdf
+where the 3 papers are:
+ 
+DeliveryPaper.pdf 
+WaveletExtraction.pdf
+DeliveryMassager.pdf
+
+which ought to be digested before attempting to run the code.
+
+The source tree includes some basic examples illustrating the use of the
+code, usually on small data sets.
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+FOR EXISTING DELIVERY USERS ONLY:
+
+    Some small schema changes have occurred in the XSD files. Make sure you
+    use the new schemas. Old Delivery XML files can be converted to new format
+	using scripts/XMLconverter.sh
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 
+
+SETUP
+________________________________________________________________
+
+The delivery inversion suite is most naturally suited to a Linux/Unix environment.
+It interfaces most naturally with Seismic Unix (SU) (http://timna.mines.edu/cwpcodes/),
+and familiarity with these codes is expected. People have reported success with MacOSX,
+and CYGWIN on Windows too. THE BHP_SU extensions to SU are useful to have 
+installed, but not mandatory.
+
+To set up "delivery" codes,
+
+(1) Ensure you have a java 1.5 or later installed (must have a jit or hotspot)
+(2) Ensure the scripts directory is in your $PATH
+(3) Read and edit scripts/environment_setup.sh to reflect your setup
+(4) The 5 main scripts you want to use are 
+       delivery
+       deliveryAnalyser
+       waveletExtractor
+       deliveryMassager.sh   (script for native binary)
+       xmledit.sh
+    The top 4 are like SU programs and self-document.
+    xmledit.sh fires up a GUI style XML editor for constructing/editing parameter
+    files. For CYGWIN users, a small edit to these files is required (see the CYGWIN 
+    comments in the scripts).
+
+    DeliveryMassager (called deliveryMassager.sh) is a native code
+    that must be compiled in general.
+    % cd NativeCodes
+    and follow the README_* files.
+
+Graphics
+________
+
+Many of the examples use convenient plotting utilities for X windows
+capable of taking ascii or binary input to illustrate what is going on. You'll need
+something of this flavour in order to understand what the inversions are doing.
+SU has some good plotting utilities ones (e.g. "xgraph"), but I tend
+to use GNU's plotutils package, especially the "graph" program. This is
+free & easy to find for any *nix system, but use whatever you like. The example
+READMEs will show lines where ascii data is piped into "graph", so you can
+substitute your favourite at the obvious place.
+
+
+EXAMPLES
+________________________________________________________________
+
+(1) Delivery (Inversion)
+
+In the au/csiro/JamesGunning/Tests/InverterTests
+directory are a bunch of test problems, usually with
+READMEs in each directory.
+
+The model is controlled by a master XML file, and a set of traces which
+provide seismic data and prior information (that may vary on a trace-by trace basis)
+To play with the model, open an xml file with the xmleditor, and look in
+the hierarchy to see what's there. Double & right clicking enables you to edit
+and add things (see the editor help facility).
+Eg.
+
+% cd au/csiro/JamesGunning/Tests/InverterTests/1TraceFluidDetection
+% xmledit.sh xml=ModelDescription.xml
+
+
+
+Here's a brief summary.
+
+
+1TraceFluidDetection   3 layer problem (shale/reservoir/shale) aimed at fluid detection. 
+                       Discussed in the C&G preprint.
+
+3LayerBHPWedge         3 layer problem with pinchout. Test problem for nasty multimodality/loop skipping
+
+3LayerWedge            3 layer problem with pinchout, smaller & faster than BHP problem.
+                       Discussed in the C&G preprint.  
+
+GasOilFlank            2 layer problem (shale/reservoir) testing fluid detection vs velocity uncertainty
+                       To set up simple "fluid detection from single peak-amplitude" type models, this is probably
+                       a good suite of files to extrapolate from.
+
+IsopachTests           Tests of isopach constraints
+
+NG_Wedge               Test of detection of trends in the net-to-gross in a reservoir layer (no fluid effects)
+                       Discussed in the C&G preprint.
+
+Simple3LayerContactsTestProblem  
+					   Example case of fluid contacts presenting major reflections within layers, and
+                       how to constrain these problems with known depth contacts.
+
+Experimental           6 layer single-trace problem testing many exotic features of inverter.
+                       Mainly for development testing
+
+
+----------------------------------------------------------------
+
+(2) Wavelet Extraction
+
+In the au/csiro/JamesGunning/Tests/WaveletExtractorTests
+are the examples discussed in the WaveletExtraction.pdf paper
+
+----------------------------------------------------------------
+
+(3) DeliveryMassager
+
+In the au/csiro/JamesGunning/Tests/MassagerTests are the
+(non-proprietary) examples discussed in the DeliveryMassager.pdf
+paper
+
+
+
+
+
+REBUILDING/HACKING
+__________________________________________________________________
+
+(1) java code (Delivery, WaveletExtractor)
+
+To rebuild the java code: your system must have "make", which
+is usually standard in Linux & unix. This should not be necessary.
+
+% cd au/csiro/JamesGunning/
+% make
+
+There is some JNI material in
+au/csiro/JamesGunning/lib/Numerical/djbFFT/
+for which native libraries on Linux (intel 32 & 64 bit) & OSX
+have been built. Porting these should not be too hard. 
+The java code has fallback java methods in any case. These
+JNI libraries are provided in order to get optimally fast
+FFTs.
+
+To access these native libraries, you should append (e.g. on intel-linux)
+$SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/lib/Numerical/djbFFT/djbfft-0.76/Linux-i686-unknown/lib
+to the standard library search path 
+Linux: LD_LIBRARY_PATH
+OSX: JAVA_LIBRARY_PATH 
+where $SEISMIC_INVERTER_HOME is the 
+root of your delivery installation.
+
+E.g. Linux:
+(tcsh)
+% setenv LD_LIBRARY_PATH $SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/lib/Numerical/djbFFT/djbfft-0.76/${CSIRO_OSTYPE}/lib
+(bash)
+% export LD_LIBRARY_PATH=$SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/lib/Numerical/djbFFT/djbfft-0.76/${CSIRO_OSTYPE}/lib
+
+E.g. OSX:
+(tcsh)
+% setenv JAVA_LIBRARY_PATH $SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/lib/Numerical/djbFFT/djbfft-0.76/${CSIRO_OSTYPE}/lib
+(bash)
+% export JAVA_LIBRARY_PATH=$SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/lib/Numerical/djbFFT/djbfft-0.76/${CSIRO_OSTYPE}/lib
+
+(2) Native codes (DeliveryMassager)
+
+You need the usual c compilers etc.
+
+% cd NativeCodes 
+
+and follow the README_*
+

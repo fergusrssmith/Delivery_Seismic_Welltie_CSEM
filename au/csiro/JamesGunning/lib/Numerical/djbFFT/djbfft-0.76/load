@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# WARNING: This file was auto-generated. Do not edit!
+main="$1"; shift
+exec cc   -m64 -o "$main" "$main".o ${1+"$@"}

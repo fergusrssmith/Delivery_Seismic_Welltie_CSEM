@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>output</title>
+      
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+</head>
+  <body>
+ 
+<h3><u><big><big>Output</big></big></u><br>
+ </h3>
+ Some global flags that control output and the operating mode.<br>
+ <br>
+ 
+<table cellpadding="2" cellspacing="2" border="1" width="80%">
+   <tbody>
+     <tr>
+       <td valign="top">density_ordering<br>
+       </td>
+       <td valign="top">Must be one of<br>
+       <b>none.</b>&nbsp; Any fluids are allowed in any permeable layer.<br>
+       <b>partial.</b> Fluids are density ordered for all adjacent permeable 
+layers not separated by an impermeable layer.<br>
+       <b>full.</b>&nbsp; Fluids are density ordered across the entire reservoir 
+model, regardless of whether there are impermeable layers separating permeable 
+ones.<br>
+       </td>
+     </tr>
+     <tr>
+       <td valign="top">realisation_number_header_field<br>
+       </td>
+       <td valign="top">SU header word to store the realisation number. Defaults 
+to <i>mark.</i> Choose wisely<br>
+       </td>
+     </tr>
+     <tr>
+       <td valign="top">depth_models<br>
+       </td>
+       <td valign="top">Output traces can be written in depth. (Last block 
+of (Nlayers+1) numbers become depth, not time). Recommended practice is to 
+write them in time, and do trivial time-to-depth conversion slater using 
+     <i>deliveryAnalyser.</i><br>
+       </td>
+     </tr>
+     <tr>
+       <td valign="top">master_depth_layer_number<br>
+       </td>
+       <td valign="top">The layer number from which to hang/support all other 
+depths. Must be from 1 to Nlayers. All subsequent depth models will depend 
+on this.<br>
+       </td>
+     </tr>
+   
+  </tbody> 
+</table>
+ <br>
+ <br>
+</body>
+</html>

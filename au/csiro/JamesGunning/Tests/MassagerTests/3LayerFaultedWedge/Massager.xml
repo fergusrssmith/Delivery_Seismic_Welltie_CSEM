@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><massaged_inversion>
+  <massaged_inversion_info>
+    <name>Massager Test For 3 Layer Fault Model</name>
+    <project>3LayerFaultedWedge</project>
+    <author>Gunning</author>
+  </massaged_inversion_info>
+
+  <delivery_massage_analysis_info>
+	<delivery_massage_analysis_filename>massage_analysis.mab</delivery_massage_analysis_filename>
+	<x-coordinate_header_word>gx</x-coordinate_header_word>
+	<y-coordinate_header_word>gy</y-coordinate_header_word>
+  </delivery_massage_analysis_info>
+  <model_description>
+	<property_name normalised="false" smooth_across_faults="false">d</property_name>
+	<property_name normalised="false" smooth_across_faults="false">net-sand</property_name>
+	<property_name normalised="false" smooth_across_faults="false">thickness</property_name>
+	<property_name normalised="false" smooth_across_faults="true">NG</property_name>
+	<property_name normalised="false" smooth_across_faults="true">S_oil</property_name>
+	<trend_smoothing_variogram>	
+	  <type>gau</type>	
+	  <sill>1</sill>	
+	  <nugget>0</nugget>
+	  <azimuth>0</azimuth>
+	  <!-- Angle azimuth is clockwise from N principal dir -->
+	  <rotated-x-range>600.0</rotated-x-range> 
+	  <rotated-y-range>600.0</rotated-y-range>
+	</trend_smoothing_variogram>
+
+	<layer>
+	  <name>layer1:Shale</name>
+      <inversion_layer_number>1</inversion_layer_number>
+	  <variogram>
+		<type>gau</type>
+		<sill>1</sill>
+		<nugget>0</nugget>
+		<azimuth>0</azimuth>
+		<!-- Angle azimuth is clockwise from N principal dir -->
+		<rotated-x-range>600.0</rotated-x-range>
+		<rotated-y-range>600.0</rotated-y-range>
+	  </variogram>
+	  <ECLIPSE_grid_filename>FaultedWedgeModel.ecl</ECLIPSE_grid_filename>
+	  <ECLIPSE_segments_keyword>SEGMENTS</ECLIPSE_segments_keyword>
+	  <ECLIPSE_layer_number>1</ECLIPSE_layer_number>
+	  <!-- next items required for layer 1 with common eclipse grid : required if depths are not massaged -->
+	  <ECLIPSE_reference_depth_layer_number>2</ECLIPSE_reference_depth_layer_number>
+	  <ECLIPSE_output_grid_filename>MassagedEclProperties.ecl</ECLIPSE_output_grid_filename>
+	  <well_observation>
+		<position_x>1000</position_x>
+		<position_y>0</position_y>
+		<property_name>thickness</property_name>
+		<property_value>40.0</property_value>
+	  </well_observation>	  
+	</layer>
+	<layer>
+	  <name>layer2:Reservoir</name>
+      <inversion_layer_number>2</inversion_layer_number>
+	  <variogram>
+		<type>gau</type>
+		<sill>1</sill>
+		<nugget>0</nugget>
+		<azimuth>0</azimuth>
+		<!-- Angle azimuth is clockwise from N principal dir -->
+		<rotated-x-range>600.0</rotated-x-range>
+		<rotated-y-range>600.0</rotated-y-range>
+	  </variogram>
+	  <decorations>
+		<Nz>30</Nz>
+		<threeDvariogram>
+		  <type>gau</type>
+		  <sill>1</sill>
+		  <nugget>0.00</nugget>
+		  <a_hmax>3800</a_hmax>
+		  <a_hmin>3800</a_hmin>
+		  <a_vert>300</a_vert>
+		  <ang1>0</ang1>
+		  <ang2>0</ang2>
+		  <ang3>0</ang3>
+		</threeDvariogram>
+	  </decorations>
+	  <well_observation>
+		<position_x>1000</position_x>
+		<position_y>0</position_y>
+		<property_name>thickness</property_name>
+		<property_value>10.0</property_value>
+	  </well_observation>
+	  <well_observation>
+		<position_x>1000</position_x>
+		<position_y>0</position_y>
+		<property_name>NG</property_name>
+		<property_value>0.6</property_value>
+	  </well_observation>
+	</layer>
+	<layer>
+	  <name>layer3:Shale</name>
+      <inversion_layer_number>3</inversion_layer_number>
+	  <variogram>
+		<type>gau</type>
+		<sill>1</sill>
+		<nugget>0</nugget>
+		<azimuth>0</azimuth>
+		<!-- Angle azimuth is clockwise from N principal dir -->
+		<rotated-x-range>600.0</rotated-x-range>
+		<rotated-y-range>600.0</rotated-y-range>
+	  </variogram>
+	</layer>
+  </model_description>
+</massaged_inversion>

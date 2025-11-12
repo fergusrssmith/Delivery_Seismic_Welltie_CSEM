@@ -1,0 +1,25 @@
+A simple test to see whether inverter detects an amplitude boost due to oil in the reservoir.
+(Examples are on intel linux, so you may not need the suswapbytes pipes)
+
+# The demos here use bigendian data. SU takes this directly if compiled with SUXDR on (I recommend this)
+# if your SU install is not SUXDR and little endian, insert suswapbytes at suitable pipes (|) below
+
+# Synthetic has been created with...
+delivery ModelDescription.xml -m prior_traces.su -v 3 -PD -II -IS -p --IF 1 --make-synthetic 40 4 1.8 2.2
+cp near_stack_synth.su near-stack.su
+
+# This is what prior-drawn brine synthetics look like, compared to the 'truth'......
+delivery ModelDescription.xml -m prior_traces.su -v 3 -PD -II -IS -N 50 --IF 0 -S 1.8 2.2
+cat near-stack.su near_stack_synth.su  | suxgraph linewidth=5,1 reverse=1
+
+
+# This is what prior-drawn oil synthetics look like, compared to the 'truth'......
+delivery ModelDescription.xml -m prior_traces.su -v 3 -PD -II -IS -N 50 --IF 1 -S 1.8 2.2
+cat near-stack.su near_stack_synth.su  | suxgraph linewidth=5,1 reverse=1
+
+# The boost means we expect to see very small posterior brine probability (a few %). To check:
+delivery ModelDescription.xml -m prior_traces.su -v 3 -PD -II -RWS -N 500
+
+
+# Whereas, is you ignore seismic (-IS), the posterior odds are still 50:50, which is what the prior specified...
+delivery ModelDescription.xml -m prior_traces.su -v 3 -PD -II -IS -RWS -N 500

@@ -1,0 +1,8 @@
+$(CSIRO_OSTYPE)/edgelist.o: edgelist.c vdefs.h
+$(CSIRO_OSTYPE)/geometry.o: geometry.c vdefs.h
+$(CSIRO_OSTYPE)/heap.o: heap.c vdefs.h
+$(CSIRO_OSTYPE)/getdiagram.o: getdiagram.c vdefs.h
+$(CSIRO_OSTYPE)/memory.o: memory.c vdefs.h
+$(CSIRO_OSTYPE)/output.o: output.c vdefs.h
+$(CSIRO_OSTYPE)/voronoi.o: voronoi.c vdefs.h
+$(CSIRO_OSTYPE)/2Dhull.o: 2Dhull.c 2Dhull.h

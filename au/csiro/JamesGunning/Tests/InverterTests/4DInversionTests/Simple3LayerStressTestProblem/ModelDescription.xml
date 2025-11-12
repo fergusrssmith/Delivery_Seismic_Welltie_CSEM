@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><inversion>
+  <inversion_info>
+	<name>3 layer wedge, simple 4D test. note - numbers in SI</name>
+	<project>contacts test</project>
+	<author>Gunning</author>
+  </inversion_info>
+  <time_lapse_format>true</time_lapse_format>
+  <seismic_data>
+	<stack is-constant-angle-stack-with-angle-degrees="10">	
+	  <name>near1</name>
+	  <vintage>1</vintage> <!-- 1 denotes base survey. Will be 1,2,3... -->
+	  <filename>near_stack.V1.su</filename>
+	  <min_offset>0</min_offset>
+	  <max_offset varies_areally="false">500</max_offset>
+	  <reflector_time varies_areally="false">1800</reflector_time>
+	  <stack_velocity varies_areally="false">2200</stack_velocity>
+	  <wavelet>
+		<filename>wavelet.su</filename>
+		<noise_rms varies_areally="false">0.008</noise_rms>
+	  </wavelet>
+	</stack>
+	<stack is-constant-angle-stack-with-angle-degrees="30">	
+	  <name>far1</name>
+	  <vintage>1</vintage> <!-- 1 denotes base survey. Will be 1,2,3... -->
+	  <filename>far_stack.V1.su</filename>
+	  <min_offset>1000</min_offset>
+	  <max_offset varies_areally="false">1500</max_offset>
+	  <reflector_time varies_areally="false">1800</reflector_time>
+	  <stack_velocity varies_areally="false">2200</stack_velocity>
+	  <wavelet>
+		<filename>wavelet.su</filename>
+		<noise_rms>0.008</noise_rms>
+	  </wavelet>
+	</stack> 	
+	<stack is-constant-angle-stack-with-angle-degrees="10">	
+	  <name>near2</name>
+	  <vintage>2</vintage> <!-- 1 denotes base survey. Will be 1,2,3... -->
+	  <filename>near_stack.V2.su</filename>
+	  <min_offset>0</min_offset>
+	  <max_offset varies_areally="false">500</max_offset>
+	  <reflector_time varies_areally="false">1800</reflector_time>
+	  <stack_velocity varies_areally="false">2200</stack_velocity>
+	  <wavelet>
+		<filename>wavelet.su</filename>
+		<noise_rms varies_areally="false">0.008</noise_rms>
+	  </wavelet>
+	</stack>
+	<stack is-constant-angle-stack-with-angle-degrees="30">	
+	  <name>far2</name>
+	  <vintage>2</vintage> <!-- 1 denotes base survey. Will be 1,2,3... -->
+	  <filename>far_stack.V2.su</filename>
+	  <min_offset>1000</min_offset>
+	  <max_offset varies_areally="false">1500</max_offset>
+	  <reflector_time varies_areally="false">1800</reflector_time>
+	  <stack_velocity varies_areally="false">2200</stack_velocity>
+	  <wavelet>
+		<filename>wavelet.su</filename>
+		<noise_rms>0.008</noise_rms>
+	  </wavelet>
+	</stack> 	
+
+	<AVO_terms>
+	  <A>1.0</A>
+	  <B>1.0</B>
+	</AVO_terms>
+  </seismic_data>
+  <model_description>    
+	<top_layer>
+	  <name>top (1,0)</name>
+	  <reservoir_endmember>
+		<name>reference sand</name>
+		<brine>
+		  <name>brine</name>
+		</brine>
+	  </reservoir_endmember>
+	  <nonreservoir_endmember>
+		<name>reference shale</name>
+	  </nonreservoir_endmember>
+	  <time varies_areally="true">2000</time>
+	  <sigma_time varies_areally="false">5</sigma_time>
+	  <net_to_gross>0.0</net_to_gross>
+	  <depth varies_areally="true">1900</depth>
+	  <depth_rock_curves>1000</depth_rock_curves>
+	  <sigma_depth varies_areally="false">20</sigma_depth>
+	  <LFIV varies_areally="false">0</LFIV>
+	  <sigma_LFIV varies_areally="false">0</sigma_LFIV>
+	  <time_lapse_specification>
+		<stress_correlation_coefficient>-0.1</stress_correlation_coefficient> <!-- -0.1 -->
+	  </time_lapse_specification>
+	</top_layer>
+
+	<middle_layer synchronise_rock_matrix="false">
+	  <name>reservoir</name>
+	  <reservoir_endmember>
+		<name>reference sand</name>        
+		<brine>
+		  <name>brine</name>
+		</brine>
+		<oil>
+		  <name>oil</name>
+		  <probability_of_oil varies_areally="false">1</probability_of_oil>
+		  <!-- HERE - SET SATURATIONS FLAT, TRY ordering options etc... -->		 
+		  <saturation_of_oil ordering="none" varies_areally="true" vintage="2">0.55</saturation_of_oil> 
+		  <saturation_of_oil varies_areally="true" vintage="1">0.55</saturation_of_oil>
+
+			<sigma_saturation_of_oil>0.4</sigma_saturation_of_oil> <!-- 0.4 --> 		 
+		 <!--
+		 <saturation_of_oil ordering="none" varies_areally="false">0</saturation_of_oil>
+		 -->		
+		</oil>
+	  </reservoir_endmember>
+	  <nonreservoir_endmember>
+		<name>reference shale</name>
+	  </nonreservoir_endmember>
+	  <time same_as_layer_above="false" varies_areally="true">2010</time>
+	  <sigma_time varies_areally="false">20</sigma_time>      
+
+	  <net_to_gross same_as_layer_above="false" varies_areally="false">0.9</net_to_gross>  <!--FIXME .9 -->
+	  <sigma_net_to_gross varies_areally="false">0.2</sigma_net_to_gross>                  <!--FIXME .2 -->
+
+	  <depth same_as_layer_above="false" varies_areally="true">1900</depth>
+	  <sigma_depth same_as_layer_above="false" varies_areally="false">0</sigma_depth>
+	  <depth_rock_curves>1000</depth_rock_curves>
+	  <LFIV same_as_layer_above="false" varies_areally="false">0</LFIV>
+	  <sigma_LFIV same_as_layer_above="false" varies_areally="false">0</sigma_LFIV>
+	  <thickness same_as_layer_above="false" varies_areally="false">60</thickness>
+	  <sigma_thickness varies_areally="false">40.0</sigma_thickness>
+	  <time_lapse_specification>
+		<stress_correlation_coefficient>1</stress_correlation_coefficient>
+		<reference_layer_time_lapse_priors>
+		  <vintage1_2>
+			<delta_pore_pressure varies_areally="true">0</delta_pore_pressure>
+			<sigma_delta_pore_pressure varies_areally="false">0.2</sigma_delta_pore_pressure> <!--FIXME 0.2, 0.7 -->
+			<sigma_time_shift>0</sigma_time_shift>
+		  </vintage1_2>
+		</reference_layer_time_lapse_priors>
+	  </time_lapse_specification>
+	</middle_layer>
+
+
+	<bottom_layer>
+	  <name>bottom</name>
+	  <reservoir_endmember>
+		<name>reference sand</name>
+		<brine>
+		  <name>brine</name>
+		</brine>
+	  </reservoir_endmember>
+	  <nonreservoir_endmember>
+		<name>reference shale</name>
+	  </nonreservoir_endmember>
+	  <time same_as_layer_above="false" varies_areally="true">2020</time>
+	  <sigma_time varies_areally="false">20</sigma_time>
+	  <net_to_gross>0.0</net_to_gross>
+	  <depth same_as_layer_above="false" varies_areally="true">1900</depth>
+	  <sigma_depth varies_areally="false">20</sigma_depth>
+	  <depth_rock_curves>1000</depth_rock_curves>
+	  <LFIV same_as_layer_above="false" varies_areally="false">0</LFIV>
+	  <sigma_LFIV varies_areally="false">0</sigma_LFIV>
+	  <t_base varies_areally="true">2100</t_base>
+	  <sigma_t_base varies_areally="false">5</sigma_t_base>
+	  <time_lapse_specification>
+		<stress_correlation_coefficient>-0.05</stress_correlation_coefficient>
+	  </time_lapse_specification>
+	</bottom_layer>
+  </model_description>
+
+  <rock_fluid_properties>
+	<fluid_properties>
+	  <fluid>
+		<name>brine</name>
+		<vp varies_areally="false">1600</vp>
+		<rho varies_areally="false">1.02</rho>
+	  </fluid>
+	  <fluid>
+		<name>oil</name>
+		<vp varies_areally="false">1230</vp>
+		<rho varies_areally="false">.850</rho>
+	  </fluid>
+	  <fluid> 
+		<name>gas</name>
+		<vp varies_areally="false">545</vp>
+		<rho varies_areally="false">0.13</rho>
+	  </fluid>
+	</fluid_properties>
+
+	<rock_properties>
+	  <reservoir_endmember>
+		<name>reference sand</name>
+		<reference_fluid>brine</reference_fluid>
+		<vp_curve>
+		  <intercept varies_areally="false">2214</intercept>
+		  <depth_coefficient varies_areally="false">0.5285</depth_coefficient>
+		  <LFIV_coefficient varies_areally="false">0</LFIV_coefficient>
+		  <sigma varies_areally="false">110</sigma>
+		</vp_curve>
+		<vs_curve>
+		  <intercept varies_areally="false">334</intercept>
+		  <slope varies_areally="false">0.3216</slope>
+		  <sigma varies_areally="false">70</sigma>
+		</vs_curve>
+		<porosity_curve>
+		  <intercept varies_areally="false">0.666</intercept>
+		  <slope varies_areally="false">-1.315e-4</slope>
+		  <sigma varies_areally="false">0.015</sigma>
+		</porosity_curve>
+		<vp_grain varies_areally="false">6143</vp_grain>
+		<vs_grain varies_areally="false">4189</vs_grain>
+		<rho_grain>2.65</rho_grain>
+		<!--   in units like m/s-MPa. For, say, expected extension ...-->
+		<stress_path_coefficients>	
+		  <vintage1_2>-200.0</vintage1_2>
+		</stress_path_coefficients>		
+	  </reservoir_endmember>
+	  <nonreservoir_endmember>
+		<name>reference shale</name>
+		<vp_curve>
+		  <intercept varies_areally="false">-60</intercept> <!-- -160 -->
+		  <depth_coefficient varies_areally="false">2.643</depth_coefficient>
+		  <LFIV_coefficient varies_areally="false">0</LFIV_coefficient>
+		  <sigma varies_areally="false">95</sigma>
+		</vp_curve>
+		<vs_curve>
+		  <intercept varies_areally="false">-432</intercept>
+		  <slope varies_areally="false">0.6071</slope>
+		  <sigma varies_areally="false">37</sigma>
+		</vs_curve>
+		<density_curve>
+		  <factor varies_areally="false">0.1968</factor> <!-- .1868 -->
+		  <exponent varies_areally="false">0.3204</exponent> 
+		  <sigma varies_areally="false">0.026</sigma>
+		</density_curve>
+		<stress_path_coefficients>	
+		  <vintage1_2>-180.0</vintage1_2>
+		</stress_path_coefficients>	
+	  </nonreservoir_endmember>
+	</rock_properties>
+  </rock_fluid_properties>
+  <output>
+	<density_ordering>full</density_ordering>
+	<realisation_number_header_field>mark</realisation_number_header_field>
+	<depth_models>false</depth_models>
+	<master_depth_layer_number>2</master_depth_layer_number>
+  </output> 
+  <property_indices>
+    <saturation_of_oil_link vintage="1">2</saturation_of_oil_link>
+    <saturation_of_oil_link vintage="2">3</saturation_of_oil_link>    
+	<delta_pore_pressure_link vintage="2">1</delta_pore_pressure_link>
+	<time_link>5</time_link>
+	<depth_link>4</depth_link>
+  </property_indices>
+</inversion>

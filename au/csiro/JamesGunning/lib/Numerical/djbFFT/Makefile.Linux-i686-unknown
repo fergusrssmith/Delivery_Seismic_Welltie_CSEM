@@ -1,0 +1,6 @@
+ # Plat-dependent things...
+CFLAGS_UNIVERSAL= 
+M32= -m32
+CSHAREDLIBFLAG = -shared -fPIC 
+INCLUDEPATH = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+DYLIBSUFFIX = so

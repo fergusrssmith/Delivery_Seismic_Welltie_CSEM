@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<document>
+  <documentinfo>
+	<property> name="title" value="Layer Descriptions"</property>
+	<property> name="field" value="Prospect bigdollars"></property>
+	<property> name="author" value="Donald Duck"></property>
+  </documentinfo>  
+  
+  <layers>
+
+	<layer>
+	  <!-- optional name -->
+	  <name> top layer (1,0)</name>
+
+	  <!-- this layer does not specify a permeable member, so it is taken as pure impermeable-rock -->
+	  <!-- with NG=0, and no fluid or permeable things need to be specified -->
+	  <shale_member>shale B</shale_member> 
+	
+	  <!-- specific values or indices  --> 
+	  <!-- Example: t = top of layer time. This entry means - the mean has default 1800ms, --> 
+	  <!-- but it varies with trace number, so look for it in the model-prior traces --> 
+	  <!-- The index of its entry is in the "property_indices" section -->
+	  <t>1.800<varies/></t>
+	  <sigma_t>.005</sigma_t> 
+
+	  <depth>1850</depth>
+	  <sigma_depth>20</sigma_depth> 
+
+	  <LFIV>2000</LFIV>
+	  <sigma_LFIV>110</sigma_LFIV> 
+
+	  <!-- layer thickness (isopach) constraints  -->
+	   <dz>210</dz>
+	  <sigma_dz>10</sigma_dz>		
+	</layer>
+	
+
+	<layer>
+	  <!-- optional name -->
+	  <name> reservoir (2,1)</name>
+
+	  <!-- the synchronise flag means make all non-fluid properties identical to the other layers
+	       which carry the synchronise flag and whose rock types match -->
+	  <synchronise/>
+	  <!-- meta information  -->
+	  <sand_member>sand B</sand_member>
+	  <shale_member>shale</shale_member>
+	  <!-- possible fluids -->
+	  <brine>brine B</brine>
+	  <oil>40APIoil</oil>
+	  <gas>methane</gas>
+	  <lsg>low sat gas</lsg>
+	  
+	  <!-- specific values or indices  -->
+	  <!-- top of layer time  -->
+	  <t>1.920<varies/></t>
+	  <sigma_t>.0052</sigma_t>
+	  <depth>2250</depth>
+	  <sigma_depth>0</sigma_depth>
+	  
+	  <!-- the "same_as_layer_above"   flag means the property for this layer will be the same as
+	       that of the layer above (like a mini-synchronisation). Useful for things like LFIV, since
+	       this tends to be a very coarse scale average anyway. -->
+	  <LFIV>2000<same_as_layer_above/></LFIV>
+	  <sigma_LFIV>200<same_as_layer_above/></sigma_LFIV>
+	  
+	  <NG>0.4<varies/></NG>
+	  <sigma_NG>0.2</sigma_NG>
+		
+	  <!-- fluid prior probs and  sats -->
+	  <!-- from RFT data, we may want to vary the P_oil, etc.... -->
+	  <P_oil>0.3<varies/></P_oil>
+	  <S_oil>.67</S_oil>
+	  <sigma_S_oil>0.3</sigma_S_oil>
+	  
+	  <P_gas>0.1</P_gas>
+	  <S_gas>0.8</S_gas>
+	  <sigma_S_gas>0.2</sigma_S_gas>
+	  
+	  <P_lsg>0.0001</P_lsg>
+	  <S_lsg>0.22</S_lsg>
+	  <sigma_S_lsg>0.1</sigma_S_lsg>
+	  
+	  <!-- layer thickness (isopach) constraints -->
+	  <dz>75</dz>
+	  <sigma_dz>10.00000</sigma_dz>		
+	  <!-- oldvalue 2 -->		
+	</layer>
+	
+  <layer>
+	  <!-- optional name -->
+	  <name> middle seal (3,2)</name>
+
+	  <!-- this layer does not specify a permeable member, so it is taken as pure impermeable-rock -->
+	  <!-- with NG=0, and no fluid or permeable things need to be specified -->
+	  <shale_member>shale B</shale_member> 
+	
+	  <!-- specific values or indices  --> 
+	  <!-- Example: t = top of layer time. This entry means - the mean has default 1800ms, --> 
+	  <!-- but it varies with trace number, so look for it in the model-prior traces --> 
+	  <!-- The index of its entry  in the model-prior traces is in the "property_indices" section -->
+	  <t>1.94<varies/></t>
+
+	  <sigma_t>.0054</sigma_t> 
+	  <depth>2260</depth>
+	  <sigma_depth>.100</sigma_depth> 
+	  <LFIV>2000</LFIV>
+	  <sigma_LFIV>.150</sigma_LFIV> 
+
+	  <!-- layer thickness (isopach) constraints  -->
+	  <dz>49.3</dz>
+	  <sigma_dz>10.00000</sigma_dz>
+	  <!-- oldvalue 5 -->		
+	</layer>
+	
+
+
+	<layer>
+	  <!-- optional name -->
+	  <name> reservoir (4,3)</name>
+
+	  <synchronise/>
+	  <!-- meta information  -->
+	  <sand_member>sand B</sand_member>
+	  <shale_member>shale</shale_member>
+	  <!-- possible fluids -->
+	  <brine>brine B</brine>
+	  <oil>40APIoil</oil>
+	  <gas>methane</gas>
+	  <lsg>low sat gas</lsg>
+	  
+	  <!-- specific values or indices  -->
+	  <!-- top of layer time  -->
+	  <t>1.96<varies/></t>
+	  <sigma_t>.0056</sigma_t>
+	  <depth>2270</depth>
+	  <sigma_depth>100</sigma_depth>
+	  <LFIV>2000</LFIV>
+	  <sigma_LFIV>200</sigma_LFIV>
+	  
+	  <NG>0.4<varies/></NG>
+	  <sigma_NG>0.2</sigma_NG>
+		
+	  <!-- fluid prior probs and  sats -->
+	  <!-- from RFT data, we may want to vary the P_oil, etc.... -->
+	  <P_oil>0.23<varies/></P_oil>
+	  <S_oil>0.7</S_oil>
+	  <sigma_S_oil>0.3</sigma_S_oil>
+	  
+	  <P_gas>0.1</P_gas>
+	  <S_gas>0.8</S_gas>
+	  <sigma_S_gas>0.2</sigma_S_gas>
+	  
+	  <P_lsg>0.0001</P_lsg>
+	  <S_lsg>0.22</S_lsg>
+	  <sigma_S_lsg>0.1</sigma_S_lsg>
+	  <
+	  <!-- layer thickness (isopach) constraints -->
+	  <dz>28</dz>
+	  <sigma_dz>2.00000</sigma_dz>		
+	  <!-- oldvalue 2 -->		
+	</layer>
+	
+	<layer>
+	  <!-- optional name -->
+	  <name> reservoir B (5,4)</name>
+
+	  <synchronise/>
+
+	  <!-- meta information  -->
+	  <sand_member>sand B</sand_member>
+	  <shale_member>shale</shale_member>
+	  <!-- possible fluids -->
+	  <brine>brine B</brine>
+	  <oil>40APIoil</oil>
+	  <gas>methane</gas>
+	  <!-- specific values or indices  -->
+	  <!-- top of layer time  -->
+	  <t>1.97<varies/></t>
+	  <sigma_t>.0058</sigma_t>
+	  <depth>2330</depth>
+	  <sigma_depth>20</sigma_depth>
+	  <LFIV>2200</LFIV>
+	  <!-- old sigma=220 -->
+	  <sigma_LFIV>220</sigma_LFIV>
+	  
+	  <NG>0.8<varies/></NG>
+	  <sigma_NG>0.2</sigma_NG>
+		
+	  <!-- fluid prior probs and  sats -->
+	  <P_oil>0.34<varies/></P_oil>
+	  <S_oil>0.7</S_oil>
+	  <sigma_S_oil>0.3</sigma_S_oil>
+
+	  <P_gas>0.45</P_gas>
+	  <S_gas>0.55</S_gas>
+
+	  <!-- layer thickness (isopach) constraints -->
+	  <dz>34.2</dz>
+	  <sigma_dz>13.20000</sigma_dz>		
+	  <!-- oldvalue 3.2 -->		
+	</layer>
+
+	<layer>
+	  <!-- optional name -->
+	  <name>bottom seal (6,5)</name>
+	  <!-- only shale here -->
+	  <shale_member>shale B</shale_member>
+	  <!-- possible fluids -->
+	  <brine>brine B</brine>
+	  
+	  <!-- specific values or indices  -->
+	  <!-- top of layer time  -->
+	  <t>1.98<varies/></t>
+	  <sigma_t>.006</sigma_t>
+
+	  <!-- last layer *****MUST***** specify base time & uncertainty  -->
+	  <!-- if times vary, so must t_base, since it's a time -->
+	  <t_base>2.1<varies/></t_base>
+	  <!-- if sigma-times vary, so must sigma_t_base -->
+	  <sigma_t_base>.0062<varies/></sigma_t_base>  
+
+	  <depth>2800</depth>
+	  <sigma_depth>100</sigma_depth>
+	  <LFIV>2000<same_as_layer_above/></LFIV>
+	  <sigma_LFIV>150<same_as_layer_above/></sigma_LFIV>
+	  
+	  <!-- layer thickness (isopach) constraints -->
+	  <dz>300</dz>
+	  <sigma_dz>80.0000</sigma_dz>
+	  <!-- oldvalue 30 -->		
+	</layer>
+
+  </layers>
+
+  <property_indices>
+	<!-- these are the variable bits coming in from the model su traces... -->
+	<!-- some layer said that eg. t varies, so its index is found in this section -->
+	<!-- N.B. t implies t_base  (last block has N+1 entries). sigma_t has only N -->
+	<sigma_t>1</sigma_t>
+	<NG>2</NG>
+	<P_oil>3</P_oil>
+	<near_stack_noise_rms>4</near_stack_noise_rms>
+	<sigma_A>5</sigma_A>
+	<t>6</t>
+
+  </property_indices>
+
+
+
+
+
+  <!-- VARIOUS USEFUL FLAGS -->
+
+  <!-- FLAG to indicate density ordering for fluids -->
+  <!-- This must be one of {none,partial,full} -->
+  <!-- "full" =fluids are density-ordered in permeable layers for the full -->
+  <!--        extent of the model, even if two permeable layers are separated by an impermeable layer-->
+  <!-- "partial" = fluids are density-ordered in adjacent permeable layers not separated by an impermeable layer-->
+  <!-- "none" = all fluids are allowed in all layers, irrespective of density -->
+
+  <density_ordering>full</density_ordering>
+
+  <!-- header field into which to place the realisation number -->
+  <realisation_number_header_field>mark</realisation_number_header_field>
+
+  <!-- flag to indicate whether to output depth models. Depth is `hung' from top depth ; -->
+  <!-- either the model prior depth of the top layer if depths vary, or the stack velocity * top-layer time, if they don't -->
+  <!-- output_depth_models/ -->
+
+
+
+
+
+
+
+
+
+
+ <!-- SEISMIC STACK & WAVELET DATA -->
+ <stack>
+	<filename>near-stack.su</filename>
+	<!-- units in these entries have to be consistent of course, so the angle is sane -->
+	<near_offset>0</near_offset>
+	<far_offset>1200</far_offset>
+	<reflector_time>1.800</reflector_time>
+	<stack_velocity>2200</stack_velocity>
+	<wavelet_filename>near-wavelet.su</wavelet_filename>
+	<noise_rms>.0100 <varies/></noise_rms>
+  </stack>
+  
+  <stack>
+	<filename>far-stack.su</filename>
+	<near_offset>1200</near_offset>
+	<far_offset>2400</far_offset>
+	<reflector_time>1.800</reflector_time>
+	<stack_velocity>2300</stack_velocity>
+	<!-- The wavelet will be an in this .su file -->
+	<wavelet_filename>far-wavelet.su</wavelet_filename>
+	<noise_rms>.0100</noise_rms>
+  </stack>
+
+
+
+  <AVO_terms>
+    <!-- AVO fudge coefficients   -->
+	<!-- correction to zero offset reflection coeff -->
+	<A>1.0</A>
+	<!-- entry for varying A might be... <sigma_A>0.0<varies/></sigma_A> -->
+	<B>1.0</B>
+	<!-- no sigma_B signifies it's fixed: sigma_B=0 -->
+  </AVO_terms>
+
+
+</document>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: xml
+sgml-omittag:nil
+sgml-shorttag:nil
+sgml-namecase-general:nil
+sgml-general-insert-case:lower
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->

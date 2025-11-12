@@ -1,0 +1,8 @@
+ # Plat-dependent things...
+CSHAREDLIBFLAG = -shared -fPIC
+ATLAS_LDPATH = /usr/lib64/atlas
+#ATLASOPTS = -L${ATLAS_LDPATH} -lcblas -latlas
+ATLASOPTS = -L${ATLAS_LDPATH} -llapacke -lblas -lsatlas 
+# path to find atlas rpm header files, usually say /usr/include/atlas/cblas.h on, say fedora
+INCLUDEPATH = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -I/usr/include/atlas/
+DYLIBSUFFIX = so

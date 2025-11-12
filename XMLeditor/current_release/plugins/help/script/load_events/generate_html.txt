@@ -1,0 +1,35 @@
+html/introduction.html
+Introduction to event loader into BHPIO
+The program loads a 12 ascii horizon files into one BHPIO random accesed dataset.  It will also form a tranposed dataset that can be viewed as a map by the INTviewer.  The program will put the inline and crossline numbers to be in header words cdp and ep.  The input horizons need to be in an ascii format "%14.0f %14.0f %30.4f\n".  This format can easily be output from Landmark using the *.fmt file downloadable from http://gtech.pethou.bhp.com.au/lfp/data/misc/LFP1_Amp.fmt.  It is also the format expected by the LFP Phase I spreadsheet and the grdlib MATLAB library.
+
+html/script_parameters.html
+Event loader Parameters
+The parameters for event loading are:
+<b>project_path</b> : the name of the project directory where all of the input and output files will be stored (top level for relative pathing)
+<b>mincdp</b> : minimum cdp of seismic dataset (for bhpwritecube)
+<b>inccdp</b> : cdp increment of seismic dataset (for bhpwritecube)
+<b>ncdp</b> : number of cdp of seismic dataset (for bhpwritecube)
+<b>minep</b> : minimum ep of seismic dataset (for bhpwritecube)
+<b>incep</b> : ep increment of seismic dataset (for bhpwritecube)
+<b>nedp</b> : number of ep of seismic dataset (for bhpwritecube)
+<b>input_filename</b> : a seismic dataset that corresponds to the horizons to be loaded  (project_path/int_datasets/input_filename.dat)
+<b>output_filename</b> : output BHPIO indexed horizon dataset name (project_path/int_datasets/output_filename.dat and project_path/int_datasets/output_filename_transpose_cdp.dat)
+<b>event1_name</b> : the file name of the 1st event to load (project_path/horizons/event1_name.xyz)
+<b>event2_name</b> : the file name of the 2nd event to load (project_path/horizons/event2_name.xyz)
+<b>event3_name</b> : the file name of the 3rd event to load (project_path/horizons/event3_name.xyz)
+<b>event4_name</b> : the file name of the 4th event to load (project_path/horizons/event4_name.xyz)
+<b>event5_name</b> : the file name of the 5th event to load (project_path/horizons/event5_name.xyz)
+<b>event6_name</b> : the file name of the 6th event to load (project_path/horizons/event6_name.xyz)
+<b>event7_name</b> : the file name of the 7th event to load (project_path/horizons/event7_name.xyz)
+<b>event8_name</b> : the file name of the 8th event to load (project_path/horizons/event8_name.xyz)
+<b>event9_name</b> : the file name of the 9th event to load (project_path/horizons/event9_name.xyz)
+<b>event10_name</b> : the file name of the 10th event to load (project_path/horizons/event10_name.xyz)
+<b>event11_name</b> : the file name of the 11th event to load (project_path/horizons/event11_name.xyz)
+<b>event12_name</b> : the file name of the 12th event to load (project_path/horizons/event12_name.xyz)
+
+html/flow.html
+Event loader Job Flow
+This job flow requires a file (project_path/int_datasets/default.dat) with a list of directories where the output BHPIO datasets can be stored.
+
+
+

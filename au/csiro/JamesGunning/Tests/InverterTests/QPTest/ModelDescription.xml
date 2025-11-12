@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inversion>
+  <inversion_info>
+    <name>Quadratic programming test</name>
+    <project>QP test</project>
+    <author>Gunning</author>
+  </inversion_info>
+  <seismic_data>
+    <stack>
+      <name>full</name>
+      <filename>seismic.su</filename>
+      <min_offset>0</min_offset>
+      <max_offset>4000</max_offset>
+      <reflector_time>1300</reflector_time>
+      <stack_velocity>7400</stack_velocity>
+      <wavelet>
+        <filename>wavelet.su</filename>
+        <noise_rms varies_areally="false">0.001</noise_rms>
+      </wavelet>
+    </stack>
+    
+  <AVO_terms>
+      <A>1.0</A>
+      <B>1.0</B>
+    </AVO_terms></seismic_data>
+  <model_description>
+    <top_layer>
+      <name>top shale</name>
+      <reservoir_endmember>
+        <name>reference sand</name>
+        <brine>
+          <name>brine</name>
+        </brine>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>reference shale</name>
+      </nonreservoir_endmember>
+      <time varies_areally="false">3800</time>
+      <sigma_time varies_areally="false">8</sigma_time>
+      <net_to_gross varies_areally="false">0.0</net_to_gross>
+      <depth varies_areally="false">8500</depth>
+      <LFIV varies_areally="false">0</LFIV>
+    </top_layer>
+    <middle_layer>
+      <name>sand</name>
+      <reservoir_endmember>
+        <name>reference sand</name>
+        <brine>
+          <name>brine</name>
+        </brine>
+        <gas>
+          <name>gas A</name>
+          <probability_of_gas varies_areally="false">0</probability_of_gas>
+          <saturation_of_gas>0.8</saturation_of_gas>
+        </gas>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>reference shale</name>
+      </nonreservoir_endmember>
+      <time varies_areally="false" same_as_layer_above="false">4000</time>
+      <sigma_time varies_areally="false">15</sigma_time>
+      <net_to_gross varies_areally="false" same_as_layer_above="false">0.8</net_to_gross>
+      <sigma_net_to_gross varies_areally="false">0.08</sigma_net_to_gross>
+      <depth varies_areally="false" same_as_layer_above="false">8500</depth>
+      <LFIV varies_areally="false" same_as_layer_above="false">0</LFIV>
+    </middle_layer>
+    <bottom_layer>
+      <name>bottom shale</name>
+      <reservoir_endmember>
+        <name>reference sand</name>
+        <brine>
+          <name>brine</name>
+        </brine>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>reference shale</name>
+      </nonreservoir_endmember>
+      <time varies_areally="false" same_as_layer_above="false">4010</time>
+      <sigma_time varies_areally="false">15</sigma_time>
+      <net_to_gross>0.0</net_to_gross>
+      <depth varies_areally="false" same_as_layer_above="false">8900</depth>
+      <LFIV varies_areally="false" same_as_layer_above="false">0</LFIV>
+      <t_base varies_areally="false">4100</t_base>
+      <sigma_t_base varies_areally="false">6</sigma_t_base>
+    </bottom_layer>
+  </model_description>
+  <rock_fluid_properties>
+    <fluid_properties>
+      <fluid>
+        <name>gas A</name>
+        <vp varies_areally="false">2700</vp>
+        <rho varies_areally="false">0.32</rho>
+      </fluid>
+      <fluid>
+        <name>brine</name>
+        <vp varies_areally="false">5500</vp>
+        <rho varies_areally="false">1.05</rho>
+      </fluid>
+    </fluid_properties>
+    <rock_properties>
+      <reservoir_endmember>
+        <name>reference sand</name>
+        <reference_fluid>brine</reference_fluid>
+        <vp_curve>
+          <intercept varies_areally="false">4199</intercept>
+          <depth_coefficient varies_areally="false">0.5182</depth_coefficient>
+          <LFIV_coefficient varies_areally="false">0</LFIV_coefficient>
+          <sigma varies_areally="false">373</sigma>
+        </vp_curve>
+        <vs_curve>
+          <intercept varies_areally="false">-3996</intercept>
+          <slope varies_areally="false">0.8940</slope>
+          <sigma varies_areally="false">226</sigma>
+        </vs_curve>
+        <porosity_curve>
+          <intercept varies_areally="false">0.3686</intercept>
+          <slope varies_areally="false">-4.89E-6</slope>
+          <sigma varies_areally="false">0.0144</sigma>
+        </porosity_curve>
+        <vp_grain>20151</vp_grain>
+        <vs_grain>13740</vs_grain>
+        <rho_grain>2.65</rho_grain>
+      </reservoir_endmember>
+      
+    <nonreservoir_endmember>
+        <name>reference shale</name>
+        <vp_curve>
+          <intercept varies_areally="false">5834</intercept>
+          <depth_coefficient varies_areally="false">0.332</depth_coefficient>
+          <LFIV_coefficient>0</LFIV_coefficient>
+          <sigma varies_areally="false">382</sigma>
+        </vp_curve>
+        <vs_curve>
+          <intercept varies_areally="false">-3373</intercept>
+          <slope varies_areally="false">0.8012</slope>
+          <sigma varies_areally="false">206</sigma>
+        </vs_curve>
+        <density_curve>
+          <factor varies_areally="false">0.6677</factor>
+          <exponent varies_areally="false">0.1388</exponent>
+          <sigma varies_areally="false">0.0137</sigma>
+        </density_curve>
+      </nonreservoir_endmember>
+    </rock_properties>
+  </rock_fluid_properties>
+  <output>
+    <density_ordering>none</density_ordering>
+    <realisation_number_header_field>mark</realisation_number_header_field>
+    <depth_models>false</depth_models>
+    <master_depth_layer_number>1</master_depth_layer_number>
+  </output>
+  
+<property_indices>
+  </property_indices>
+</inversion>

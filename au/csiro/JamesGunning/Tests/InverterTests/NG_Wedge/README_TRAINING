@@ -1,0 +1,34 @@
+# Teaching purpose README. See also main README
+
+# This is a model of a net-to-gross sand wedge of constant thickness
+# buried in shales. The C & G preprint
+# has a discussion of this model. Here's some things you can do using 
+# inbuilt graphics for example
+
+# See the seismic
+cat near-stack.su | suxwigb
+
+# See the underlying mean prior model
+delivery -v 3 -p -m prior_traces.su ModelDescription.xml ; \
+deliveryAnalyser -i realisations.su -l -G
+deliveryAnalyser -i realisations.su -lNG -G
+
+# See samples from the prior
+delivery -v 3  -N 100 -IS -m prior_traces.su ModelDescription.xml ; \
+deliveryAnalyser -i realisations.su -l 
+
+
+# To make Random walk sampler (-RWS) realisations
+delivery -PD -v 3 -RWS -N 100 -m prior_traces.su ModelDescription.xml
+
+
+# to see the inverted NG:
+deliveryAnalyser -i realisations.su -lNG -G
+deliveryAnalyser -i realisations.su -p-ascii NG 2 -G
+
+# to see the p50 NG
+deliveryAnalyser -i realisations.su --quantile NG 2 50
+
+# to plot it
+deliveryAnalyser -i realisations.su --quantile NG 2 50 | awk '{print $NF}' | graph -TX -a
+

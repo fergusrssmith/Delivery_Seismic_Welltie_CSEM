@@ -1,0 +1,17 @@
+Here's a simple 1-trace test to confirm that Pinchout detection 
+and the Quadratic Programming routines work. Try:
+
+% delivery ModelDescription.xml -PD -v 3 --Xsections 2 -RWS -N 500
+
+% graph -TX -y 0 2 PosteriorXsection.fs0.mode1.t.*.txt
+
+% deliveryAnalyser -i realisations.su -l | suximage blockinterp=1
+
+% deliveryAnalyser -i realisations.su --histogram thickness 2 | graph -TX
+
+
+and you can do this with samples from the prior by running 
+
+% delivery ModelDescription.xml -PD -v 3 --Xsections 2 -RWS -N 500 -IS
+
+for comparison

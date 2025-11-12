@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# This script requires JDK >= 1.5, 
+# and runs the seismic inversion analysis (deliveryAnalyser) code
+#
+# All CAPITALISED variables imported from this file
+source environment_setup.sh
+
+
+CLASSPATH=$SEISMIC_INVERTER_HOME/jars/colt.jar:$SEISMIC_INVERTER_HOME/jars/concurrent.jar:$SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/lib:$SEISMIC_INVERTER_HOME/:$SEISMIC_INVERTER_HOME/jars/FreeHEP.jar
+
+if [ `uname` == "Darwin" ]; then
+# OSX's 2D graphics renderer may improve with this..
+  OPTS="-Dapple.awt.graphics.UseQuartz=true"
+else
+  OPTS=""
+fi
+
+# Use default java on user's path
+java $OPTS -classpath $CLASSPATH au.csiro.JamesGunning.seismicinverter.InversionAnalyser $*
+ 

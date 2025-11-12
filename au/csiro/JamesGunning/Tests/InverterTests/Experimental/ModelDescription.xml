@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inversion>
+  <inversion_info>
+    <name>complex model test</name>
+    <project>test</project>
+    <author>Gunning</author>
+  </inversion_info>
+  <seismic_data>
+    <stack>
+      <name>near</name>
+      <filename>near-stack.su</filename>
+      <min_offset>0</min_offset>
+      <max_offset varies_areally="false">1200</max_offset>
+      <reflector_time varies_areally="false">1800</reflector_time>
+      <stack_velocity varies_areally="false">2200</stack_velocity>
+      <wavelet>
+        <filename>near-wavelet.su</filename>
+        <noise_rms varies_areally="false">0.03</noise_rms>
+      </wavelet>
+    </stack>
+    <stack>
+      <name>far</name>
+      <filename>far-stack.su</filename>
+      <min_offset varies_areally="false">1200</min_offset>
+      <max_offset varies_areally="false">2400</max_offset>
+      <reflector_time varies_areally="false">1800</reflector_time>
+      <stack_velocity varies_areally="false">2200</stack_velocity>
+      <wavelet>
+        <filename>far-wavelet.su</filename>
+        <noise_rms varies_areally="false">0.03</noise_rms>
+      </wavelet>
+    </stack>
+    <AVO_terms>
+      <A>1.0</A>
+      <sigma_A varies_areally="false">0.1</sigma_A>
+      <B>1.0</B>
+      <sigma_B varies_areally="false">0.15</sigma_B>
+    </AVO_terms>
+  </seismic_data>
+  <model_description>
+    <top_layer>
+      <name>top (1,0)</name>
+      <reservoir_endmember>
+        <name>p294MavkoRockPhysicsHB_Sand</name>
+        <brine>
+          <name>brine</name>
+        </brine>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>GOM_shale B</name>
+      </nonreservoir_endmember>
+      <time varies_areally="true">1800</time>
+      <sigma_time varies_areally="false">5</sigma_time>
+      <net_to_gross>0.0</net_to_gross>
+      <depth varies_areally="false">1850</depth>
+      <sigma_depth varies_areally="false">20</sigma_depth>
+      
+    <LFIV varies_areally="false">2000</LFIV><sigma_LFIV varies_areally="false">110</sigma_LFIV>
+      <thickness varies_areally="false">0</thickness>
+      <sigma_thickness varies_areally="false">10</sigma_thickness>
+    </top_layer>
+    <middle_layer synchronise_rock_matrix="true">
+      <name>reservoir (2,1)</name>
+      <reservoir_endmember>
+        <name>p296MavkoRockPhysicsHB_TightGasSand</name>
+        <brine>
+          <name>brine B</name>
+        </brine>
+        <oil>
+          <name>40APIoil</name>
+          <probability_of_oil varies_areally="true">0.3</probability_of_oil>
+          <saturation_of_oil>0.7</saturation_of_oil>
+          <sigma_saturation_of_oil varies_areally="false">0.3</sigma_saturation_of_oil>
+        </oil>
+        
+      <gas>
+          <name>methane</name>
+          <probability_of_gas varies_areally="false">0.1</probability_of_gas>
+          <saturation_of_gas>0.8</saturation_of_gas>
+          <sigma_saturation_of_gas varies_areally="false">0.2</sigma_saturation_of_gas>
+        </gas>
+        <lsg>
+          <name>low sat gas</name>
+          <probability_of_lsg varies_areally="false">0.001</probability_of_lsg>
+          <saturation_of_lsg varies_areally="false" same_as_layer_above="false">0.15</saturation_of_lsg>
+        </lsg>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>GOM_shale A</name>
+      </nonreservoir_endmember>
+      <time varies_areally="true" same_as_layer_above="false">1920</time>
+      <sigma_time varies_areally="false">10</sigma_time>
+      <net_to_gross>0.0</net_to_gross>
+      <depth varies_areally="false" same_as_layer_above="false">2250</depth>
+      <sigma_depth varies_areally="false">0</sigma_depth>
+      
+    <LFIV varies_areally="false" same_as_layer_above="true">2000</LFIV><sigma_LFIV varies_areally="false" same_as_layer_above="true">200</sigma_LFIV>
+      <thickness varies_areally="false" same_as_layer_above="false">0</thickness>
+      <sigma_thickness varies_areally="false">10</sigma_thickness>
+    </middle_layer>
+    <middle_layer synchronise_rock_matrix="false">
+      <name>middle seal (3,2)</name>
+      <reservoir_endmember>
+        <name>p294MavkoRockPhysicsHB_Sand</name>
+        <brine>
+          <name>brine</name>
+        </brine>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>GOM_shale B</name>
+      </nonreservoir_endmember>
+      <time varies_areally="true" same_as_layer_above="false">1940</time>
+      <sigma_time varies_areally="false">10</sigma_time>
+      <net_to_gross>0.0</net_to_gross>
+      <depth varies_areally="false" same_as_layer_above="false">2260</depth>
+      <sigma_depth varies_areally="false">20</sigma_depth>
+      
+    <LFIV varies_areally="false">2000</LFIV><sigma_LFIV varies_areally="false">110</sigma_LFIV>
+      <thickness varies_areally="false" same_as_layer_above="false">0</thickness>
+      <sigma_thickness varies_areally="false">6.8</sigma_thickness>
+    </middle_layer>
+    <middle_layer synchronise_rock_matrix="true">
+      <name>reservoir (4,3)</name>
+      <reservoir_endmember>
+        <name>p296MavkoRockPhysicsHB_TightGasSand</name>
+        <brine>
+          <name>brine B</name>
+        </brine>
+        <oil>
+          <name>40APIoil</name>
+          <probability_of_oil varies_areally="true">0.3</probability_of_oil>
+          <saturation_of_oil>0.7</saturation_of_oil>
+          <sigma_saturation_of_oil varies_areally="false">0.3</sigma_saturation_of_oil>
+        </oil>
+        
+      <gas>
+          <name>methane</name>
+          <probability_of_gas varies_areally="false">0.1</probability_of_gas>
+          <saturation_of_gas>0.8</saturation_of_gas>
+          <sigma_saturation_of_gas varies_areally="false">0.2</sigma_saturation_of_gas>
+        </gas>
+        <lsg>
+          <name>low sat gas</name>
+          <probability_of_lsg varies_areally="false">0.001</probability_of_lsg>
+          <saturation_of_lsg varies_areally="false" same_as_layer_above="false">0.15</saturation_of_lsg>
+        </lsg>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>GOM_shale B</name>
+      </nonreservoir_endmember>
+      <time varies_areally="true" same_as_layer_above="false">1960</time>
+      <sigma_time varies_areally="false">5</sigma_time>
+      <net_to_gross varies_areally="true" same_as_layer_above="false">0.4</net_to_gross>
+      <sigma_net_to_gross varies_areally="false">0.2</sigma_net_to_gross>
+      <depth varies_areally="false" same_as_layer_above="false">2250</depth>
+      <sigma_depth varies_areally="false">100</sigma_depth>
+      
+    <LFIV varies_areally="false">2000</LFIV><sigma_LFIV varies_areally="false">200</sigma_LFIV>
+      <thickness varies_areally="false" same_as_layer_above="false">54.5</thickness>
+      <sigma_thickness varies_areally="false">2</sigma_thickness>
+    </middle_layer>
+
+
+    <middle_layer synchronise_rock_matrix="true">
+      <name>reservoir B (5,4)</name>
+      <reservoir_endmember>
+        <name>p296MavkoRockPhysicsHB_TightGasSand</name>
+        <brine>
+          <name>brine B</name>
+        </brine>
+        <oil>
+          <name>40APIoil</name>
+          <probability_of_oil varies_areally="true">0.35</probability_of_oil>
+          <saturation_of_oil>0.7</saturation_of_oil>
+          <sigma_saturation_of_oil varies_areally="false">0.3</sigma_saturation_of_oil>
+        </oil>
+        
+      <gas>
+          <name>methane</name>
+          <probability_of_gas varies_areally="false">0.1</probability_of_gas>
+          <saturation_of_gas>0.8</saturation_of_gas>
+          <sigma_saturation_of_gas varies_areally="false">0.2</sigma_saturation_of_gas>
+        </gas>
+        <lsg>
+          <name>low sat gas</name>
+          <probability_of_lsg varies_areally="false">0.001</probability_of_lsg>
+          <saturation_of_lsg varies_areally="false" same_as_layer_above="false">0.15</saturation_of_lsg>
+        </lsg>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>GOM_shale A</name>
+      </nonreservoir_endmember>
+      <time varies_areally="true" same_as_layer_above="false">1970</time>
+      <sigma_time varies_areally="false">5.8</sigma_time>
+      <net_to_gross varies_areally="true" same_as_layer_above="false">0.8</net_to_gross>
+      <sigma_net_to_gross varies_areally="false">0.2</sigma_net_to_gross>
+      <depth varies_areally="false" same_as_layer_above="false">2330</depth>
+      <sigma_depth varies_areally="false">20</sigma_depth>
+      
+    <LFIV varies_areally="false">2000</LFIV><sigma_LFIV varies_areally="false">220</sigma_LFIV>
+      <thickness varies_areally="false" same_as_layer_above="false">8.5</thickness>
+      <sigma_thickness varies_areally="false">3.2</sigma_thickness>
+    </middle_layer>
+    <bottom_layer>
+      <name>bottom seal (6,5)</name>
+      <reservoir_endmember>
+        <name>p294MavkoRockPhysicsHB_Sand</name>
+        <brine>
+          <name>brine B</name>
+        </brine>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>GOM_shale B</name>
+      </nonreservoir_endmember>
+      <time varies_areally="true" same_as_layer_above="false">1980</time>
+      <sigma_time varies_areally="false">6</sigma_time>
+      <net_to_gross>0.0</net_to_gross>
+      <depth varies_areally="false" same_as_layer_above="false">2800</depth>
+      <sigma_depth varies_areally="false">100</sigma_depth>
+      
+      <LFIV varies_areally="false" same_as_layer_above="true">2000</LFIV>
+      <sigma_LFIV varies_areally="false" same_as_layer_above="true">150</sigma_LFIV>
+      <thickness varies_areally="false" same_as_layer_above="false">122</thickness>
+      <sigma_thickness varies_areally="false">80</sigma_thickness>
+      
+    <t_base varies_areally="true">2100</t_base><sigma_t_base varies_areally="false">6.3</sigma_t_base>
+    </bottom_layer>
+  </model_description>
+  <rock_fluid_properties>
+    <fluid_properties>
+      <fluid>
+        <name>brine B</name>
+        <vp varies_areally="false">1650</vp>
+        <sigma_vp varies_areally="false">130</sigma_vp>
+        <rho varies_areally="false">1010</rho>
+        <sigma_rho varies_areally="false">20</sigma_rho>
+      </fluid>
+      <fluid>
+        <name>reference brine</name>
+        <vp varies_areally="false">1710</vp>
+        <rho varies_areally="false">1010</rho>
+      </fluid>
+      <fluid>
+        <name>40APIoil</name>        
+        <vp varies_areally="false">1500</vp>
+        <sigma_vp varies_areally="false">34</sigma_vp>
+        <rho varies_areally="false">800</rho>
+        <sigma_rho varies_areally="false">10</sigma_rho>
+      </fluid>
+      <fluid>
+        <name>methane</name>
+        <vp varies_areally="false">556</vp>
+        <rho varies_areally="false">145</rho>
+      </fluid>
+      <fluid>
+        <name>low sat gas</name>
+        <vp varies_areally="false">600</vp>
+        <sigma_vp varies_areally="false">57</sigma_vp>
+        <rho varies_areally="false">230</rho>
+      </fluid>
+    </fluid_properties>
+    <rock_properties>
+      <reservoir_endmember>
+        <name>p294MavkoRockPhysicsHB_Sand</name>
+        <reference_fluid>reference brine</reference_fluid>
+        <vp_curve>
+          <intercept varies_areally="false">3000</intercept>
+          <depth_coefficient varies_areally="false">0.55</depth_coefficient>
+          <LFIV_coefficient>0</LFIV_coefficient>
+          <sigma varies_areally="false">200</sigma>
+        </vp_curve>
+        <vs_curve>
+          <intercept varies_areally="false">-733</intercept>
+          <slope varies_areally="false">0.768</slope>
+          <sigma varies_areally="false">150</sigma>
+        </vs_curve>
+        <porosity_curve>
+          <intercept varies_areally="false">0.95</intercept>
+          <slope varies_areally="false">-0.0001923</slope>
+          <sigma varies_areally="false">0.05</sigma>
+        </porosity_curve>
+        <!-- use GOM grain data -->
+        <vp_grain varies_areally="false">6110</vp_grain>
+        <vs_grain varies_areally="false">4131</vs_grain>
+        <rho_grain varies_areally="false">2650</rho_grain>
+      </reservoir_endmember>
+      <reservoir_endmember>
+        <name>p296MavkoRockPhysicsHB_TightGasSand</name>
+        <reference_fluid>brine B</reference_fluid>
+        <vp_curve>
+          <intercept varies_areally="false">3400</intercept>
+          <depth_coefficient varies_areally="false">0.55</depth_coefficient>
+          <LFIV_coefficient>0</LFIV_coefficient>
+          <sigma varies_areally="false">200</sigma>
+        </vp_curve>
+        <vs_curve>
+          <intercept varies_areally="false">485.5</intercept>
+          <slope varies_areally="false">0.55</slope>
+          <sigma varies_areally="false">70</sigma>
+        </vs_curve>
+        <porosity_curve>
+          <intercept varies_areally="false">0.454</intercept>
+          <slope varies_areally="false">-0.000073</slope>
+          <sigma varies_areally="false">0.05</sigma>
+        </porosity_curve>
+        <!-- use Hacked GOM grain data -->
+        <vp_grain varies_areally="false">5110</vp_grain>
+        <vs_grain varies_areally="false">3131</vs_grain>
+        <rho_grain varies_areally="false">2650</rho_grain>
+      </reservoir_endmember>
+      <nonreservoir_endmember>
+        <name>GOM_shale A</name>
+        <vp_curve>
+          <intercept varies_areally="false">1440</intercept>
+          <depth_coefficient varies_areally="false">0.1</depth_coefficient>
+          <LFIV_coefficient varies_areally="false">0</LFIV_coefficient>
+          <sigma varies_areally="false">170</sigma>
+        </vp_curve>
+        <vs_curve>
+          <intercept varies_areally="false">-494</intercept>
+          <slope varies_areally="false">0.57</slope>
+          <sigma varies_areally="false">50</sigma>
+        </vs_curve>
+        <density_curve>
+          <!-- GGG coefficients here of course -->
+          <factor varies_areally="false">300</factor>
+          <exponent varies_areally="false">0.26</exponent>
+          <sigma varies_areally="false">20</sigma>
+        </density_curve>
+      </nonreservoir_endmember>
+      <nonreservoir_endmember>
+        <name>GOM_shale B</name>
+        <vp_curve>
+          <intercept varies_areally="false">1446</intercept>
+          <depth_coefficient varies_areally="false">0.103</depth_coefficient>
+          <LFIV_coefficient>0</LFIV_coefficient>
+          <sigma varies_areally="false">170</sigma>
+        </vp_curve>
+        <vs_curve>
+          <intercept varies_areally="false">-487</intercept>
+          <slope varies_areally="false">0.567</slope>
+          <sigma varies_areally="false">45</sigma>
+        </vs_curve>
+        <density_curve>
+          <!-- GGG coefficients here of course -->
+          <factor varies_areally="false">300</factor>
+          <exponent>0.26</exponent>
+          <sigma varies_areally="false">20</sigma>
+        </density_curve>
+      </nonreservoir_endmember>
+    </rock_properties>
+  </rock_fluid_properties>
+  
+  <output>
+    <density_ordering>full</density_ordering>
+	<realisation_number_header_field>mark</realisation_number_header_field>
+    <depth_models>false</depth_models>
+    <master_depth_layer_number>1</master_depth_layer_number>
+  </output>
+<property_indices>
+    <near_stack_noise_rms_link>4</near_stack_noise_rms_link>    
+    <sigma_A_link>5</sigma_A_link><probability_of_oil_link>3</probability_of_oil_link>  
+    <net_to_gross_link>2</net_to_gross_link>
+    <time_link>6</time_link>
+    <sigma_time_link>1</sigma_time_link>
+</property_indices>
+</inversion>

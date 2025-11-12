@@ -1,0 +1,7 @@
+# Plat-dependent things...
+# preferred...
+ATLASOPTS = 
+CSHAREDLIBFLAG =  -dynamiclib -framework JavaVM -framework Accelerate
+#CSHAREDLIBFLAG =  -bundle -framework JavaVM 
+INCLUDEPATH = -I/System/Library/Frameworks/JavaVM.framework/Headers
+DYLIBSUFFIX = jnilib

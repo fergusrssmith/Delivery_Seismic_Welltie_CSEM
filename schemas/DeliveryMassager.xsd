@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:complexType name="variogramType">
+	<xsd:simpleContent>
+	  <xsd:restriction base="xsd:string">
+		<xsd:enumeration value="gau"/>
+		<xsd:enumeration value="exp"/>
+		<xsd:enumeration value="sph"/>
+	  </xsd:restriction>
+	</xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="propertyNameType">
+    <xsd:simpleContent>
+	  <xsd:extension base="xsd:string">
+		<xsd:attribute name="normalised" type="xsd:boolean" default="false"/>
+		<xsd:attribute name="smooth_across_faults" type="xsd:boolean" default="false"/>
+		<!-- this use_trend_smoothing_special_variogram may be absent on old schemas -->
+		<xsd:attribute name="use_trend_smoothing_special_variogram" type="xsd:boolean" use="optional" default="false"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+
+  <xsd:element name="massaged_inversion">
+	<xsd:complexType>
+	  <xsd:sequence>
+		<xsd:element name="massaged_inversion_info">
+		  <xsd:complexType> 
+			<xsd:sequence>
+			  <xsd:element name="name" type="xsd:string" default="inversion title"/>
+			  <xsd:element name="project" type="xsd:string" default="project name"/>
+			  <xsd:element name="author" type="xsd:string" default="my name"/>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+		<xsd:element name="delivery_massage_analysis_info">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="delivery_massage_analysis_filename" type="xsd:string" default="massaged_analysis_stats.mab"/>
+			  <xsd:element name="x-coordinate_header_word" type="xsd:string" default="cdp"/>
+			  <xsd:element name="y-coordinate_header_word" type="xsd:string" default="ep"/>
+			  <xsd:element name="utm-conversions" minOccurs="0" maxOccurs="1">
+				<xsd:complexType>
+				  <xsd:sequence>
+					<xsd:element name="point" minOccurs="3" maxOccurs="3">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="x" type="xsd:float" default="0"/>
+						  <xsd:element name="y" type="xsd:float" default="0"/>
+						  <xsd:element name="inline" type="xsd:integer" default="0"/>
+						  <xsd:element name="xline" type="xsd:integer" default="0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+
+
+		<xsd:element name="model_description">
+		  <xsd:complexType> 
+			<xsd:sequence>
+
+			  <xsd:element name="property_name" type="propertyNameType" minOccurs="1" maxOccurs="unbounded" default="thickness"/>
+
+			  <xsd:element name="trend_smoothing_variogram">
+				<xsd:complexType> 
+				  <xsd:sequence>
+					<xsd:element name="type" type="variogramType" default="gau"/>
+					<xsd:element name="sill" type="xsd:float" default="1.0"/>
+					<xsd:element name="nugget" type="xsd:float" default="0"/>
+					<xsd:element name="azimuth" type="xsd:float" default="0"/>
+					<xsd:element name="rotated-x-range" type="xsd:float" default="1000"/>
+					<xsd:element name="rotated-y-range" type="xsd:float" default="1000"/>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>     <!-- trend_smoothing_variogram -->
+
+			  <xsd:element name="trend_smoothing_special_variogram" minOccurs="0">
+				<xsd:complexType> 
+				  <xsd:sequence>
+					<xsd:element name="type" type="variogramType" default="gau"/>
+					<xsd:element name="sill" type="xsd:float" default="1.0"/>
+					<xsd:element name="nugget" type="xsd:float" default="0"/>
+					<xsd:element name="azimuth" type="xsd:float" default="0"/>
+					<xsd:element name="rotated-x-range" type="xsd:float" default="100"/>
+					<xsd:element name="rotated-y-range" type="xsd:float" default="100"/>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>     <!-- trend_smoothing_special_variogram -->
+
+			  <xsd:element name="layer">
+				<xsd:complexType> 
+				  <xsd:sequence>
+					<xsd:element name="name" type="xsd:string" default="layer-name"/>
+					<xsd:element name="inversion_layer_number" type="xsd:integer" default="1"/>
+
+					<xsd:element name="variogram">
+					  <xsd:complexType> 
+						<xsd:sequence>
+						  <xsd:element name="type" type="variogramType" default="gau"/>
+						  <xsd:element name="sill" type="xsd:float" default="1.0"/>
+						  <xsd:element name="nugget" type="xsd:float" default="0"/>
+						  <xsd:element name="azimuth" type="xsd:float" default="0"/>
+						  <xsd:element name="rotated-x-range" type="xsd:float" default="1000"/>
+						  <xsd:element name="rotated-y-range" type="xsd:float" default="1000"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element> <!-- variogram -->
+
+					<xsd:element name="ECLIPSE_grid_filename" type="xsd:string" default="Eclipse_file.txt"/>
+					<xsd:element name="ECLIPSE_segments_keyword" type="xsd:string" default="SEGMENTS"/>
+					<xsd:element name="ECLIPSE_layer_number" type="xsd:integer" default="1"/>
+					<!-- Next entry doesn't matter if depth not massaged, but reqd otherwise. -->
+					<!-- Safest to insist on some declaration -->
+					<xsd:element name="ECLIPSE_reference_depth_layer_number" type="xsd:integer" default="1" minOccurs="1"/>
+					<xsd:element name="ECLIPSE_output_grid_filename" type="xsd:string" default="MassagedEclProperties.ecl"/>
+
+					<xsd:element name="stats" minOccurs="0">
+					  <xsd:complexType> 
+						<xsd:sequence>
+						  <xsd:element name="truncation_Zmin" type="xsd:float" default="0"/>
+						  <xsd:element name="truncation_Zmax" type="xsd:float" default="100000"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element> <!-- stats -->
+
+					<xsd:element name="decorations" minOccurs="0">
+					  <xsd:complexType> 
+						<xsd:sequence>
+						  <xsd:element name="Nz" type="xsd:integer" default="30"/>
+						  <xsd:element name="threeDvariogram">
+							<xsd:complexType> 
+							  <xsd:sequence>
+								<xsd:element name="type" type="variogramType" default="gau"/>
+								<xsd:element name="sill" type="xsd:float" default="1.0"/>
+								<xsd:element name="nugget" type="xsd:float" default="0"/>
+								<xsd:element name="a_hmax" type="xsd:float" default="1000"/>
+								<xsd:element name="a_hmin" type="xsd:float" default="1000"/>
+								<xsd:element name="a_vert" type="xsd:float" default="100"/>
+								<xsd:element name="ang1" type="xsd:float" default="1000"/>
+								<xsd:element name="ang2" type="xsd:float" default="1000"/>
+								<xsd:element name="ang3" type="xsd:float" default="1000"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element> <!-- threeDvariogram -->
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element> <!-- stats -->
+
+
+					<xsd:element name="well_observation" minOccurs="0" maxOccurs="unbounded" >
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="position_x" type="xsd:float" default="0"/>
+						  <xsd:element name="position_y" type="xsd:float" default="0"/>
+						  <xsd:element name="property_name" type="xsd:string" default="thickness"/>
+						  <xsd:element name="property_value" type="xsd:float" default="1.0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element> <!-- well_observation -->
+
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>  <!-- layer -->
+
+
+			  <!-- next chunk an exact copy of above layer entry, with minOccurs="0", and no ECLIPSE stuff -->
+
+			  <xsd:element name="layer" minOccurs="0" maxOccurs="unbounded" > <!-- extra layers; no ECLIPSE stuff -->
+				<xsd:complexType> 
+				  <xsd:sequence>
+					<xsd:element name="name" type="xsd:string" default="layer-name"/>
+					<xsd:element name="inversion_layer_number" type="xsd:integer" default="1"/>
+
+					<xsd:element name="variogram">
+					  <xsd:complexType> 
+						<xsd:sequence>
+						  <xsd:element name="type" type="variogramType" default="gau"/>
+						  <xsd:element name="sill" type="xsd:float" default="1.0"/>
+						  <xsd:element name="nugget" type="xsd:float" default="0"/>
+						  <xsd:element name="azimuth" type="xsd:float" default="0"/>
+						  <xsd:element name="rotated-x-range" type="xsd:float" default="1000"/>
+						  <xsd:element name="rotated-y-range" type="xsd:float" default="1000"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element> <!-- variogram -->
+
+					<!-- These ECLIPSE entries really only needed in first layer -->
+					<xsd:element name="ECLIPSE_grid_filename" type="xsd:string" default="Eclipse_file.txt" minOccurs="0"/>
+					<xsd:element name="ECLIPSE_reference_depth_layer_number" type="xsd:integer" default="1" minOccurs="0"/>
+					<xsd:element name="ECLIPSE_segments_keyword" type="xsd:string" default="SEGMENTS" minOccurs="0"/>
+					<xsd:element name="ECLIPSE_layer_number" type="xsd:integer" default="1" minOccurs="0"/>
+					<xsd:element name="ECLIPSE_output_grid_filename" type="xsd:string" default="MassagedEclProperties.ecl" minOccurs="0"/>
+
+
+
+					<xsd:element name="stats" minOccurs="0">
+					  <xsd:complexType> 
+						<xsd:sequence>
+						  <xsd:element name="truncation_Zmin" type="xsd:float" default="0"/>
+						  <xsd:element name="truncation_Zmax" type="xsd:float" default="100000"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element> <!-- stats -->
+
+					<xsd:element name="decorations" minOccurs="0">
+					  <xsd:complexType> 
+						<xsd:sequence>
+						  <xsd:element name="Nz" type="xsd:integer" default="30"/>
+						  <xsd:element name="threeDvariogram">
+							<xsd:complexType> 
+							  <xsd:sequence>
+								<xsd:element name="type" type="variogramType" default="gau"/>
+								<xsd:element name="sill" type="xsd:float" default="1.0"/>
+								<xsd:element name="nugget" type="xsd:float" default="0"/>
+								<xsd:element name="a_hmax" type="xsd:float" default="1000"/>
+								<xsd:element name="a_hmin" type="xsd:float" default="1000"/>
+								<xsd:element name="a_vert" type="xsd:float" default="100"/>
+								<xsd:element name="ang1" type="xsd:float" default="1000"/>
+								<xsd:element name="ang2" type="xsd:float" default="1000"/>
+								<xsd:element name="ang3" type="xsd:float" default="1000"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element> <!-- threeDvariogram -->
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element> <!-- stats -->
+
+
+					<xsd:element name="well_observation" minOccurs="0" maxOccurs="unbounded" >
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="position_x" type="xsd:float" default="0"/>
+						  <xsd:element name="position_y" type="xsd:float" default="0"/>
+						  <xsd:element name="property_name" type="xsd:string" default="thickness"/>
+						  <xsd:element name="property_value" type="xsd:float" default="1.0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element> <!-- well_observation -->
+
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>  <!-- layer (extra layers) -->
+
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element> <!-- model_description -->
+
+	  </xsd:sequence>
+	</xsd:complexType>
+  </xsd:element>
+</xsd:schema>

@@ -1,0 +1,59 @@
+# This is a model of a sand wedge buried in shales. The C & G preprint
+# has a discussion of this model. Here's some things you can do
+
+# The demos here use bigendian data. Su takes this directly if compiled with SUXDR on (I recommend this)
+# if your SU install is not SUXDR and little endian, insert suswapbytes at suitable pipes (|) below
+
+# See the seismic
+cat near-stack.su |   suxwigb
+
+# See the underlying mean prior model
+delivery -v 3 -p -m prior_traces.su ModelDescription.xml ; 
+deliveryAnalyser -i realisations.su -l   | suximage blockinterp=1
+
+(or easy inbuilt graphics)
+deliveryAnalyser -i realisations.su -l -G 
+
+# See samples from the prior
+delivery -v 3 -PD -N 100   -IS -m prior_traces.su ModelDescription.xml ; \
+deliveryAnalyser -i realisations.su -l   | suximage blockinterp=1
+
+(or easy inbuilt graphics)
+deliveryAnalyser -i realisations.su -l -G 
+
+# To make Random walk sampler (-RWS) realisations
+delivery -PD -v 3 -RWS  -N 100 -m prior_traces.su ModelDescription.xml
+
+# to see them:
+deliveryAnalyser -i realisations.su -l   | suximage blockinterp=1
+OR
+deliveryAnalyser -i realisations.su -l -G 
+
+# to see the p50 thickness of the wedge
+deliveryAnalyser -i realisations.su --quantile thickness 2 50
+
+# to plot it
+deliveryAnalyser -i realisations.su --quantile thickness 2 50 | awk '{print $NF}' | graph -TX -a
+
+# To see some sphaghetti plots of posterior synthetics on top of truth case (see the script...)
+make_spaghetti_plots.sh -PD -RWS -N 100
+
+# or the easy inbuilt way...
+deliveryAnalyser -i realisations.su --trace-filter 'tracl=8' -S 1.7 2.1 R_near wavelet.su near-stack.su -G
+
+
+
+Forcing pinchouts
+_________________
+
+There are cases when you need to force a pinchout. The inverter
+detects such forcing by feeding it an isopach (thickness) constraint
+of 0 thickness with 0 uncertainty (sigma_thickness=0).  In this case,
+the layer bottom-time is synchronised with the top time in the model,
+and all internal properties are omitted from the model (if possible)
+to reduce computation time. See ModelDescriptionForcingPinchout.xml
+for an example. The test perl script make_wedge_model.pl can generate
+the required traces in the flavours you may require.  Beware: later
+analysis of the internal properties of these suppressed layers may not
+contain meaningful numbers (no sampling is performed on them, as they
+cannot contribute to the seismic response and thus the likelihood).

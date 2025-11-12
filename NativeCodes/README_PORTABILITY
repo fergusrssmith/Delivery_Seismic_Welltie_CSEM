@@ -1,0 +1,45 @@
+These codes depend on two garden-variety library pacakages available on Linux,
+MacOSX, and other POSIX-like platforms: (a) glib2-dev (b) libxml2.
+These can be installed routinely using yum, fink etc (favourite package manager)
+on your platform.
+
+A few comments on porting experiences so far....
+
+___________________________________________________________________
+
+Intel Linux (32 bit), e.g. Redhat, Fedora etc
+
+Reasonably heavily tested on this platform. Defaults should build.
+
+___________________________________________________________________
+
+Mac OSX
+
+These code build fine (with a little effort) under Mac OSX.  Most
+linux-like extra things can be pulled down using the fink package manager
+http://fink.sourceforge.net/
+
+Install these via % fink install .....
+
+libxml2
+glib2-dev
+pkgconfig
+
+
+
+Notes: Apple's gcc don't yet support thread-local storage under
+Darwin, so some of the libraries aren't thread-safe (look for
+__APPLE__ type #ifdefs in the code). DeliveryMassager doesn't use
+threads anyway, so this is not an issue. But if the libraries end up
+being called in a multi-threaded environment, this must be patched up
+on OSX.
+
+For ATLAS substitutes on intel macs, ATLAS also comes as part of the
+development environment for those who may have trouble building ATLAS
+on newer macs. Provided you have the development environment and
+"Accelerate" framework in place, the build will detect "Darwin" as
+part of your $CSIRO_OSTYPE and try to link against these libraries.
+To check if you have this, see if you have the headers cblas.h,
+clapack.h in /System/Library/Frameworks/vecLib.framework/Headers/
+____________________________________________________________________
+

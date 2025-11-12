@@ -1,0 +1,43 @@
+
+###############################################################################
+#
+#	Makefile.bins
+#
+#	Targets and macros for making binaries.
+#
+#	Required variables/macros:
+#
+#		ROOT_DIR
+#		BIN_SOURCES
+#		AUX_SOURCES
+#
+#	Optional variables/macros
+#
+#		BIN_CFLAGS
+#		BIN_CPPFLAGS
+#		BIN_FFLAGS
+#		BIN_LDFLAGS
+#
+###############################################################################
+
+
+.PHONY: make world
+
+
+make:
+	@(\
+		ROOT_DIR="$(ROOT_DIR)";\
+		BIN_SOURCES="$(BIN_SOURCES)";\
+		AUX_SOURCES="$(AUX_SOURCES)";\
+		BIN_CFLAGS="$(BIN_CFLAGS)";\
+		BIN_CPPFLAGS="$(BIN_CPPFLAGS)";\
+		BIN_FFLAGS="$(BIN_FFLAGS)";\
+		BIN_LDFLAGS="$(BIN_LDFLAGS)";\
+		export CSIRO_OSTYPE ROOT_DIR BIN_SOURCES AUX_SOURCES;\
+		export BIN_CFLAGS BIN_CPPFLAGS BIN_FFLAGS BIN_LDFLAGS;\
+		$(ROOT_DIR)/config/make.bins.sh;\
+	)
+
+
+world:
+	@make make; make all

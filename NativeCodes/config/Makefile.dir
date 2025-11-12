@@ -1,0 +1,71 @@
+
+###############################################################################
+#
+#	Makefile.dir
+#
+#	Call 'make' in all sub-directories which have a 'Makefile'.
+#
+#
+###############################################################################
+
+
+
+#
+#	MACROS
+#
+
+MAKE_TARGETS	= all debug optimise fast install clean depend
+BASE_TARGETS	= make world 
+
+.PHONY: $(MAKE_TARGETS) $(BASE_TARGETS)
+
+
+
+
+#
+#	TARGETS
+#
+
+$(MAKE_TARGETS):
+	@if [ -z "$(DIRS)" ]; \
+        then \
+		dirs=`echo *`; \
+	else \
+		dirs="$(DIRS)"; \
+	fi; \
+        for dir in $$dirs; \
+	do \
+		if [ -f $$dir/Makefile ]; \
+		then \
+			echo ""; \
+			echo "Directory $$dir: make $@"; \
+			( cd $$dir; make $@ ); \
+		fi; \
+	done
+
+
+make:
+	@if [ -z "$(DIRS)" ]; \
+        then \
+		dirs=`echo *`; \
+	else \
+		dirs="$(DIRS)"; \
+	fi; \
+        for dir in $$dirs; \
+	do \
+		if [ -f $$dir/Makefile.base ]; \
+		then \
+			echo ""; \
+			echo "Directory $$dir: make make"; \
+			( cd $$dir; make -f Makefile.base make ); \
+		elif [ -f $$dir/Makefile ]; \
+		then \
+			echo ""; \
+			echo "Directory $$dir: make make"; \
+			( cd $$dir; make make ); \
+		fi;\
+	done
+
+
+world:
+	@make make; make depend; make all

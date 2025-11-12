@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+  <title>Stack data</title>
+</head>
+  <body bgcolor="#ffffff">
+  	 
+<h3><big><big><u>Stack data</u></big></big></h3>
+  	   	            
+<div align="left">Information about the stack(s): Up to 2 stacks are allowed
+(use 2 if significant AVO effects possible).<br>
+</div>
+<p>Each stack must have sane entries for the </p>
+ 
+<p></p>
+           
+<p><b>stackname</b> :SU big--endian file containing the stack (may be a named 
+pipe)<br>
+ </p>
+           
+<p><b>minimum offset </b>(length units consistent with velocities e.g. ft, 
+or m)<br>
+ </p>
+           
+<p><b>maximum offset </b>(length units consistent with velocities e.g. ft 
+or m)<br>
+ </p>
+           
+<p><b>reflector time </b>to salient reflecor in model (milliseconds)<br>
+ </p>
+           
+<p><b>stack velocity </b>(ft/second, or m/s)</p>
+ 
+<hr width="100%" size="2"> 
+<p></p>
+           
+<p><u><b>Wavelet information</b></u> <br>
+ </p>
+            
+<div align="left">You must supply wavelet information. <br>
+<br>
+<b>wavelet filename</b>: a big-endian SU file with one trace: the wavelet.
+Requisite header fields set correctly (ns,dt,f1)<b>. <br>
+<br>
+Signal to noise</b>. This is actually the <i>estimated noise RMS amplitude. 
+</i>The wavelet extraction should yield this: it's unlikely to be smaller 
+than about 20% of the signal size</div>
+           
+<p></p>
+ 
+<hr width="100%" size="2"> 
+<p></p>
+           
+<p><u><b>AVO_terms</b></u><br>
+ </p>
+                                                       
+<p>These are coefficients in the reflectivity model (see the tech. paper). 
+<br>
+Usually A,B=1 and these are fixed (sigma_A=sigma_B=0, which is assumed if<br>
+there are no sigma_A/sigma_B entries). A,B, can be used to compensate for<br>
+amplitude errors in the wavelet if it's too small etc, but the wavelet extraction<br>
+ought really to have got this right, i.e. A=B=1.0.</p>
+           
+<p></p>
+      <br>
+ <br>
+</body>
+</html>

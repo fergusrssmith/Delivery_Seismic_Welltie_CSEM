@@ -1,0 +1,62 @@
+
+   D. J. Bernstein
+   Fast arithmetic
+   djbfft
+
+                                                           How to install djbfft
+
+   Like any other piece of software (and information generally), djbfft comes with NO WARRANTY.
+
+System requirements
+
+   The djbfft installation procedure assumes that you have a UNIX system with gcc.
+
+Installation
+
+   Download the djbfft package. The latest published djbfft package is djbfft-0.76.tar.gz.
+
+   Unpack the djbfft package:
+     gunzip djbfft-0.76.tar
+     tar -xf djbfft-0.76.tar
+     cd djbfft-0.76
+
+   Decide  where  to install djbfft. The default installation directory is /usr/local/djbfft. To change this directory, edit conf-home
+   now.
+
+   Compile the djbfft library and test programs:
+     make
+
+   As root, install the library and include files:
+     make setup check
+
+   Now    you   can   use   djbfft   in   your   programs   by   compiling   with   -I/usr/local/djbfft/include   and   linking   with
+   /usr/local/djbfft/lib/djbfft.a.
+
+Testing
+
+   Check the rms errors for some convolutions of pseudorandom data:
+     ./accuracy
+
+   Single-precision  (r4 and c4) errors should be on the scale of 10^-8. Double-precision (r8 and c8) errors should be on the scale of
+   10^-16. If you see any double-precision results larger than 10^-12, please let me know.
+
+   Check the rms errors for a spanning set of transforms:
+     ./accuracy2
+
+   Note that this test takes a while to run.
+
+   Time the library:
+     ./speed
+
+   The result is a detailed speed report.
+
+   To report success:
+     ( echo 'First M. Last'; cat `cat SYSDEPS` ) \
+     | mail djb-qst@cr.yp.to
+
+   Replace First M. Last with your name.
+
+Things to do if you have more time
+
+   If  you're  interested  in  trying  to  extract the best possible speed out of djbfft, you can edit conf-cc and conf-ld to select a
+   compiler, and conf-opt to select machine-specific optimizations; then recompile.

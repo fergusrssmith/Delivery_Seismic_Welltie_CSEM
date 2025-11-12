@@ -1,0 +1,36 @@
+For larger noise levels, the most-likely fluid case may not be the model with the
+smallest "chisquare fit", as explained in other Delivery documentation.
+To illustrate this for the problem, let's look at trace 15, which has "gas".
+The peak amplitude is approx. 0.15.
+If we wind the noise level up to 50% of the peak amplitude (say 0.08)
+
+<noise_rms>0.08</noise_rms>
+
+and run the inversion, you'll see gas is not the maximum MML model for the gas-traces (e.g. cdp=15):
+
+delivery ModelDescription.xml -m prior_traces.su -v 3 --MAP --trace-filter 'cdp=15' -N 0
+
+Oil comes in at about 35%, gas & brine are less.
+
+Again, this comes from the extra probability for oil due to the wider
+posterior distribution for the reservoir top time, and the "Occam factor" that goes along with it.
+
+To explore why:
+Realisations for oil:
+
+% delivery ModelDescription.xml -m prior_traces.su -v 3 --trace-filter 'cdp=15' --IF 1 -RWS -N 1000 -o realisations.IF1.su
+
+Realisations for Gas:
+
+% delivery ModelDescription.xml -m prior_traces.su -v 3 --trace-filter 'cdp=15' --IF 2 -RWS -N 1000 -o realisations.IF2.su
+
+% cat realisations.IF1.su realisations.IF2.su | deliveryAnalyser --trace-filter 'cdp=15' --stddev t 2
+
+or visually:
+
+% cat realisations.IF1.su realisations.IF2.su | deliveryAnalyser --trace-filter 'cdp=15' --histogram t 2 -G
+
+Nonetheless, full joint realisations throw in a liberal mix of all cases....
+
+% delivery ModelDescription.xml -m prior_traces.su -v 3 --trace-filter 'cdp=15' -RWS -N 1000
+deliveryAnalyser -i realisations.su --trace-filter 'cdp=15' -lf -G

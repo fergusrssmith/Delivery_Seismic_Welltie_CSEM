@@ -1,0 +1,11 @@
+DELIVERY - a program for stochastic seismic inversion
+Copyright (C) 2006 BHP Billiton
+
+DELIVERY comes with ABSOLUTELY NO WARRANTY.
+
+This is free software, and you are welcome to redistribute it under
+certain conditions. Portions of DELIVERY are licensed under the GNU
+General Public License Version 2 (see http://www.gnu.org/licenses/gpl.txt). 
+Other portions are licensed under the BSD License (see
+http://www.opensource.org/licenses/bsd-license.php).  Please refer to
+the headers of each source code file for more information.

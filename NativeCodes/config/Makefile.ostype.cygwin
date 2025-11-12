@@ -1,0 +1,26 @@
+
+CC			= gcc
+SYS_CFLAGS		= -Wall -Wno-unused
+SYS_CFLAGS_DEBUG	= -g -p -DDEBUG
+SYS_CFLAGS_OPTIMISE	= -O3
+
+CPP			= g++
+SYS_CPPFLAGS		= -Wall
+SYS_CPPFLAGS_DEBUG	= -g -p -DDEBUG
+SYS_CPPFLAGS_OPTIMISE	= -O3
+
+FC			= f77
+SYS_FFLAGS		=
+SYS_FFLAGS_DEBUG	= -g -p
+SYS_FFLAGS_OPTIMISE	=
+
+LD			= ld
+SYS_LDFLAGS		=
+SYS_LDFLAGS_DEBUG	= -g -p
+SYS_LDFLAGS_OPTIMISE	=
+
+AR			= ar
+SYS_ARFLAGS		=
+
+RM			= rm -f
+CP			= cp -fp

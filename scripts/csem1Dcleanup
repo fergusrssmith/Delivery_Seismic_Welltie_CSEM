@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#
+# clean up the large number of files that can be produced by csem1Dinverter code
+
+rm -f logfil iter* profile* CorrCoeff* Covariance* resp* SummaryStats* ModeRemovalTestProfile*
+

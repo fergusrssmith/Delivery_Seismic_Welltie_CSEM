@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+  <xsd:include schemaLocation="bhpcommon.xsd"/>
+  
+  <xsd:complexType name="inOutType">
+    <xsd:simpleContent>
+      <xsd:restriction base="subbable_string">
+	<xsd:enumeration value="vrmst"/>
+        <xsd:enumeration value="vintt"/>
+        <xsd:enumeration value="vintz"/>
+      </xsd:restriction>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="bhptdType">
+    <xsd:all>
+      <xsd:element name="verbose" minOccurs="0" type="bitBoolType" default="0"/>
+      <xsd:element name="intype" minOccurs="0" type="inOutType" default="vintz"/>
+      <xsd:element name="outtype" minOccurs="0" type="inOutType" default="vintt"/>
+      <xsd:element name="ntout" minOccurs="0" type="subbable_integer" default="1"/>
+      <xsd:element name="indata" minOccurs="0" type="subbable_anyURI" default="infile"/>
+      <xsd:element name="outdata" minOccurs="0" type="subbable_anyURI" default="outfile"/>
+      <xsd:element name="dt" minOccurs="0" type="subbable_float" default="0.004"/>
+      <xsd:element name="dz" minOccurs="0" type="subbable_float" default="20.0"/>
+    </xsd:all>
+  </xsd:complexType> 
+</xsd:schema>

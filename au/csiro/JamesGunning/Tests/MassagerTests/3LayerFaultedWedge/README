@@ -1,0 +1,65 @@
+# This is a model of a sand wedge buried in shales. The C & G preprint
+# has a discussion of this model. 
+# Things marked JG are reminders to me, and you don't 
+# need to do them (and probably can't! - they refer to non-distributed codes)
+
+# These instruction use the deliveryMassager & eclipseXsection
+# binaries built in the NativeCodes part of the delivery
+# distribution. Read the README and NativeCodes/README_INSTALL 
+# especially carefully
+
+# P.S. eclipseXsection is a small test-plotting utility built
+# with deliveryMassager; the binary ends up in the same place
+
+# Here's some things you can do
+
+# Make the model 
+# makeFaultWedgeModel  // JG !
+
+# generate the truth case seismic (near_stack.su <- referenced in ModelDescription.xml below)
+delivery -v 3 -RWS -p -m prior_traces.su ModelDescription.xml --make-synthetic 40 4 1.9 2.2
+cp near_stack_synth.su near_stack.su
+
+# look at time model
+deliveryAnalyser -i realisations.su -l --layer 1.8 2.3 | suswapbytes | suximage blockinterp=1
+
+# look at seismic
+cat near_stack_synth.su | suswapbytes | suximage
+
+# see Xsection of Eclipse model (as postscript)
+eclipseXsection -s y 0 FaultedWedgeModel.ecl -p section.ps
+gv section.ps
+
+# Prior delivery model...
+delivery -v 3 -RWS -p -m prior_traces.su ModelDescription.xml -o realisations.prior.su ; \
+deliveryAnalyser -i realisations.prior.su -l | suswapbytes | suximage blockinterp=1
+
+# See samples from the prior
+delivery -v 3 -PD -N 100 -IS -m prior_traces.su ModelDescription.xml ; \
+deliveryAnalyser -i realisations.su -l --layer 1.8 2.3 | suswapbytes | suximage blockinterp=1
+
+# To make some (rough) Random walk sampler (-RWS) realisations
+delivery -PD -v 3 -RWS -N 100 -m prior_traces.su ModelDescription.xml
+
+# to see them:
+deliveryAnalyser -i realisations.su -l --layer 1.8 2.3 | suswapbytes | suximage blockinterp=1
+
+# to see the p50 thickness of the wedge
+deliveryAnalyser -i realisations.su --quantile thickness 2 50
+
+# to create summary statistics file:
+deliveryAnalyser -i realisations.su --massage-analyse ep,cdp,gx,gy 1,2,3 d,thickness,net-sand,NG,S_oil massage_analysis.mab
+
+# To Massage with eclipse output
+deliveryMassager Massager.xml -v 3 -a -N 4 --ecl
+
+# to see a Xsection of the most likely massaged model
+eclipseXsection -s y 0 MassagedEclProperties.ecl -p section.ps
+gv section.ps
+
+# to see a Xsection of a realisation..
+eclipseXsection -s y 0 MassagedEclProperties.realisation.3.ecl -p section.ps
+gv section.ps
+
+# to clean everything up
+rm section.ps MassagedEclProperties.* post_massaged_* realisations.su gmon.out FFT_wavelet_spectrum.txt massage_analysis.mab

@@ -1,0 +1,10 @@
+Made up BonnieHut survey (vertical hole): suface and end-of log points only: KB=24m
+6
+TVD
+MD
+X
+Y
+ep
+cdp
+0      24   170898 7634298 1515 10409
+3200   3224 170898 7634298 1515 10409

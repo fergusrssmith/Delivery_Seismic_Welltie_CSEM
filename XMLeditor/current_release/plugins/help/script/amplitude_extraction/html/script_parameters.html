@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+    <HEAD>
+        <TITLE>Secant Amplitude Extraction Parameters</TITLE>
+    </HEAD>
+    <BODY BGCOLOR="#ffffff">
+	<H3><u>Secant Amplitude Extraction Parameters</u></H3>
+	<P>The parameters for amplitude extraction are:</P>
+	<P><b>project_directory</b> : the name of the project directory where all of the input and output files will be stored (top level for relative pathing)</P>
+        <P><b>mincdp</b> : minimum cdp of seismic dataset (for bhpwritecube)</P>
+        <P><b>inccdp</b> : cdp increment of seismic dataset (for bhpwritecube)</P>
+        <P><b>ncdp</b> : number of cdp of seismic dataset (bhpwritecube)</P>
+        <P><b>minep</b> : minimum ep of seismic dataset (for bhpwritecube)</P>
+        <P><b>incep</b> : ep increment of seismic dataset (for bhpwritecube)</P>
+        <P><b>nedp</b> : number of ep of seismic dataset (for bhpwritecube)</P>
+        <P><b>input_filename</b> : input seismic dataset name (project_directory/int_datasets/input_filename.dat)</P>
+        <P><b>output_filename</b> : output filename for bhpio format of extracted events (project_directory/int_datasets/output_filename*.dat)</P>
+        <P><b>mincdpevent</b> : minimum cdp to start extracting amplitudes</P>
+        <P><b>maxcdpevent</b> : maximum cdp to start extracting amplitudes</P>
+        <P><b>minepevent</b> : minimum ep to start extracting amplitudes</P>
+        <P><b>maxepevent</b> : maximum ep to start extracting amplitudes</P>
+        <P><b>picktop</b> : the name of the ascii event that is close to the upper secant point (project_directory/horizons/picktop)</P>
+        <P><b>pickbottom</b> : the name of the ascii event that is close to the lower secant point (project_directory/horizons/pickbottom)</P>
+        <P><b>shifttop</b> : the amount in ms to shift the picktop before searching</P>
+        <P><b>shiftbottom</b> : the amount in ms to shift the pickbottom before searching</P>
+        <P><b>afile</b> : the name prefix to output the ascii extracted events (project_directory/horizons/afile.*.xyz)</P>
+        <P><b>search</b> : the number of samples, plus and minus, to search around to find the secant point</P>
+        <P></P>
+    </BODY>
+</HTML>

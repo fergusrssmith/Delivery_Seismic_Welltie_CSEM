@@ -1,0 +1,43 @@
+
+###############################################################################
+#
+#	Makefile.ar
+#
+#	Targets and macros for making an archive.
+#
+#	Required variables/macros:
+#
+#		ROOT_DIR
+#		LIB_NAME
+#		LIB_SOURCES
+#
+#	Optional variables/macros
+#
+#		LIB_CFLAGS
+#		LIB_CPPFLAGS
+#		LIB_FFLAGS
+#		LIB_LDFLAGS
+#
+###############################################################################
+
+
+.PHONY: make world
+
+
+make:
+	@(\
+		ROOT_DIR="$(ROOT_DIR)";\
+		LIB_NAME="$(LIB_NAME)";\
+		LIB_SOURCES="$(LIB_SOURCES)";\
+		LIB_CFLAGS="$(LIB_CFLAGS)";\
+		LIB_CPPFLAGS="$(LIB_CPPFLAGS)";\
+		LIB_FFLAGS="$(LIB_FFLAGS)";\
+		LIB_LDFLAGS="$(LIB_LDFLAGS)";\
+		export CSIRO_OSTYPE ROOT_DIR LIB_NAME LIB_SOURCES;\
+		export LIB_CFLAGS LIB_CPPFLAGS LIB_FFLAGS LIB_LDFLAGS;\
+		$(ROOT_DIR)/config/make.ar.sh;\
+	)
+
+
+world:
+	@make make; make all

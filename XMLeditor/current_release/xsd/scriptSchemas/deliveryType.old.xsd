@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+  <xsd:include schemaLocation="bhpcommon.xsd"/>
+
+  <xsd:complexType name="deliveryType">
+    <xsd:all>
+      <xsd:element name="filename" type="subbable_anyURI" default="ModelDescriptions.xml"/>
+      <xsd:element name="far_stack_filename" minOccurs="0" type="subbable_anyURI" default="far-stack.su"/>
+      <xsd:element name="far_stack_wavelet_filename" minOccurs="0" type="subbable_anyURI" default="far-wavelet.su"/>
+      <xsd:element name="near_stack_filename" minOccurs="0" type="subbable_anyURI" default="near-stack.su"/>
+      <xsd:element name="near_stack_wavelet_filename" minOccurs="0" type="subbable_anyURI" default="near-wavelet.su"/>
+      <xsd:element name="N" minOccurs="0" type="subbable_integer" default="1"/>
+      <xsd:element name="RWS" minOccurs="0" type="emptyType"/>
+      <xsd:element name="v" minOccurs="0" type="subbable_integer" default="4"/>
+      <xsd:element name="o" minOccurs="0" type="subbable_anyURI" default="realisations.su"/>
+      <xsd:element name="p" minOccurs="0" type="emptyType"/>
+      <xsd:element name="II" minOccurs="0" type="emptyType"/>
+      <xsd:element name="IS" minOccurs="0" type="emptyType"/>
+      <xsd:element name="IF" minOccurs="0" type="subbable_integer" default="0"/>
+      <xsd:element name="m" minOccurs="0" type="subbable_anyURI" default="model_traces.su"/>
+      <xsd:element name="make_synthetic" minOccurs="0">
+        <xsd:complexType>
+	  <xsd:sequence>
+	    <xsd:element name="freq_in_Hz" type="subbable_float" default="40"/>
+	    <xsd:element name="sample_interval_in_ms" type="subbable_float" default="4"/>
+	    <xsd:element name="t_start_in_seconds" type="subbable_float" default="0"/>
+	    <xsd:element name="t_end_in_seconds" type="subbable_float" default="1"/>
+	  </xsd:sequence>
+	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Gassman_diagnostics" minOccurs="0" type="emptyType"/>
+      <xsd:element name="Newton" minOccurs="0" type="emptyType"/>
+      <xsd:element name="Npre_decimation" minOccurs="0" type="emptyType"/>
+      <xsd:element name="additive_times" minOccurs="0" type="emptyType"/>
+      <xsd:element name="check_prior" minOccurs="0" type="emptyType"/>
+      <xsd:element name="convergence_diagnostics" minOccurs="0" type="emptyType"/>
+      <xsd:element name="dump_optimal_seismic" minOccurs="0" type="emptyType"/>
+      <xsd:element name="no_decimation" minOccurs="0" type="emptyType"/>
+      <xsd:element name="no_smart_mode_finding_starting_points" minOccurs="0" type="emptyType"/>
+      <xsd:element name="p_fluid" minOccurs="0" type="emptyType"/>
+      <xsd:element name="suppress_model_dump" minOccurs="0" type="emptyType"/>
+      <xsd:element name="times_only" minOccurs="0" type="emptyType"/>
+      <xsd:element name="PD" minOccurs="0" type="emptyType"/>
+      <xsd:element name="BHPcommand" minOccurs="0">
+        <xsd:complexType>
+	  <xsd:sequence>
+	    <xsd:element name="filename" type="subbable_anyURI" default="bhpscript.sh"/>
+	    <!--<xsd:element name="command" type="subbable_string" default="bhpwrite"/>-->
+	  </xsd:sequence>
+	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="S" minOccurs="0">
+        <xsd:complexType>
+	  <xsd:sequence>
+	    <xsd:element name="t_start_in_seconds" type="subbable_float" default="0"/>
+	    <xsd:element name="t_end_in_seconds" type="subbable_float" default="1"/>
+	  </xsd:sequence>
+	</xsd:complexType>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+</xsd:schema>

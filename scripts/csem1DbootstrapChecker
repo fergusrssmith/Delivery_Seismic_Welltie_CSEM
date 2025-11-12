@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Utility for checker sampling sanity of CSEM1Dinversion code outputs (MCMC or parametric bootstrap)
+#
+# All CAPITALISED variables imported from this file
+source environment_setup.sh
+
+if [ ! -d $SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/CSEM/OneDinversion ]; then
+	echo "Distribution does not yet contain CSEM code"
+	exit
+fi
+
+# if cygpath exists, must be on cygwin/doze
+if type -P cygpath &>/dev/null; then
+  CLASSPATH=`cygpath -wp $SEISMIC_INVERTER_HOME/jars/colt.jar:$SEISMIC_INVERTER_HOME/jars/FreeHEP.jar:$SEISMIC_INVERTER_HOME/`
+else
+  CLASSPATH=$SEISMIC_INVERTER_HOME/jars/colt.jar:$SEISMIC_INVERTER_HOME:$SEISMIC_INVERTER_HOME/jars/FreeHEP.jar
+fi
+
+java -classpath $CLASSPATH $MODEL au.csiro.JamesGunning.CSEM.OneDinversion.CSEM1DBootstrapChecker $*

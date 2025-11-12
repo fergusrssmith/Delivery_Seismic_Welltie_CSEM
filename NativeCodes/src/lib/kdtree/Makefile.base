@@ -1,0 +1,9 @@
+
+ROOT_DIR	= ../../..
+
+LIB_NAME	= kdtree
+LIB_SOURCES	= metric.c pqueue.c optkd.c eigens.c sproullkd.c dynamic-tree.c 
+
+
+
+include $(ROOT_DIR)/config/Makefile.ar

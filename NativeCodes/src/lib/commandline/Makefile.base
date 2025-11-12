@@ -1,0 +1,8 @@
+
+ROOT_DIR	= ../../..
+
+LIB_NAME	= commandline
+LIB_SOURCES	= commandline.c
+
+
+include $(ROOT_DIR)/config/Makefile.ar

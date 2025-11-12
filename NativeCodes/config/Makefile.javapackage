@@ -1,0 +1,50 @@
+
+###############################################################################
+#
+#	Makefile.javapackage
+#
+#	Targets and macros for making java classes.
+#
+#	Required variables/macros:
+#
+#		ROOT_DIR
+#               JAVA_PACKAGE
+#		JAVA_SOURCES
+#
+#	Optional variables/macros
+#
+#		JAVA_FLAGS
+#
+###############################################################################
+
+
+#
+#	MACROS
+#
+
+INSTALL_DIR	= $(ROOT_DIR)/lib/java/$(JAVA_PACKAGE)
+
+
+include $(ROOT_DIR)/config/Makefile.java
+
+
+
+#
+#	ACTION TARGETS
+#
+
+.PHONY: install
+
+
+install: all $(INSTALL_DIR)
+	cp -fdp $(JAVA_CLASSES) $(INSTALL_DIR)
+
+
+
+#
+#	FILE / DIRECTORY TARGETS
+#
+
+
+$(INSTALL_DIR): 
+	mkdir -p $(INSTALL_DIR)

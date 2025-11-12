@@ -1,0 +1,31 @@
+# This is a model of a net-to-gross sand wedge of constant thickness
+# buried in shales. The C & G preprint
+# has a discussion of this model. Here's some things you can do
+
+# The demos here use bigendian data. Su takes this directly if compiled with SUXDR on (I recommend this)
+# if your SU install is not SUXDR and little endian, insert suswapbytes at suitable pipes (|) below
+
+# See the seismic
+cat near-stack.su | suxwigb
+
+# See the underlying mean prior model
+delivery -v 3 -RWS -ID -p -m prior_traces.su ModelDescription.xml ; \
+deliveryAnalyser -i realisations.su -l -G 
+
+# See samples from the prior
+delivery -v 3 -PD -N 100  -ID -IS -m prior_traces.su ModelDescription.xml ; \
+deliveryAnalyser -i realisations.su -l -G
+
+
+# To make Random walk sampler (-RWS) realisations
+delivery -PD -v 3 -RWS -ID -N 100 -m prior_traces.su ModelDescription.xml
+
+# to see the inverted NG:
+deliveryAnalyser -i realisations.su -p-ascii NG 2 | graph -TX -a
+
+# to see the p50 NG
+deliveryAnalyser -i realisations.su --quantile NG 2 50
+
+# to plot it
+deliveryAnalyser -i realisations.su --quantile NG 2 50 | awk '{print $NF}' | graph -TX -a
+

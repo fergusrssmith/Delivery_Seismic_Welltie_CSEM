@@ -1,0 +1,7 @@
+ROOT_DIR	= ../../..
+
+LIB_NAME	= cgeom
+LIB_SOURCES	= edgelist.c  geometry.c  heap.c  getdiagram.c memory.c  output.c  voronoi.c 2Dhull.c
+LIB_CFLAGS  = 
+
+include $(ROOT_DIR)/config/Makefile.ar

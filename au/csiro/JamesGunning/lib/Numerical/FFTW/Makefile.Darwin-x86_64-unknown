@@ -1,0 +1,10 @@
+# Plat-dependent things...
+# too hard to build universal against fftw....
+#CFLAGS_UNIVERSAL= -std=gnu99 -L/sw/lib
+CFLAGS_UNIVERSAL= -std=gnu99 -arch i386 -arch x86_64 ${HOME}/src/lib/fftw/fftw-3.3.4/libfftw3.a 
+# M32=-m64
+# preferred...
+CSHAREDLIBFLAG =  -dynamiclib -framework JavaVM 
+# suitable with fftw from fink in /sw
+INCLUDEPATH = -I/System/Library/Frameworks/JavaVM.framework/Headers -I/sw/include
+DYLIBSUFFIX = jnilib

@@ -1,0 +1,17 @@
+$(CSIRO_OSTYPE)/access.o: access.c ../NR/nrutil.h ../ECLIO/eclio.h ../ECLIO/access.h \
+ ../ECLIO/eclutil.h ../ECLIO/blockops.h ../ECLIO/records.h \
+ ../ECLIO/read.h ../ECLIO/set.h ../ECLIO/copy.h ../ECLIO/write.h
+$(CSIRO_OSTYPE)/blockops.o: blockops.c ../ECLIO/eclio.h ../ECLIO/eclutil.h \
+ ../ECLIO/blockops.h ../ECLIO/access.h ../NR/nrutil.h
+$(CSIRO_OSTYPE)/copy.o: copy.c eclio.h ../ECLIO/set.h ../ECLIO/access.h \
+ ../ECLIO/eclutil.h ../ECLIO/copy.h ../NR/nrutil.h
+$(CSIRO_OSTYPE)/eclutil.o: eclutil.c ../NR/nrutil.h ../ECLIO/eclio.h ../ECLIO/eclutil.h \
+ ../ECLIO/access.h
+$(CSIRO_OSTYPE)/read.o: read.c ../ECLIO/eclio.h ../ECLIO/eclutil.h ../ECLIO/read.h \
+ ../ECLIO/access.h ../ECLIO/records.h ../ECLIO/set.h ../NR/nrutil.h
+$(CSIRO_OSTYPE)/records.o: records.c ../ECLIO/eclio.h ../ECLIO/records.h \
+ ../ECLIO/eclutil.h
+$(CSIRO_OSTYPE)/write.o: write.c ../ECLIO/eclio.h ../ECLIO/eclutil.h ../ECLIO/access.h \
+ ../NR/nrutil.h ../ECLIO/write.h
+$(CSIRO_OSTYPE)/set.o: set.c eclio.h ../ECLIO/set.h ../ECLIO/access.h ../ECLIO/eclutil.h \
+ ../NR/nrutil.h

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# This script requires JDK >= 1.5, 
+# and runs the wavelet Extraction code 
+#
+# All CAPITALISED variables imported from this file
+source environment_setup.sh
+
+CLASSPATH=$SEISMIC_INVERTER_HOME/jars/colt.jar:$SEISMIC_INVERTER_HOME/jars/concurrent.jar:$SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/lib:$SEISMIC_INVERTER_HOME:$SEISMIC_INVERTER_HOME/jars/FreeHEP.jar
+
+
+# Use default java on user's path
+#-Dsun.java2d.xrender=false a hack for oracle jdk bug (will go away..)
+java -Dsun.java2d.xrender=false -classpath $CLASSPATH au.csiro.JamesGunning.waveletextraction.ExtractionViewer $*
+ 

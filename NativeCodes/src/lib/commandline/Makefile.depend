@@ -1,0 +1,1 @@
+$(CSIRO_OSTYPE)/commandline.o: commandline.c ../commandline/commandline.h

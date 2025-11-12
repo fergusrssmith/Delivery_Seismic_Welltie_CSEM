@@ -1,0 +1,28 @@
+
+CC			= gcc
+SYS_CFLAGS		= -Wall -Wno-unused
+SYS_CFLAGS_DEBUG	= -g   -DDEBUG
+# JG should be -fast, but I think there are gcc bugs...
+# even -O2 breaks
+SYS_CFLAGS_OPTIMISE	= -O
+
+CPP			= g++
+SYS_CPPFLAGS		= -Wall
+SYS_CPPFLAGS_DEBUG	= -g   -DDEBUG
+SYS_CPPFLAGS_OPTIMISE	= -fast
+
+FC			= f77
+SYS_FFLAGS		=
+SYS_FFLAGS_DEBUG	= -g  
+SYS_FFLAGS_OPTIMISE	=
+
+LD			= ld
+SYS_LDFLAGS		= -L/sw/lib 
+SYS_LDFLAGS_DEBUG	= -g  
+SYS_LDFLAGS_OPTIMISE	=
+
+AR			= ar
+SYS_ARFLAGS		=
+
+RM			= rm -f
+CP			= cp -fp

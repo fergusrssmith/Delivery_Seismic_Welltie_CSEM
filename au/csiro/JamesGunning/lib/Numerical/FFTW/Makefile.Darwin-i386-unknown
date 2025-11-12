@@ -1,0 +1,12 @@
+# Plat-dependent things...
+# HACK: use universal FFTW package installed in /usr/local
+#CFLAGS_UNIVERSAL= -std=gnu99 -arch i386 -arch x86_64 -L/sw/lib
+CFLAGS_UNIVERSAL= -std=gnu99 -arch i386 -arch x86_64 ${HOME}/src/lib/fftw/fftw-3.3.4/libfftw3.a 
+M32= 
+# preferred...
+CSHAREDLIBFLAG =  -dynamiclib -framework JavaVM 
+#CSHAREDLIBFLAG =  -bundle -framework JavaVM 
+# suitable with fftw from fink in /sw
+#INCLUDEPATH = -I/System/Library/Frameworks/JavaVM.framework/Headers -I/sw/include 
+INCLUDEPATH = -I/System/Library/Frameworks/JavaVM.framework/Headers -I/usr/local/include
+DYLIBSUFFIX = jnilib

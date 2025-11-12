@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:complexType name="vsInt">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:integer">
+        <xsd:attribute name="varies_areally" type="xsd:boolean" default="false"/>
+	<xsd:attribute name="same_as_layer_above" type="xsd:boolean" default="false"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="varInt">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:integer">
+        <xsd:attribute name="varies_areally" type="xsd:boolean" default="false"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="varFloat">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:float">
+        <xsd:attribute name="varies_areally" type="xsd:boolean" default="false"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  
+  <xsd:complexType name="vsFloat">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:float">
+        <xsd:attribute name="varies_areally" type="xsd:boolean" default="false"/>
+	<xsd:attribute name="same_as_layer_above" type="xsd:boolean" default="false"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+
+  <xsd:element name="inversion">
+    <xsd:complexType>
+	  <xsd:sequence>
+		<xsd:element name="inversion_info">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="name" type="xsd:string" default="inversion title"/>
+			  <xsd:element name="project" type="xsd:string" default="project name"/>
+			  <xsd:element name="author" type="xsd:string" default="my name"/>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+		<xsd:element name="seismic_data">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="stack" maxOccurs="unbounded">
+				<xsd:complexType>
+				  <xsd:sequence>
+					<xsd:element name="name" type="xsd:string" default="full"/>
+					<xsd:element name="filename" type="xsd:anyURI" default="full_stack.su"/>
+					<xsd:element name="min_offset" type="varFloat" default="0"/>
+					<xsd:element name="max_offset" type="varFloat" default="4000"/>
+					<xsd:element name="reflector_time" type="varFloat" default="1300"/>
+					<xsd:element name="stack_velocity" type="varFloat" default="7400"/>
+					<xsd:element name="wavelet">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="filename" type="xsd:anyURI" default="full_wavelet.su"/>
+						  <xsd:element name="signal_to_noise" type="varFloat" default="0.1"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="time_above" type="varFloat" minOccurs="0" default="50"/>
+					<xsd:element name="time_below" type="varFloat" minOccurs="0" default="50"/>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			  <xsd:element name="AVO_terms">
+				<xsd:complexType>
+				  <xsd:sequence>
+					<xsd:element name="A" type="varFloat" default="1.0"/>
+					<xsd:element name="sigma_A" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="B" type="varFloat" default="1.0"/>
+					<xsd:element name="sigma_B" minOccurs="0" type="varFloat" default="0"/>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+		<xsd:element name="model_description">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="layer" maxOccurs="1">
+				<xsd:complexType>
+				  <xsd:attribute name="synchronise_rock_matrix" type="xsd:boolean" default="false"/>
+				  <xsd:sequence>
+					<xsd:element name="name" type="xsd:string" default="top"/>
+					<xsd:element name="reservoir_endmember">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="reference sand"/>
+						  <xsd:element name="brine" minOccurs="1">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="brine"/>
+								<xsd:element name="rho_brine" minOccurs="0" type="varFloat" default="1.0"/>
+								<xsd:element name="sigma_rho_brine" minOccurs="0" type="varFloat" default="0"/>
+								<xsd:element name="vp_brine" minOccurs="0" type="varFloat" default="1.0"/>
+								<xsd:element name="sigma_vp_brine" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="oil" minOccurs="0">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="oil A"/>
+								<xsd:element name="probability_of_oil" type="varFloat" default="0.2"/>
+								<xsd:element name="saturation_of_oil" type="varFloat" default="0.7"/>
+								<xsd:element name="sigma_saturation_of_oil" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="gas" minOccurs="0">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="gas A"/>
+								<xsd:element name="probability_of_gas" type="varFloat" default="0.2"/>
+								<xsd:element name="saturation_of_gas" type="varFloat" default="0.8"/>
+								<xsd:element name="sigma_saturation_of_gas" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="lsg" minOccurs="0">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="gas A"/>
+								<xsd:element name="probability_of_lsg" type="varFloat" default="0.2"/>
+								<xsd:element name="saturation_of_lsg" type="varFloat" default="0.15"/>
+								<xsd:element name="sigma_saturation_of_lsg" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="float_fraction" minOccurs="0" type="varFloat" default="0.0"/>
+						  <xsd:element name="sigma_float_fraction" minOccurs="0" type="varFloat" default="0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="nonreservoir_endmember">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="reference shale"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="time" type="varFloat" default="0"/>
+					<xsd:element name="sigma_time" type="varFloat" default="10"/>
+					<xsd:element name="net_to_gross" type="varFloat" default="0.0"/>
+					<xsd:element name="sigma_net_to_gross" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="depth" type="varFloat" default="0"/>
+					<xsd:element name="depth_rock_curves" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="sigma_depth" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="LFIV" type="varFloat" default="8000"/>
+					<xsd:element name="sigma_LFIV" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="thickness" minOccurs="0" type="varFloat" default="100"/>
+					<xsd:element name="sigma_thickness" minOccurs="0" type="varFloat" default="0"/>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			  <xsd:element name="layer" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+				  <xsd:attribute name="synchronise_rock_matrix" type="xsd:boolean" default="false"/>
+				  <xsd:sequence>
+					<xsd:element name="name" type="xsd:string" default="middle"/>
+					<xsd:element name="reservoir_endmember">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="reference sand"/>
+						  <xsd:element name="brine" minOccurs="1">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="brine"/>
+								<xsd:element name="rho_brine" minOccurs="0" type="varFloat" default="1.0"/>
+								<xsd:element name="sigma_rho_brine" minOccurs="0" type="varFloat" default="0"/>
+								<xsd:element name="vp_brine" minOccurs="0" type="varFloat" default="1.0"/>
+								<xsd:element name="sigma_vp_brine" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="oil" minOccurs="0">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="oil A"/>
+								<xsd:element name="probability_of_oil" type="varFloat" default="0.2"/>
+								<xsd:element name="saturation_of_oil" type="vsFloat" default="0.7"/>
+								<xsd:element name="sigma_saturation_of_oil" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="gas" minOccurs="0">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="gas A"/>
+								<xsd:element name="probability_of_gas" type="varFloat" default="0.2"/>
+								<xsd:element name="saturation_of_gas" type="vsFloat" default="0.8"/>
+								<xsd:element name="sigma_saturation_of_gas" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="lsg" minOccurs="0">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="gas A"/>
+								<xsd:element name="probability_of_lsg" type="varFloat" default="0.2"/>
+								<xsd:element name="saturation_of_lsg" type="vsFloat" default="0.15"/>
+								<xsd:element name="sigma_saturation_of_lsg" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="float_fraction" minOccurs="0" type="varFloat" default="0.0"/>
+						  <xsd:element name="sigma_float_fraction" minOccurs="0" type="varFloat" default="0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="nonreservoir_endmember">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="reference shale"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="time" type="vsFloat" default="0"/>
+					<xsd:element name="sigma_time" type="varFloat" default="0"/>
+					<xsd:element name="net_to_gross" type="vsFloat" default="0.0"/>
+					<xsd:element name="sigma_net_to_gross" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="depth" type="vsFloat" default="0"/>
+					<xsd:element name="sigma_depth" minOccurs="0" type="vsFloat" default="0"/>
+					<xsd:element name="depth_rock_curves" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="LFIV" type="vsFloat" default="8000"/>
+					<xsd:element name="sigma_LFIV" minOccurs="0" type="vsFloat" default="0"/>
+					<xsd:element name="thickness" minOccurs="0" type="vsFloat" default="100"/>
+					<xsd:element name="sigma_thickness" minOccurs="0" type="varFloat" default="50"/>
+					<xsd:element name="t_base" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="sigma_t_base" minOccurs="0" type="varFloat" default="10"/>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			  <xsd:element name="bottom_layer">
+				<xsd:complexType>
+				  <xsd:attribute name="synchronise_rock_matrix" type="xsd:boolean" default="false"/>
+				  <xsd:sequence>
+					<xsd:element name="name" type="xsd:string" default="bottom"/>
+					<xsd:element name="reservoir_endmember">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="reference sand"/>
+						  <xsd:element name="brine" minOccurs="1">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="brine"/>
+								<xsd:element name="rho_brine" minOccurs="0" type="varFloat" default="1.0"/>
+								<xsd:element name="sigma_rho_brine" minOccurs="0" type="varFloat" default="0"/>
+								<xsd:element name="vp_brine" minOccurs="0" type="varFloat" default="1.0"/>
+								<xsd:element name="sigma_vp_brine" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="oil" minOccurs="0">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="oil A"/>
+								<xsd:element name="probability_of_oil" type="varFloat" default="0.2"/>
+								<xsd:element name="saturation_of_oil" type="vsFloat" default="0.7"/>
+								<xsd:element name="sigma_saturation_of_oil" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="gas" minOccurs="0">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="gas A"/>
+								<xsd:element name="probability_of_gas" type="varFloat" default="0.2"/>
+								<xsd:element name="saturation_of_gas" type="vsFloat" default="0.8"/>
+								<xsd:element name="sigma_saturation_of_gas" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="lsg" minOccurs="0">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="name" type="xsd:string" default="gas A"/>
+								<xsd:element name="probability_of_lsg" type="varFloat" default="0.2"/>
+								<xsd:element name="saturation_of_lsg" type="vsFloat" default="0.15"/>
+								<xsd:element name="sigma_saturation_of_lsg" minOccurs="0" type="varFloat" default="0"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="float_fraction" minOccurs="0" type="varFloat" default="0.0"/>
+						  <xsd:element name="sigma_float_fraction" minOccurs="0" type="varFloat" default="0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="nonreservoir_endmember">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="reference shale"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="time" type="vsFloat" default="0"/>
+					<xsd:element name="sigma_time" type="varFloat" default="0"/>
+					<xsd:element name="net_to_gross" type="vsFloat" default="0.0"/>
+					<xsd:element name="sigma_net_to_gross" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="depth" type="vsFloat" default="0"/>
+					<xsd:element name="sigma_depth" minOccurs="0" type="vsFloat" default="0"/>
+					<xsd:element name="depth_rock_curves" minOccurs="0" type="varFloat" default="0"/>
+					<xsd:element name="LFIV" type="vsFloat" default="8000"/>
+					<xsd:element name="sigma_LFIV" minOccurs="0" type="vsFloat" default="0"/>
+					<xsd:element name="thickness" minOccurs="0" type="vsFloat" default="100"/>
+					<xsd:element name="sigma_thickness" minOccurs="0" type="varFloat" default="50"/>
+					<xsd:element name="t_base" type="varFloat" default="0"/>
+					<xsd:element name="sigma_t_base" type="varFloat" default="10"/>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+		<xsd:element name="rock_fluid_properties">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="fluid_properties">
+				<xsd:complexType>
+				  <xsd:sequence>
+					<xsd:element name="fluid" maxOccurs="unbounded">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="brine"/>
+						  <xsd:element name="vp" type="varFloat" default="5250"/>
+						  <xsd:element name="sigma_vp" minOccurs="0" type="varFloat" default="0"/>
+						  <xsd:element name="rho" type="varFloat" default="1.01"/>
+						  <xsd:element name="sigma_rho" minOccurs="0" type="varFloat" default="0"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			  <xsd:element name="rock_properties">
+				<xsd:complexType>
+				  <xsd:sequence>
+					<xsd:element name="reservoir_endmember" maxOccurs="unbounded">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="reference sand"/>
+						  <xsd:element name="reference_fluid" type="xsd:string" default="brine"/>
+						  <xsd:element name="vp_curve">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="intercept" type="varFloat" default="4320"/>
+								<xsd:element name="depth_coefficient" type="varFloat" default="0.33"/> <!-- FIXME SS or depth ? -->
+								<xsd:element name="LFIV_coefficient" type="varFloat" default="0"/>
+								<xsd:element name="sigma" type="varFloat" default="250"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="vs_curve">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="intercept" type="varFloat" default="-2930"/>
+								<xsd:element name="slope" type="varFloat" default="0.75"/>
+								<xsd:element name="sigma" type="varFloat" default="190"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="porosity_curve">
+							<xsd:complexType>
+							  <xsd:sequence>	
+								<xsd:element name="intercept" type="varFloat" default="0.48"/>
+								<xsd:element name="slope" type="varFloat" default="-1.9E-5"/>
+								<xsd:element name="sigma" type="varFloat" default="0.018"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="vp_grain" type="varFloat" default="20151"/>
+						  <xsd:element name="vs_grain" type="varFloat" default="13740"/>
+						  <xsd:element name="rho_grain" type="varFloat" default="2.65"/>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+					<xsd:element name="nonreservoir_endmember" maxOccurs="unbounded">
+					  <xsd:complexType>
+						<xsd:sequence>
+						  <xsd:element name="name" type="xsd:string" default="reference shale"/>
+						  <xsd:element name="vp_curve">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="intercept" type="varFloat" default="4640"/>
+								<xsd:element name="depth_coefficient" type="varFloat" default="0.33"/> <!-- FIXME SS or depth ? -->
+								<xsd:element name="LFIV_coefficient" type="varFloat" default="0"/>
+								<xsd:element name="sigma" type="varFloat" default="470"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="vs_curve">
+							<xsd:complexType>
+							  <xsd:sequence>
+								<xsd:element name="intercept" type="varFloat" default="-1630"/>
+								<xsd:element name="slope" type="varFloat" default="0.57"/>
+								<xsd:element name="sigma" type="varFloat" default="140"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						  <xsd:element name="density_curve">
+							<xsd:complexType>
+							  <xsd:sequence>	
+								<xsd:element name="factor" type="varFloat" default="0.22"/>
+								<xsd:element name="exponent" type="varFloat" default="0.26"/>
+								<xsd:element name="sigma" type="varFloat" default="0.02"/>
+							  </xsd:sequence>
+							</xsd:complexType>
+						  </xsd:element>
+						</xsd:sequence>
+					  </xsd:complexType>
+					</xsd:element>
+				  </xsd:sequence>
+				</xsd:complexType>
+			  </xsd:element>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+		<xsd:element name="output">
+		  <xsd:complexType>
+			<xsd:sequence>
+			  <xsd:element name="density_ordering" default="full">
+				<xsd:simpleType>
+				  <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="full"/>
+                    <xsd:enumeration value="partial"/>
+                    <xsd:enumeration value="none"/>
+                  </xsd:restriction>
+                </xsd:simpleType>
+			  </xsd:element> 
+			  <xsd:element name="realisation_number_header_field" type="xsd:string" default="mark"/>
+			  <xsd:element name="depth_models" type="xsd:boolean" default="false"/>
+			  <xsd:element name="master_depth_layer_number" type="xsd:integer" default="1"/>
+			  <xsd:element name="properties" minOccurs="0" maxOccurs="1">
+				<xsd:complexType>
+				  <xsd:attribute name="d" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="LFIV" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="NG" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="vp_m" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="vs_m" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="rho_m" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="vp_s" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="vs_s" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="phi_s" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="S_h" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="rho_h" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="fluid_type" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="vp_eff" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="rho_eff" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="Z_eff" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="R_near" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="R_far" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="seismic_chisquare" type="xsd:boolean" default="true"/>
+				  <xsd:attribute name="float_fraction" type="xsd:boolean" default="true"/>
+				</xsd:complexType>
+			  </xsd:element>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+		<xsd:element name="property_indices">
+		  <xsd:complexType>
+			<xsd:sequence>  <!-- change to any order -->
+			  <xsd:element name="min_offset_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="max_offset_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="reflector_time_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="stack_velocity_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="near_stack_signal_to_noise_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="far_stack_signal_to_noise_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="time_above_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="time_below_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="A_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_A_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="B_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_B_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="rho_brine_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_rho_brine_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="vp_brine_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_vp_brine_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="probability_of_oil_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="probability_of_gas_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="probability_of_lsg_link" minOccurs="0" type="xsd:integer" default="1"/> 
+			  <xsd:element name="saturation_of_oil_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="saturation_of_gas_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="saturation_of_lsg_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_saturation_of_oil_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_saturation_of_gas_link" minOccurs="0" type="xsd:integer" default="1"/> 
+			  <xsd:element name="sigma_saturation_of_lsg_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="float_fraction_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_float_fraction_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="net_to_gross_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_net_to_gross_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="time_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_time_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="depth_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_depth_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="SSdepth_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_SSdepth_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="LFIV_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_LFIV_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="thickness_link" minOccurs="0" type="xsd:integer" default="1"/>
+			  <xsd:element name="sigma_thickness_link" minOccurs="0" type="xsd:integer" default="1"/>
+			</xsd:sequence>
+		  </xsd:complexType>
+		</xsd:element>
+      </xsd:sequence>
+    </xsd:complexType> 
+  </xsd:element> 
+</xsd:schema>

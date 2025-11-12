@@ -1,0 +1,15 @@
+List of parameters and deviations. ( Wavelet coarse dt= 0.00583216 f1= -0.0233286 )
+property                                      prior-mean ML-value   sigma_post   (<post>-<prior>)/sigma_prior  
+wavelet_coeff_0                                  0.00000    49.4380      135.583                      0.0187276
+wavelet_coeff_1                                  0.00000   -94.7870      148.444                     -0.0359062
+wavelet_coeff_2                                  0.00000    195.815      147.980                      0.0741765
+wavelet_coeff_3                                  0.00000    356.241      152.534                       0.134947
+wavelet_coeff_4                                  0.00000   -919.627      146.082                      -0.348363
+wavelet_coeff_5                                  0.00000   -127.952      152.684                     -0.0484696
+wavelet_coeff_6                                  0.00000    765.793      143.771                       0.290089
+wavelet_coeff_7                                  0.00000   -318.156      147.030                      -0.120520
+wavelet_coeff_8                                  0.00000    215.065      135.337                      0.0814685
+time_to_depth_knot_12_well_0                     1.81880    1.81497  0.000805264                      -0.956448
+t_shift_BonnieHouse_0_3sec.su                    0.00000 -0.00634075  0.000261011                      -0.634075
+t_shift_BonnieHut_0_3sec.su                      0.00000 -0.00514319  0.000306083                      -0.514319
+noise_stack_0                                          -    66.5584      3.43661                              -

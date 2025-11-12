@@ -1,0 +1,34 @@
+# This is a larger model of a sand wedge buried in shales, set up to match 
+# a standard BHP test problem. It's basically a bigger version of the
+# 3LayerWedge problem with the same features.
+# The 3LayerWedge problem is faster and shows the same behaviour
+
+# The demos here use bigendian data. Su takes this directly if compiled with SUXDR on (I recommend this)
+# if your SU install is not SUXDR and little endian, insert suswapbytes at suitable pipes (|) below
+
+# See the seismic
+cat near-stack.su | suxwigb
+
+# See the underlying mean prior model
+delivery -v 3 -RWS -ID -p -m prior_traces.su ModelDescription.xml ; \
+deliveryAnalyser -i realisations.su -l | suximage blockinterp=1
+
+# See samples from the prior
+delivery -v 3 -PD -N 100  -ID -IS -m prior_traces.su ModelDescription.xml ; \
+deliveryAnalyser -i realisations.su -l  | suximage blockinterp=1
+
+
+# To make Random walk sampler (-RWS) realisations
+delivery -PD -v 3 -RWS -ID -N 100 -m prior_traces.su ModelDescription.xml
+
+# to see them:
+deliveryAnalyser -i realisations.su -l | suximage blockinterp=1
+
+# to see the p50 thickness of the wedge
+deliveryAnalyser -i realisations.su --quantile thickness 2 50
+
+# to plot it
+deliveryAnalyser -i realisations.su --quantile thickness 2 50 | awk '{print $NF}' | graph -TX -a
+
+# To see some sphaghetti plots of posterior synthetics on top of truth case (see the script...)
+make_spaghetti_plots.sh -PD -RWS -N 100

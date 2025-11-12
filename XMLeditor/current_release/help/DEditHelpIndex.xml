@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='ISO-8859-1'  ?>
+<!DOCTYPE index
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/index_1_0.dtd">
+
+<index version="1.0">
+    <indexitem text="Introduction" target="introhtml"/>
+    <indexitem text="New" target="new_xml"/>
+    <indexitem text="Open" target="open_xml"/>
+    <indexitem text="Save" target="save_xml"/>
+    <indexitem text="Insert Above" target="insert_above"/>
+    <indexitem text="Insert As Sub-Item" target="insert_child"/>
+    <indexitem text="Insert Below" target="insert_below"/>
+    <indexitem text="Switch" target="switch"/>
+    <indexitem text="Copy" target="copy"/>
+    <indexitem text="Cut" target="cut"/>
+    <indexitem text="Paste Above" target="paste_above"/>
+    <indexitem text="Paste As Sub-Item" target="paste_child"/>
+    <indexitem text="Paste Below" target="paste_below"/>
+    <indexitem text="The XML Tree" target="tree"/>
+    <indexitem text="The Status Message" target="status"/>
+    <indexitem text="The XML Text Window" target="text"/>
+    <indexitem text="Adding Help Information" target="adding_help"/>
+    <indexitem text="Adding Plugins" target="adding_plugins"/>
+    <indexitem text="How the Schema Code Works" target="schema_rambling"/>
+</index>
+

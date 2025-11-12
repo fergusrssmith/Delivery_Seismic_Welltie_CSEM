@@ -1,0 +1,53 @@
+//********************************************************************************//
+//                                                                                //
+//    LICENSE FOR BHP SEISMIC INVERSION SUITE OF PROGRAMS                         //
+//                                                                                //
+//    The following is the license that applies to this copy of the BHP Seismic   //
+//    Inversion Suite of Programs software (hereinafter the "Software"). BHP's    //
+//    Software Manager may be contacted at the following address:                 //
+//                                                                                //
+//          CSIRO Petroleum                                                       //
+//          P.O. Box 3000                                                         //
+//          Glen Waverley, Victoria                                               //
+//          Australia 3150                                                        //
+//          Telephone Number:  613 9259 6849                                      //
+//                                                                                //
+//    Copyright 2001                                                              //
+//                                                                                //
+//    BHP Software.  All rights reserved.                                         //
+//                                                                                //
+//    Permission is hereby granted, free of charge, to any person obtaining       //
+//    a copy of this software and associated documentation files (the             //
+//    "Software") to deal in the Software, without restriction, except as         //
+//    hereinafter provided, including without limitation the rights to use,       //
+//    copy, modify merge, publish, and distribute the Software and to permit      //
+//    persons to whom the Software is furnished to do so, provided that the       //
+//    above copyright notice and this permission notice appear in all copies      //
+//    of the Software and that both the above copyright notice and this           //
+//    permission notice appear in supporting documentation.  No charge may        //
+//    be made for any redistribution of the Software, including modified or       //
+//    merged versions of the Software.  The complete source code must be          //
+//    included in any distribution. For an executable file, complete source       //
+//    code means the source code for all modules it contains                      //
+//                                                                                //
+//    Modified or merged versions of the Software must be provided to the         //
+//    Software Manager, regardless of whether such modified or merged             //
+//    versions are distributed to others.                                         //
+//                                                                                //
+//    THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS      //
+//    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF                  //
+//    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGMENT        //
+//    OF THIRD PARTY RIGHTS.  IN NO EVENT SHALL THE COPYRIGHT HOLDER              //
+//    INCLUDED IN THIS NOTICE BE LIABLE FOR ANY CLAIM OR ANY SPECIAL              //
+//    INDIRECT OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING      //
+//    FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,        //
+//    NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION        //
+//    WITH THE USE OF PERFORMANCE OF THIS SOFTWARE.                               //
+//                                                                                //
+//    The name of the copyright holder shall not be used in advertising or        //
+//    otherwise to promote the use or other dealings in this Software,            //
+//    without prior written consent of the copyright holder.                      //
+//                                                                                //
+//********************************************************************************//
+
+

@@ -1,0 +1,1 @@
+properties=thickness,net-sand,net-hydrocarbon,net-oil,net-lsg,net-gas,fluid_type_0,fluid_type_1,fluid_type_2,fluid_type_3,d,LFIV,NG,vp_m,vs_m,rho_m,vp_s,vs_s,phi_s,S_h,rho_h,fluid_type,vp_eff,rho_eff,Z_eff,R_pp:1,R_pp:2,seismic_chisquare,t_fc,d_fc,R_pp_fc:1,R_pp_fc:2,S_oil,S_lsg,S_gas,delta_p,time_shift,vs_eff,Zs_eff 

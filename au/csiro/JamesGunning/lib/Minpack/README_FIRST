@@ -1,0 +1,16 @@
+Modifications: Nonlinear Optimization Java Package
+--------------------------------------------------
+
+This package is a hacked version of an optimisation library from Steve
+Verrill (steve@ws13.fpl.fs.fed.us), with some additional functionality
+added to facilitate its use within the seismic_inverter seismic
+inversion codes. The function prototypes in Uncmin_methods in
+particular have been augmented, mainly for the purposes of catching
+strange conditions and giving feedback to the driver routines.  In
+most other respects, the original Uncmin code from Steve is intact.
+
+You should now read the README, bearing this in mind.
+
+Last  modified, Oct 2002, James Gunning (James.Gunning@csiro.au)
+
+______________________________________________________________________

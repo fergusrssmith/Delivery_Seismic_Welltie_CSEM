@@ -1,0 +1,11 @@
+
+ROOT_DIR	= ../../..
+
+LIB_NAME	= ECLIO
+LIB_SOURCES	=\
+        access.c blockops.c copy.c eclutil.c read.c records.c \
+	write.c set.c
+
+
+
+include $(ROOT_DIR)/config/Makefile.ar

@@ -1,0 +1,8 @@
+$(CSIRO_OSTYPE)/metric.o: metric.c metric.h
+$(CSIRO_OSTYPE)/pqueue.o: pqueue.c metric.h pqueue.h
+$(CSIRO_OSTYPE)/optkd.o: optkd.c nn.h metric.h pqueue.h optkd.h ../NR/nrutil.h thread.h
+$(CSIRO_OSTYPE)/eigens.o: eigens.c
+$(CSIRO_OSTYPE)/sproullkd.o: sproullkd.c nn.h metric.h pqueue.h sproullkd.h eigens.h \
+ thread.h
+$(CSIRO_OSTYPE)/dynamic-tree.o: dynamic-tree.c nn.h optkd.h pqueue.h dynamic-tree.h \
+ ../NR/nrutil.h

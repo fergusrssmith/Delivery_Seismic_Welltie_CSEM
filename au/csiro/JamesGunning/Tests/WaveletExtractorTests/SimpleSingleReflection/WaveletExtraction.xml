@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wavelet_extraction>
+  <wavelet_extraction_info>
+    <name>james' test</name>
+    <project>project name</project>
+    <author>James Gunning</author>
+  </wavelet_extraction_info>
+  <well_info>
+    <well>
+      <name>fake_well</name>
+      <well_log_info>
+        <well_log_filename>well_log.txt</well_log_filename>
+        <measured_depth_keyword>MD</measured_depth_keyword>
+        <sonic_DT_keyword>DT</sonic_DT_keyword>
+        <shear_sonic_DT_keyword>DT</shear_sonic_DT_keyword>
+        <density_keyword>RHOB</density_keyword>
+      </well_log_info>
+      <well_survey_info>
+        <well_survey_filename>survey.txt</well_survey_filename>
+        <total_vertical_depth_keyword>TVD</total_vertical_depth_keyword>
+        <measured_depth_keyword>MD</measured_depth_keyword>
+        <x_position_keyword>X</x_position_keyword>
+        <y_position_keyword>Y</y_position_keyword>
+      </well_survey_info>
+      <checkshot_info>
+        <checkshot_filename>checkshot.txt</checkshot_filename>
+        <checkshot_time_keyword>T</checkshot_time_keyword>
+        <sigma_checkshot_time_keyword>sigmaT</sigma_checkshot_time_keyword>
+        <measured_depth_keyword>MD</measured_depth_keyword>
+      </checkshot_info>
+	  <seismic_stack_info is-single-trace-only="true">
+        <seismic_minicube_filename>stack1.su</seismic_minicube_filename>
+        <min_offset>0</min_offset>
+        <max_offset>1000</max_offset>
+        <reflector_time_ms>2000</reflector_time_ms>
+        <stack_velocity>8000</stack_velocity>
+		<time_to_depth_local_systematic_time_shift_mean_ms>0</time_to_depth_local_systematic_time_shift_mean_ms>
+        <time_to_depth_local_systematic_time_shift_uncertainty_ms>0</time_to_depth_local_systematic_time_shift_uncertainty_ms>    
+      </seismic_stack_info>
+    </well>
+  </well_info>
+  <extraction_info>
+    <extraction_window_start_time>1.1</extraction_window_start_time>
+    <extraction_window_end_time>1.7</extraction_window_end_time>
+  </extraction_info>
+  <wavelet_parameters>
+    <maximum_coda_time_millis>75</maximum_coda_time_millis>
+    <maximum_precursor_time_millis>75</maximum_precursor_time_millis>
+  </wavelet_parameters>
+  <seismic_minicube_header_words>
+    <inline_header_keyword>tracf</inline_header_keyword>
+    <xline_header_keyword>fldr</xline_header_keyword>
+    <X_header_keyword>tracf</X_header_keyword>
+    <Y_header_keyword>fldr</Y_header_keyword>
+  </seismic_minicube_header_words>
+  <output>
+    <maximum_likelihood_wavelet_filename>MLwavelet.MOST_LIKELY.stack.n.su</maximum_likelihood_wavelet_filename>
+    <maximum_likelihood_parameters_filename>MLparameters.MOST_LIKELY.stack.n.su</maximum_likelihood_parameters_filename>
+    <wavelet_realisations_filename>wavelet_realisations.su</wavelet_realisations_filename>
+    <parameter_realisations_filename>parameter_realisations.su</parameter_realisations_filename>
+    <blocked_log_file_prefix>blocked_</blocked_log_file_prefix>
+    <realisation_number_header_field>mark</realisation_number_header_field>
+  </output>
+</wavelet_extraction>

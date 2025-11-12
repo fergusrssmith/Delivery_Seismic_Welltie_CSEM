@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+# This script requires JDK >= 1.5, 
+# and runs the seismic inversion (delivery ) code
+#
+# All CAPITALISED variables imported from this file
+source environment_setup.sh
+
+
+CLASSPATH=$SEISMIC_INVERTER_HOME/jars/colt.jar:$SEISMIC_INVERTER_HOME/jars/concurrent.jar:$SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/lib:$SEISMIC_INVERTER_HOME/
+
+
+# Use default java on user's path
+# uncomment below to debug...
+# echo $CLASSPATH
+
+java -classpath $CLASSPATH au.csiro.JamesGunning.seismicinverter.ModelGluer $*
+
+# CYGWIN users: change the above to
+# java --Xmx${memMax}m classpath "$(cygpath -wp $CLASSPATH)" au.csiro.JamesGunning.seismicinverter.ModelGluer $*

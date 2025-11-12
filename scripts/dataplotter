@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Scatterplotting utility
+
+# All CAPITALISED variables imported from this file
+source environment_setup.sh
+
+if [ ! -d $SEISMIC_INVERTER_HOME/au/csiro/JamesGunning/lib/graphutil ]; then
+	echo "Distribution does not yet contain graphing code"
+	exit
+fi
+
+# if cygpath exists, must be on cygwin/doze
+if type -P cygpath &>/dev/null; then
+  CLASSPATH=`cygpath -wp $SEISMIC_INVERTER_HOME/jars/colt.jar:$SEISMIC_INVERTER_HOME/jars/FreeHEP.jar:$SEISMIC_INVERTER_HOME/`
+else
+  CLASSPATH=$SEISMIC_INVERTER_HOME/jars/colt.jar:$SEISMIC_INVERTER_HOME:$SEISMIC_INVERTER_HOME/jars/FreeHEP.jar
+fi
+
+
+# Scatterplotting class
+java -classpath $CLASSPATH $MODEL au.csiro.JamesGunning.lib.graphutil.DataPlotter $*
+
+

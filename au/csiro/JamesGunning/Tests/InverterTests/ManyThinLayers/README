@@ -1,0 +1,16 @@
+A simple test to see whether inverter copes with messy pinchout possibilities
+(Examples are on intel linux, so you may not need the suswapbytes pipes)
+
+# The demos here use bigendian data. Su takes this directly if compiled with SUXDR on (I recommend this)
+# if your SU install is not SUXDR and little endian, insert suswapbytes at suitable pipes (|) below
+
+# Synthetic has been created with...
+delivery ModelDescription.xml -m prior_traces.su -v 3 -PD -II -IS -p --make-synthetic 40 4 1.8 2.2
+cat near_stack_synth.su  | suaddnoise f=5,10,20,40 amps=0,1,1,0 sn=6  >| near_stack.sn=6.su
+ln -sf near_stack.sn=6.su near-stack.su 
+
+
+
+# This is what prior synthetics looks like, compared to the 'truth'......
+delivery ModelDescription.xml -m prior_traces.su -v 3 -PD -II -IS -N 50 -S 1.8 2.2
+cat near-stack.su near_stack_synth.su | suxgraph linewidth=5,1 reverse=1

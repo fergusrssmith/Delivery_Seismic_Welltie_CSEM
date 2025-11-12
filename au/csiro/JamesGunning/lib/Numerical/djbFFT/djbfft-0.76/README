@@ -1,0 +1,22 @@
+Compilation usually requires:
+% In djbfft-0.76: note changes in Makefile (JGHACKS)
+cd djbfft-0.76
+make clean; make
+cd ..
+make
+
+Note Makefile.OSTYPE files contain platform specifics 
+about JNI. Currently, Linux* and Darwin (OSX) are tested.
+
+
+# Bernstein's original README is...
+
+##########################################################
+
+djbfft 0.76, beta.
+19990930
+Copyright 1999
+D. J. Bernstein, djb@pobox.com
+
+djbfft home page: http://pobox.com/~djb/djbfft.html
+Installation instructions: http://pobox.com/~djb/djbfft/install.html
