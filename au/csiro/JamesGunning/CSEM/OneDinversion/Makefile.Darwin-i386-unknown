@@ -1,0 +1,14 @@
+# Plat-dependent things...
+# preferred...
+# CSHAREDLIBFLAG =  -dynamiclib -framework JavaVM 
+INCLUDEPATH = -I/System/Library/Frameworks/JavaVM.framework/Headers
+JNILIBSUFFIX = jnilib
+RANLIB = ranlib
+# Fortran flags
+FC=gfortran
+# should put here, for universal binaries, when gfortran supports them...
+#  -std=gnu99 -arch i386 -arch ppc 
+FORFLAGS=-fPIC
+# Fortran linker flags
+FLD=gfortran
+FLDFLAGS = -dynamiclib -single_module -fPIC

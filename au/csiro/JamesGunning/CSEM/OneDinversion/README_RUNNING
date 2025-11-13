@@ -1,0 +1,44 @@
+This code depends critically on a JNI native library, build from
+Fortran originals and c "glue", as per the Makefile.
+Native libraries are built and supplied for 
+1) Linux (intel 32 & 64 bit) 
+2) Mac OSX (PPC & intel: 32 bit only), 
+3) win32 via MinGW.
+
+DO NOT rebuild unless you have to - it's a slightly delicate build.
+See README_WINDOWS for windows building
+
+(1) You need a current JDK to run the code.
+Get a recent jdk (*NOT the jre*) from sun, e.g. browse around
+http://java.sun.com/javase/downloads/index.jsp
+
+Use at least Java 1.5
+Do the standard install.
+
+The code has been written to seek the correct library "directly* as a System.load(),
+and not require the usual JAVA_LIBRARY_PATH mechanisms.
+
+(2) An example script is provided as ../../../../../scripts/csem1Dinverter. 
+
+a) OSX, Linux: his should work fine for Linux and OSX out of the box.
+   On OSX: you *might* have to set your JVM to 32bit for now (tho' I think the JNI loading now fixes this)
+
+b) Windows: 
+
+Either minGW, (or cygwin), paths to java will have to be set in your
+environment.
+The script above is works fine in the cygwin environment. Small tweaks may be required
+to get it to run as a DOS batch script. The critical requirement is to set the
+environment variables
+
+SEISMIC_INVERTER_HOME=directory at top of the delivery distribution (from this level, ../../../../..)
+CSIRO_OSTYPE=cygwin
+
+The script ../../../../../scripts/csem1Dinverter (and the included environment_setup.sh) should make
+it obvious how these are used to derive a CLASSPATH for java.
+
+The JNI library is loaded within the cygwin directory, so make sure you have set
+CSIRO_OSTYPE=cygwin.
+
+Clearly the script will vary depending on whther you use bash within cygwin,
+or some direct DOS batch-script (in which I have no expertise).

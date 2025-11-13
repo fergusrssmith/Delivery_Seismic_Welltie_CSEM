@@ -1,0 +1,20 @@
+#Typical run, smoothing style:
+csem1Dinverter -q -v 2 -P -s --startup startup
+
+# Show fit:
+csem1Dplotter resp_final
+
+# Show depth profile
+graph -TX profile_final.txt
+
+# Tests of multimodality in split-canonical model: can put resistivity in either of 2 thin layers
+csem1Dinverter -q -v 2 -P --MS d --startup startup.PB
+
+# Drawing samples via parametric boostrap:
+csem1Dinverter -q -v 2 -P --MS d --PB 100 --LM --startup startup.PB
+
+# have a look at them....
+csem1DModelStatsPlotter -m PBsamples.txt
+
+#Scatterplots of the 2 middle 50m layers sharing resistivity:
+dataplotter -c 2,3 PBsamples.txt

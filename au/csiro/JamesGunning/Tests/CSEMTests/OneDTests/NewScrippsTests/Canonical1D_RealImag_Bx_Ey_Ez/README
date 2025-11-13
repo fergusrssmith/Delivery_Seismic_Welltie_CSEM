@@ -1,0 +1,26 @@
+In this example, with Real and Imag parts for all fields
+convergence to decent optimum using smoothing methods seems very fragile &
+grid sensitive, even the very cautious Newman mode (-r)
+I'm unsure how |Bx| helps here
+
+# See data
+csem1Dplotter data
+
+# Bayes smoothing style
+csem1Dinverter -v 2 -q --NS --LM -s -P --startup startup
+
+
+# Smoothing methods seems quite easily deflected on other grids, e.g. --log-grid
+# Creeping/Newman
+csem1Dinverter -v 2 -q --NS --LM -r -P --log-grid 25 --startup startup
+
+
+# But splitting seems to work pretty well in most cases
+csem1Dinverter -v 2 -q --NS --LM -P --auto-split --MS d:r,5 --startup startup | grep Gridding:
+
+
+
+# Plot profiles, or solutions
+csem1Dplotter resp_final
+
+graph -TX profile_final.txt

@@ -1,0 +1,40 @@
+FORMAT:            OCCAMITER_1.0
+DESCRIPTION:       test
+MODEL FILE:        model
+DATA FILE:         data
+DATE/TIME:                                      
+MAX ITER:          1000
+REQ TOL:           1.00
+IRUF:               1
+DEBUG LEVEL:        1
+ITERATION:          0
+PMU:                -5
+RLAST:              0000000E+08
+TLAST:              100.0000    
+IFFTOL:             0
+NO. PARMS:         16
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+
+
+
+     
+     
+     
+     
+     
+     

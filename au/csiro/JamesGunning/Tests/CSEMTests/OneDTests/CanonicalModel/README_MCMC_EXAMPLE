@@ -1,0 +1,22 @@
+#To generate a small MCMC run (like fig 8 in paper)
+
+csem1Dinverter -q -v 2 --startup startup.2x50mlayers --MS d:r,4 --LM -N 20000
+
+#Scatterplots of the 2 middle 50m layers sharing resistivity:
+
+dataplotter -c 2,3 MCMCsamples.txt
+
+# typical property trajectory as the MCMC chain "diffuses". Pull out column 2 & graph it (just for interest)
+awk 'NR>8{print $2}' MCMCsamples.txt | graph -TX -a
+
+# Some block images (awk acts here to preserve header [8 lines], then thin to every 10th sample): N.B.
+# csem1DModelStatsPlotter [options] -               
+# says to accept data from stdin)
+
+awk 'NR<=8||NR%10==0{print $0}' MCMCsamples.txt | csem1DModelStatsPlotter -m -
+
+# To check generated chisquare distributions:
+csem1DbootstrapChecker -H MCMCsamples.txt
+
+# To check thinning required
+csem1DbootstrapChecker --Raftery MCMCsamples.txt

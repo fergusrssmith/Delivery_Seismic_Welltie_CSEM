@@ -1,0 +1,19 @@
+FORMAT:            OCCAMITER_1.0
+DESCRIPTION:       test
+MODEL FILE:        model.many.mod
+DATA FILE:         data.Amp.dat                                                                         
+DATE/TIME:                                      
+MAX ITER:          1000
+REQ TOL:           0.95
+IRUF:              1
+DEBUG LEVEL:       1
+ITERATION:         0
+PMU:               10
+RLAST:             1
+TLAST:             1
+IFFTOL:            0
+NO. PARMS:         30
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+

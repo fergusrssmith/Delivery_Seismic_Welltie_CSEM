@@ -1,0 +1,20 @@
+In this example, with |Ey|, phase(Ey) and |Bx| components, 
+convergence to decent optimum seems a bit more fragile.
+I'm unsure how |Bx| helps here
+
+# See data
+csem1Dplotter data
+
+# smoothing style
+csem1Dinverter -v 2 -q --NS --LM -s -P --startup startup
+
+# raw unsmoothed case
+csem1Dinverter -v 2 -q --NS --LM -P --no-smoothing-weights --startup startup
+
+# splitting seems to work pretty well
+csem1Dinverter -v 2 -q --NS --LM -P --auto-split --MS d --startup startup | grep Gridding:
+
+# Plot profiles, or solutions
+csem1Dplotter resp_final
+
+graph -TX profile_final.txt

@@ -1,0 +1,19 @@
+In this example, with |Ey| and phase(Ey) components, convergence to decent optimum
+is reasonably straightforward. Similar behaviour to legacy kernel
+
+# See data
+csem1Dplotter data
+
+# smoothing style
+csem1Dinverter -v 2 -q --NS --LM -s -P --startup startup
+
+# raw unsmoothed case
+csem1Dinverter -v 2 -q --NS --LM -P --no-smoothing-weights --startup startup
+
+# splitting
+csem1Dinverter -v 2 -q --NS --LM -P --auto-split --MS d --startup startup | grep Gridding:
+
+# Plot profiles, or solutions
+csem1Dplotter resp_final
+
+graph -TX profile_final.txt

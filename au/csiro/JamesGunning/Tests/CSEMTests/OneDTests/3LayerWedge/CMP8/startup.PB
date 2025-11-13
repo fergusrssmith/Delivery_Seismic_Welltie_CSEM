@@ -1,0 +1,20 @@
+FORMAT:            OCCAMITER_1.0
+DESCRIPTION:       test
+MODEL FILE:        model_suggestion.fine.mod
+DATA FILE:         data.dat
+DATE/TIME:         Tue Aug 11 15:51:51 EST 2009
+MAX ITER:          1000
+REQ TOL:           0.9
+IRUF:              1
+DEBUG LEVEL:       0
+ITERATION:         0
+PMU:               -10
+RLAST:             1
+TLAST:             1
+IFFTOL:            0
+NO. PARMS:         13
+0 0 0 0 0
+0 0 0 0 0 
+0 0 0
+
+

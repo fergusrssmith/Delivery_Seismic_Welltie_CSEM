@@ -1,0 +1,67 @@
+At present, builds require GNU make (standard with Linux, OSX-FINK, cygwin on windows).
+Windows users - study especially README_WINDOWS
+
+1)  Define the environment variable $CSIRO_OSTYPE
+    for platform specific identification. Examples:
+    Linux-i686-unknown, Darwin-Power-Macintosh-unknown (for MacOSX) etc.
+    We contrive this from the output of 'uname -smp'
+
+    [csh]% setenv CSIRO_OSTYPE `uname -smp | sed 's/ /-/g;s/-[^-]*$/-unknown/g'`
+    [sh]%  export CSIRO_OSTYPE=`uname -smp | sed 's/ /-/g;s/-[^-]*$/-unknown/g'`
+
+    On common 32 bit intel Linuxes, you get:  $CSIRO_OSTYPE = Linux-i686-unknown
+
+    Set this variable permanently in your .cshrc or .profile
+
+2) To build, platform specific things need to be defined in a file
+   Makefile.${CSIRO_OSTYPE} see, e.g. the example for Linux;
+   Makefile.Linux-i686-unknown.  Working examples are there for Linux
+   32 & 64 bit, OSX PPC and intel, and 'doze via mingw/cygwin.
+
+   The c and fortran flags are those required to build a "java native
+   interface" (JNI) shared library, as per the acres of public
+   documentation for JNI (Google "jni tutorial" etc). Note the fortran
+   is mixed 77/90, mainly to glue a kind of dynamic memory management
+   (from java) onto the f77 original computational kernels. Copy an
+   existing file, and set the compiler & linker flags suitably.
+
+3) Type
+   % make
+   and things should build.
+   To run the code, see README_RUNNING
+
+A typical successful build on, e.g. Linux, looks like:
+
+make --directory=NativeSources/LegacyScripps 
+make[1]: Entering directory `/home/polonius/jsg/java/au/csiro/JamesGunning/CSEM/OneDinversion/NativeSources/LegacyScripps'
+gfortran  -c -w -O3 -fPIC modules.f90 -o ../../Linux-i686-unknown/modules.o
+gfortran  -c -w -O3 -fPIC hedmods.f -o ../../Linux-i686-unknown/hedmods.o
+gfortran  -c -w -O3 -fPIC hy2fht.f -o ../../Linux-i686-unknown/hy2fht.o
+gfortran  -c -w -O3 -fPIC seafloor_JG.f90 -o ../../Linux-i686-unknown/seafloor_JG.o
+ar -r ../../Linux-i686-unknown/LegacyScripps.a ../../Linux-i686-unknown/modules.o ../../Linux-i686-unknown/hedmods.o ../../Linux-i686-unknown/hy2fht.o ../../Linux-i686-unknown/seafloor_JG.o
+ar: creating ../../Linux-i686-unknown/LegacyScripps.a
+ranlib ../../Linux-i686-unknown/LegacyScripps.a 
+make[1]: Leaving directory `/home/polonius/jsg/java/au/csiro/JamesGunning/CSEM/OneDinversion/NativeSources/LegacyScripps'
+make --directory=NativeSources/Scripps 
+make[1]: Entering directory `/home/polonius/jsg/java/au/csiro/JamesGunning/CSEM/OneDinversion/NativeSources/Scripps'
+gfortran  -c -w -O3 -fPIC -x f95-cpp-input JavaModules.f90 -o ../../Linux-i686-unknown/JavaModules.o
+gfortran  -c -w -O3 -fPIC -x f95-cpp-input FilterModules.f90 -o ../../Linux-i686-unknown/FilterModules.o
+gfortran  -c -w -O3 -fPIC -x f95-cpp-input Dipole1D_ptrs.f90 -o ../../Linux-i686-unknown/Dipole1D_ptrs.o
+gfortran  -c -w -O3 -fPIC -x f95-cpp-input JavaInterface.f90 -o ../../Linux-i686-unknown/JavaInterface.o
+gfortran  -c -w -O3 -fPIC -x f95-cpp-input CallDipole1D.f90 -o ../../Linux-i686-unknown/CallDipole1D.o
+gfortran  -c -w -O3 -fPIC -x f95-cpp-input OccamModules.f90 -o ../../Linux-i686-unknown/OccamModules.o
+gfortran  -c -w -O3 -fPIC -x f95-cpp-input CSEM1D.f90 -o ../../Linux-i686-unknown/CSEM1D.o
+ar -r ../../Linux-i686-unknown/Scripps.a ../../Linux-i686-unknown/JavaModules.o ../../Linux-i686-unknown/FilterModules.o ../../Linux-i686-unknown/Dipole1D_ptrs.o ../../Linux-i686-unknown/JavaInterface.o ../../Linux-i686-unknown/CallDipole1D.o ../../Linux-i686-unknown/OccamModules.o ../../Linux-i686-unknown/CSEM1D.o
+ar: creating ../../Linux-i686-unknown/Scripps.a
+ranlib ../../Linux-i686-unknown/Scripps.a 
+make[1]: Leaving directory `/home/polonius/jsg/java/au/csiro/JamesGunning/CSEM/OneDinversion/NativeSources/Scripps'
+javac -classpath ../../../../..:../../../../../jars/colt.jar -O -deprecation -target 1.5  ScrippsLegacyModelInterface.java
+Note: ../../../../../au/csiro/JamesGunning/CSEM/OneDinversion/CSEM1DInverter.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+javac -h -jni -classpath ../../../../..:../../../../../jars/colt.jar ScrippsLegacyModelInterface
+gfortran  -shared -fPIC -I/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0/include -I/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0/include/linux ScrippsLegacyModelInterfaceImp.c ./Linux-i686-unknown/LegacyScripps.a \
+                -o ./Linux-i686-unknown/libScrippsLegacyModelInterface.so
+gfortran  -shared -fPIC -I/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0/include -I/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0/include/linux ScrippsModelInterfaceImp.c ./Linux-i686-unknown/Scripps.a \
+                -o ./Linux-i686-unknown/libScrippsModelInterface.so
+javac -classpath ../../../../..:../../../../../jars/colt.jar -O -deprecation -target 1.5   CSEM1DBootstrapChecker.java
+javac -classpath ../../../../..:../../../../../jars/colt.jar -O -deprecation -target 1.5   ModelStudyChecker.java

@@ -1,0 +1,11 @@
+ # Plat-dependent things...
+CSHAREDLIBFLAG = -shared -fPIC 
+INCLUDEPATH = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+JNILIBSUFFIX = so
+RANLIB = ranlib
+# Fortran flags
+FC=gfortran 
+FORFLAGS=-fPIC
+# Fortran linker flags
+FLD=gfortran
+FLDFLAGS = -shared -fPIC

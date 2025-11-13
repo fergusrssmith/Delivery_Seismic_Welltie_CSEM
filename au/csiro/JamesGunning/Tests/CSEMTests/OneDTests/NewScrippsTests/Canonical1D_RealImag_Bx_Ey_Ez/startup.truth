@@ -1,0 +1,24 @@
+FORMAT:            OCCAMITER_1.0
+DESCRIPTION:       model for truth case
+MODEL FILE:        model.truth
+DATA FILE:         data
+DATE/TIME:                                      
+MAX ITER:          1000
+REQ TOL:           1.00
+IRUF:               1
+DEBUG LEVEL:        0
+ITERATION:          0
+PMU:                0
+RLAST:              0
+TLAST:              0
+IFFTOL:             0
+NO. PARMS:         3
+     0.
+     2.
+     0.
+     
+     
+     
+     
+     
+     

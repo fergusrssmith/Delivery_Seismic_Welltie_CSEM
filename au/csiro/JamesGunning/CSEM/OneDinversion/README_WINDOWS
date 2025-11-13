@@ -1,0 +1,86 @@
+# Instructions for REBUILDING on windows, Jul 08
+# NOT necessary for running shipped code as is
+
+
+1) Get MinGW | Minimalist GNU for Windows
+http://www.mingw.org/wiki/Getting_Started
+do the "Automated Installer" bits using
+https://sourceforge.net/project/showfiles.php?group_id=2435&package_id=240780
+install most basic components (but *not* java)
+especially: c, c++, f77 compilers, make
+Do the default install
+
+2) Get gfortran for windows
+http://gcc.gnu.org/wiki/GFortran
+Get the "mingw build", or "native Windows" build" see 
+http://gcc.gnu.org/wiki/GFortranBinaries
+This redirects to something like (as of Jan 2010)
+http://quatramaran.ens.fr/~coudert/gfortran/gfortran-windows.exe
+Put it in, say
+C:/MinGW/gfortran
+(website suggests you avoid places with spaces, like "Program Files")
+
+3) Get a recent jdk (*NOT the jre*) from sun, e.g. browse around
+http://java.sun.com/javase/downloads/index.jsp
+
+Use at least Java 1.5
+Do the standard install.
+
+4) To build native pieces (in DOS)
+- add the java area to your path, e.g.
+% path C:/Program\ Files/Java/jdk1.6.0_10/bin
+do this somehow permanently too (autoexec.bat?)
+so, e.g. 
+% java -version
+produces sane output
+
+You need to set environment variables 
+(On WinXP: tunnel down from: Start/My Computer/View System Information/Advanced-Tab/Environment Variables)
+
+% set CSIRO_OSTYPE=cygwin
+% set SEISMIC_INVERTER_HOME=root_of distribution (i.e. directory containing au, jars etc)
+% add to PATH: SEISMIC_INVERTER_HOME/scripts
+
+then the compile is
+% make -f Makefile
+
+5) Running
+Make sure your PATH sees
+a) the java executables area
+b) the scripts directory of the Delivery distribution: ../../../../../scripts/
+For a script, see the example ../../../../../scripts/csem1Dinverter
+Your Windows environment must have set the variables
+
+SEISMIC_INVERTER_HOME=root_of Delivery distribution (i.e. directory containing au, jars etc)
+CSIRO_OSTYPE=cygwin
+
+to run, for example:
+
+% csem1Dinverter -v 2 -h
+
+
+########
+ A rough working snapshot might look like (e.g., running within VMWARE)...
+
+% csem1Dinverter -v 2 
+
+Starting CSEM1DInverter
+reading startup file: startup
+reading model..
+reading model file...model.mod
+Expect 9 free parameters
+reading data..
+ reading data file...data.dat
+Read 155 data points
+BayesianAutoSmoothing = false
+MCMC = false
+Multistart = false
+Zeroed smoothing weights = false
+Dumping Xsections = false
+Dumping profiles  = false
+Estimated min skin-depth = 897.119
+Major i/o accomplished:
+Starting major loop...
+Wrote response file resp0000
+......
+

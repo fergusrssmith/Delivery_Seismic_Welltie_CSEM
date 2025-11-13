@@ -1,0 +1,25 @@
+The wedge example in the paper.
+
+Inversions are CMP independent 1d inversions at each "trace".
+We organise these into separate directories, for simplicity
+in running, ability to farm out to a compute-grid, and for some
+very simple graphics viewing.
+
+To run, choose the style by editing run_inversions.sh, and
+fire off the script:
+
+% run_inversions.sh
+
+Once finished, and you have resp_final and profile_final
+files in each CMP directory, a rough view of the whole line
+inversion can be obtained with
+
+% csem1DplotSection GeomCMP.txt
+
+
+Individual fits etc can be seen as, e.g.
+
+% csem1Dplotter CMP3/resp_final
+
+To clean the lot:
+% clean.sh

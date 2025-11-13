@@ -1,0 +1,25 @@
+# Cygwin Platform-dependent things...
+# Note especially JAVA_HOME and FORTRAN_HOME
+
+JAVA_HOME = C:/Program\ Files/Java/jdk1.6.0_10
+FORTRAN_HOME = C:/MinGW/gfortran
+SEISMIC_INVERTER_HOME=../../../../..
+# CLASSPATH = $(SEISMIC_INVERTER_HOME)';'$(SEISMIC_INVERTER_HOME)/jars/colt.jar`
+
+CSHAREDLIBFLAG = -shared -fPIC 
+INCLUDEPATH = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/win32 -I$(JAVA_HOME)/include/linux
+JNILIBSUFFIX = dll
+RANLIB = ranlib
+
+# might need this:
+# DLONG = -D__int64="long long"
+DLONG =
+# Fortran flags
+FC=$(FORTRAN_HOME)/bin/gfortran  $(DLONG) -shared -mrtd
+FORFLAGS=
+# Fortran linker flags
+FLD=$(FORTRAN_HOME)/bin/gfortran -L$(FORTRAN_HOME) -lgfortran -shared -mrtd -Wl,--add-stdcall-alias
+
+
+FLDFLAGS = -shared 
+CFLAGS = $(DLONG) -shared -Wl,--add-stdcall-alias -L$(FORTRAN_HOME) -lgfortran
