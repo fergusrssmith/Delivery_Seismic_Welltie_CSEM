@@ -1024,7 +1024,8 @@ public final class DEditor extends JFrame {
 	InputSource is = new InputSource(new StringReader(contents));
 	DocumentBuilderFactory dbfactory=DocumentBuilderFactory.newInstance();
 	try {
-	    DocumentBuilder builder = dbfactory.newDocumentBuilder();
+	    dbfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		DocumentBuilder builder = dbfactory.newDocumentBuilder();
 	    return builder.parse(is);
 	} catch (SAXException sxe) {
 	    // Error generated during parsing
