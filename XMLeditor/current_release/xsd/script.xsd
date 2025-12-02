@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:include schemaLocation="scriptSchemas/bhpcommon.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/bhpreadType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/bhploadhdrType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/bhpintegrateType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/bhpstorehdrType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/bhphorizonType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/bhptransposeType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/bhpioType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/bhpwritecubeType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/sushwType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/segyreadType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/sucleanType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/suchwType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/sugainType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/suwindType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/suximageType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/scatterType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/deliveryType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/deliveryAnalyserType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/suswapbytesType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/bhptdType.xsd"/>
+  <xsd:include schemaLocation="scriptSchemas/suresampType.xsd"/>
+
+  <xsd:complexType name="commandWithString">
+    <xsd:simpleContent>
+      <xsd:extension base="subbable_string">
+        <xsd:attribute name="run_in_background" type="xsd:boolean" default="false"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:element name="script">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="include" minOccurs="0" maxOccurs="unbounded" type="xsd:anyURI" default="parameters.xml"/>
+        <xsd:element name="parameters">
+	  <xsd:complexType>
+	    <xsd:sequence>
+	      <xsd:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+	        <xsd:complexType>
+		  <xsd:sequence>
+		    <xsd:element name="name" type="subbable_string" default="pname"/>
+		    <xsd:element name="value" type="subbable_string" default="pvalue"/>
+		  </xsd:sequence>
+		</xsd:complexType>
+	      </xsd:element>
+	    </xsd:sequence>
+	  </xsd:complexType>
+	</xsd:element>
+        <xsd:group name="commands" minOccurs="0" maxOccurs="unbounded">
+          <xsd:choice>
+	    <!-- solo commands -->
+	    <xsd:element name="unix_command" type="commandWithString" default=""/>
+	    <xsd:element name="bhpio" type="bhpioType"/>
+	    <xsd:element name="cp" type="commandWithString" default=""/>
+	    <xsd:element name="rm" type="commandWithString" default=""/>
+	    <xsd:element name="bhptranspose" type="bhptransposeType"/>
+	    <xsd:element name="script_text" type="subbable_string" default=""/>
+	    <xsd:element name="scatter" type="scatterType"/>
+	    <xsd:element name="gather" type="emptyType"/>
+	    <xsd:element name="delivery" type="deliveryType"/>
+	    <!-- starters -->
+	    <xsd:element name="segyread" type="segyreadType"/>
+	    <xsd:element name="bhpread" type="bhpreadType"/>
+	    <xsd:element name="unix_command_P" type="subbable_string" default=""/>
+	    <xsd:element name="script_text_P" type="subbable_string" default=""/>
+	    <xsd:element name="file_P" type="subbable_anyURI" default=""/>
+	    <!-- middlemen -->
+	    <xsd:element name="P_unix_command_P" type="subbable_string" default=""/>
+	    <xsd:element name="P_script_text_P" type="subbable_string" default=""/>
+	    <xsd:element name="sushw" type="sushwType"/>
+	    <xsd:element name="bhploadhdr" type="bhploadhdrType"/>
+	    <xsd:element name="bhpintegrate" type="bhpintegrateType"/>
+	    <xsd:element name="bhpstorehdr" type="bhpstorehdrType"/>
+	    <xsd:element name="bhphorizon" type="bhphorizonType"/>
+	    <xsd:element name="bhptd" type="bhptdType"/>
+	    <xsd:element name="suresamp" type="suresampType"/>
+	    <xsd:element name="suhilb" type="emptyType"/>
+	    <xsd:element name="suclean" type="sucleanType"/>
+	    <xsd:element name="suswapbytes" type="suswapbytesType"/>
+	    <xsd:element name="suchw" type="suchwType"/>
+	    <xsd:element name="sugain" type="sugainType"/>
+	    <xsd:element name="suwind" type="suwindType"/>
+	    <xsd:element name="deliveryAnalyser" type="deliveryAnalyserType"/>
+	    <!-- enders -->
+	    <xsd:element name="P_unix_command" type="commandWithString" default=""/>
+	    <xsd:element name="P_script_text" type="subbable_string" default=""/>
+	    <xsd:element name="P_file" default="myfile">
+	      <xsd:complexType>
+	        <xsd:simpleContent>
+		  <xsd:extension base="subbable_anyURI">
+		    <xsd:attribute name="run_in_background" type="xsd:boolean" default="false"/>
+		  </xsd:extension>
+		</xsd:simpleContent>
+	      </xsd:complexType>
+	    </xsd:element>
+	    <xsd:element name="surange">
+	      <xsd:complexType>
+	        <xsd:attribute name="run_in_background" type="xsd:boolean" default="false"/>
+	      </xsd:complexType>
+	    </xsd:element>
+	    <xsd:element name="suximage" type="suximageType"/>
+	    <xsd:element name="bhpwritecube" type="bhpwritecubeType"/>
+	  </xsd:choice>
+	</xsd:group>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

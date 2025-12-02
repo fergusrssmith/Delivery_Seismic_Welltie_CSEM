@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+ <xsd:include schemaLocation="bhpcommon.xsd"/>
+  
+ <xsd:complexType name="segyreadType">
+   <xsd:all>
+     <xsd:element name="tape" type="subbable_string" default="/dev/rmt0"/>
+     <xsd:element name="buff" type="bitBoolType" minOccurs="0" default="1"/>
+     <xsd:element name="verbose" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="vblock" type="subbable_integer" minOccurs="0" default="50"/>
+     <xsd:element name="hfile" type="subbable_anyURI" minOccurs="0" default="header"/>
+     <xsd:element name="bfile" type="subbable_anyURI" minOccurs="0" default="binary"/>
+     <xsd:element name="over" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="format" minOccurs="0" default="1">
+       <xsd:complexType>
+         <xsd:simpleContent>
+	   <xsd:restriction base="xsd:integer">
+	     <xsd:enumeration value="1"/>
+	     <xsd:enumeration value="2"/>
+	     <xsd:enumeration value="3"/>
+	   </xsd:restriction>
+         </xsd:simpleContent>
+	 <xsd:attribute name="substitution_string" type="xsd:string" default=""/>
+       </xsd:complexType>
+     </xsd:element>
+     <xsd:element name="conv" type="bitBoolType" minOccurs="0" default="1"/>
+     <xsd:element name="ns" type="subbable_integer" minOccurs="0" default="0"/>
+     <xsd:element name="trmin" type="subbable_integer" minOccurs="0" default="1"/>
+     <xsd:element name="trmax" type="subbable_integer" minOccurs="0" default="2147483647"/>
+     <xsd:element name="endian" type="bitBoolType" minOccurs="0" default="1"/>
+     <xsd:element name="errmax" type="subbable_integer" minOccurs="0" default="0"/>
+   </xsd:all>
+ </xsd:complexType>
+
+</xsd:schema>

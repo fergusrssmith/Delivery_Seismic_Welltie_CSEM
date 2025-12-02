@@ -1,0 +1,44 @@
+html/introduction.html
+Introduction to Wavelet Reservoir ID
+This program inputs selected data from a BHPIO dataset, indexed by cdp and ep, and takes the wavelet transform of it.  It also finds the average frequency slope of the selected dataset (an indicator of sand bed thickness).  A different (usually larger) dataset is selected from the BHPIO dataset and the frequency slope of that dataset is calculated and normalized to the average slope of the first selected dataset.  The both calculations are distributed, if submitted to a Linux cluster.
+
+html/script_parameters.html
+Wavelet Reservoir ID Parameters
+The parameters for Wavelet Reservoir ID are:
+<b>first_transform</b> : exponent (base 10) of scale of first wavelet transform scale
+<b>inc_transform</b> : exponent (base 10) increment of wavelet transform scales
+<b>last_transform</b> : exponent (base 10) of scale of last wavelet transform scale
+<b>first_stack_low</b> : first index of the wavelet transform to stack to form the first stack (used to calculate frequency slope)
+<b>first_stack_high</b> : last index of the wavelet transform to stack to form the first stack (used to calculate frequency slope)
+<b>second_stack_low</b> : first index of the wavelet transform to stack to form the second stack (used to calculate frequency slope)
+<b>second_stack_high</b> : last index of the wavelet transform to stack to form the second stack (used to calculate frequency slope)
+<b>smooth_length</b> : length of temporal smoother of wavelet transform (in ms)
+<b>project_path</b> : the name of the project directory where all of the input and output files will be stored (top level for relative pathing)
+<b>output_filename</b> : output  BHPIO indexed seismic dataset name (project_path/int_datasets/output_filename_cwt.dat for wavelet transform of first selected dataset, project_path/int_datasets/output_filename_cwtan.dat for normalized frequency slope of second selected dataset)
+<b>input_filename</b> : input seismic BHPIO datset name  (project_path/int_datasets/input_filename.dat)
+<b>tmp</b> : path of temporary directory (must exist).
+<b>mincdpsigmaslope</b> : minimum cdp for which to calculate the normalized frequency slope.
+<b>maxcdpsigmaslope</b> : maximum cdp for which to calculate the normalized frequency slope.
+<b>inccdpsigmaslope</b> : cdp increment for which to calculate the normalized frequency slope.
+<b>minepsigmaslope</b> : minimum ep for which to calculate the normalized frequency slope.
+<b>maxepsigmaslope</b> : maximum ep for which to calculate the normalized frequency slope.
+<b>incepsigmaslope</b> : ep increment for which to calculate the normalized frequency slope.
+<b>mincdptransform</b> : minimum cdp for which to calculate the wavelet transform.
+<b>maxcdptransform</b> : maximum cdp for which to calculate the wavelet transform.
+<b>inccdptransform</b> : cdp increment for which to calculate the wavelet transform.
+<b>mineptransform</b> : minimum ep for which to calculate the wavelet transform.
+<b>maxeptransform</b> : maximum ep for which to calculate the wavelet transform.
+<b>inceptransform</b> : ep increment for which to calculate the wavelet transform.
+<b>mincdpmean</b> : minimum cdp for which to calculate the normalization for the frequency slope.
+<b>maxcdpmean</b> : maximum cdp for which to calculate the normalization for the frequency slope.
+<b>inccdpmean</b> : cdp increment for which to calculate the normalization for the frequency slopem.
+<b>minepmean</b> : minimum ep for which to calculate the normalization for the frequency slope.
+<b>maxepmean</b> : maximum ep for which to calculate the normalization for the frequency slope.
+<b>incepmean</b> : ep increment for which to calculate the normalization for the frequency slope.
+
+html/flow.html
+Wavelet Reservoir ID Job Flow
+This job flow requires a file (project_path/int_datasets/default.dat) with a list of directories where the output BHPIO datasets can be stored.
+
+
+

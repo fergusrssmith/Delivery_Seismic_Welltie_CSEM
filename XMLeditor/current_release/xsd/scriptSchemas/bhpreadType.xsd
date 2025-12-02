@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:include schemaLocation="bhpcommon.xsd"/>
+
+  <xsd:complexType name="bhpreadType">
+    <xsd:all>
+      <xsd:element name="filename" type="subbable_string" default="myfile"/>
+      <xsd:element name="pathlist" type="subbable_anyURI" minOccurs="0" default="myfile.dat"/>
+      <xsd:element name="keys" minOccurs="0">
+	<xsd:complexType>
+	  <xsd:sequence>
+	    <xsd:element name="key" maxOccurs="5">
+	      <xsd:complexType>
+		<xsd:sequence>
+		  <xsd:element name="name" type="headerWord" default="ep"/>
+		  <xsd:element name="range" type="subbable_string" default="0"/>
+		</xsd:sequence>
+	      </xsd:complexType>
+	    </xsd:element>
+	  </xsd:sequence>
+	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="rule" minOccurs="0" default="near">
+	<xsd:complexType>
+	  <xsd:simpleContent>
+	    <xsd:restriction base="xsd:string">
+              <xsd:enumeration value="near"/>
+              <xsd:enumeration value="match"/>
+              <xsd:enumeration value="all"/>
+	      <xsd:enumeration value="stack"/>
+            </xsd:restriction>
+	  </xsd:simpleContent>
+	  <xsd:attribute name="substitution_string" type="xsd:string" default=""/>
+	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="maxtraces" type="subbable_integer" minOccurs="0" default="0"/>
+      <xsd:element name="request" minOccurs="0" default="summary">
+	<xsd:complexType>
+	  <xsd:simpleContent>
+	    <xsd:restriction base="xsd:string">
+              <xsd:enumeration value="data"/>
+	      <xsd:enumeration value="summary"/>
+	      <xsd:enumeration value="fold"/>
+	    </xsd:restriction>
+	  </xsd:simpleContent>
+	  <xsd:attribute name="substitution_string" type="xsd:string" default=""/>
+	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="properties" minOccurs="0">
+	<xsd:complexType>
+	  <xsd:sequence>
+	    <xsd:element name="property" type="subbable_string" maxOccurs="unbounded"/>
+	  </xsd:sequence>
+	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="horizons" minOccurs="0">
+        <xsd:complexType>
+	  <xsd:sequence>
+	    <xsd:element name="horizon" type="subbable_string" maxOccurs="unbounded"/>
+	  </xsd:sequence>
+	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="endian" minOccurs="0" type="bitBoolType" default="0"/>
+      <xsd:element name="foldfile" type="subbable_anyURI" minOccurs="0" default="foldfile"/>
+      <xsd:element name="display" minOccurs="0" type="yes_no_Type" default="no"/>
+      <xsd:element name="interpolate" minOccurs="0" default="nearest">
+	<xsd:complexType>
+	  <xsd:simpleContent>
+	    <xsd:restriction base="xsd:string">
+	      <xsd:enumeration value="nearest"/>
+	      <xsd:enumeration value="bilinear"/>
+	    </xsd:restriction>
+	  </xsd:simpleContent>
+	  <xsd:attribute name="substitution_string" type="xsd:string" default=""/>
+	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="verbose" minOccurs="0" type="bitBoolType" default="0"/>
+    </xsd:all>
+  </xsd:complexType>
+</xsd:schema>

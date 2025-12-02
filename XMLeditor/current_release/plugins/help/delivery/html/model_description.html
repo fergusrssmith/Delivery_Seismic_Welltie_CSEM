@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+  <title>Stack data</title>
+</head>
+  <body bgcolor="#ffffff" text="#000000" link="#000099" vlink="#990099"
+ alink="#000099">
+   	  
+<h3><big><big><u><a name="Model_description"></a>Model description</u></big></big></h3>
+   	 	  
+<p>Information about the layers<br>
+  At least 2 layers are required. Each layer has two end-member rocks (Net-to-gross
+ may be trivially 1 or 0 though).<br>
+  </p>
+   
+<p><big><b>Making new layers</b></big><br>
+  The attribute &lt;synchronise_rock_matrix&gt; should be checked only if<br>
+  the layer above has the identical end-member rocks, and you want it to
+differ  from the current layer only in the<br>
+  effect of fluids. Only rarely will you want to do this kind of thing (e.g.
+ for finding a contact in a thick reservoir).<br>
+  <b><br>
+  Mandatory layer entries</b><br>
+  </p>
+   
+<table cellpadding="2" cellspacing="2" border="1" width="80%">
+    <tbody>
+      <tr>
+        <td valign="top">Name<br>
+        </td>
+        <td valign="top">layer name. Give layers a sensible, identifiable 
+name.       <br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><a href="#reservoir_endmember">reservoir_endmember</a><br>
+        </td>
+        <td valign="top">details of <i>permeable</i> rock in layer. See below<br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><a href="#nonreservoir_endmember">nonreservoir_endmember</a><br>
+        </td>
+        <td valign="top">details of <i>impermeable</i> rock in layer. See 
+below<br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">time<br>
+        </td>
+        <td valign="top">prior mean time (ms) of layer top<br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">sigma_time<br>
+        </td>
+        <td valign="top">prior mean time uncertainty (standard deviation) 
+(ms) of layer top. Usually something like 10ms.<br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">net_to_gross<br>
+        </td>
+        <td valign="top">prior mean net to gross of layer: 0&lt;net_to_gross&lt;1<br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">depth<br>
+        </td>
+        <td valign="top">prior mean depth of layer. You also may want to
+have  this locked over a series of layers using the attribute <i>same_as_layer_above.</i>
+ Must be in same units as rock trends regressions.<br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">LFIV<br>
+        </td>
+        <td valign="top">prior mean low-frequency-interval-velocity (LFIV)
+ of layer (q.v. Rock trends). Put zero if no regression against LFIV is used.
+ &nbsp;If present, he LFIV is a large-scale quantity, so you may want to
+have  this locked over a series of layers using the attribute <i>same_as_layer_above.</i>
+ Must be in same units as rock trends regressions.<br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">t_base<br>
+        </td>
+        <td valign="top"><i>Will only appear as mandatory entry on bottom 
+layer.</i> Same meaning as t, but for the bottom of the last layer.<br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">sigma_t_base<br>
+        </td>
+        <td valign="top"><i>Will only appear as mandatory entry on bottom 
+layer.</i> Same meaning as sigma_t, but for the bottom of the last layer.<br>
+        </td>
+      </tr>
+       
+  </tbody>  
+</table>
+   
+<p><b><br>
+   Optional layer entries</b><br>
+    </p>
+   
+<table cellpadding="2" cellspacing="2" border="1" width="80%">
+     <tbody>
+       <tr>
+         <td valign="top">sigma_net_to_gross<br>
+         </td>
+         <td valign="top">prior net-to-gross uncertainty (standard deviation)
+ if uncertain. Typically 0.1-0.2. Set to zero if known, or omit entry.<br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top">sigma_depth<br>
+         </td>
+         <td valign="top">prior depth uncertainty  (standard deviation) if
+ uncertain. Typically a few tens of feet. &nbsp;Controls horizontal axis
+uncertainty  in rock trends regressions, and often best set to zero if error
+bars in vp  are significant. See also delivery docs on the --lock-depths
+option. Taken  to be zero if entry omitted (often best choice)<br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top">sigma_LFIV<br>
+         </td>
+         <td valign="top">uncertainty on LFIV  (standard deviation) if uncertain.
+ Taken to be zero if entry omitted. &nbsp;The LFIV is a large-scale quantity,
+ so you may want to have this locked using same_as_layer_above<br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top">thickness<br>
+         </td>
+         <td valign="top">default prior constraint thickness on layer (isopach).
+ Make sure units are consistent with velocities. Will usually <i>vary_areally</i>,
+ so you may want to switch on this attribute if a thickness property is present
+ in the input traces.<br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top">sigma_thickness<br>
+         </td>
+         <td valign="top">uncertainty in layer thickness (perhaps a kriging
+ standard deviation). Do not impose better than 1% of the layer thickness,
+ even at wells (e.g. 1ft). Will usually <i>vary_areally</i>.<br>
+         </td>
+       </tr>
+                          
+  </tbody>   
+</table>
+     
+<p><br>
+   </p>
+ 
+<table cellpadding="2" cellspacing="2" border="1" width="80%"
+ bgcolor="#ffff66">
+   <tbody>
+     <tr>
+       <td valign="top">       
+      <p><font color="red"><b>Important</b></font></p>
+   Each one of these entries may have <i>varies_areally</i> turned on. If
+you do, make sure there is a suitable number coming in from the prior traces, 
+you know which block it is, and you put a suitable entry in the <a
+ href="file:///home/gemini/jsg/java/au/csiro/JamesGunning/xmledit/plugins/help/deliveryEditor/html/property_indices.html">property_indices</a> 
+section.<br>
+       </td>
+     </tr>
+   
+  </tbody> 
+</table>
+ 
+<p><br>
+  </p>
+   
+<p><b>Rock entries</b></p>
+   
+<table cellpadding="2" cellspacing="2" border="1" width="80%">
+    <tbody>
+      <tr>
+        <td valign="top"><a name="reservoir_endmember"></a>reservoir_endmember<br>
+        </td>
+        <td valign="top">Required entries: <b>name,</b> and up to 4 kinds 
+of fluids that may be present. At a minimum, you will have to enter a brine
+ entry. Omit entries for oil, gas or lsg (low-sat-gas) if they can't be &nbsp;in
+ this layer (e.g. if you know it bears only water). The fluid names must
+correspond  with the fluid names defined in the <a
+ href="rock_fluid_properties.html">rock_fluid_properties</a>  section. The
+rock name must correspond to a rock defined in the&nbsp;  <a
+ href="rock_fluid_properties.html">rock_fluid_properties</a> section. <br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><a name="nonreservoir_endmember"></a>nonreservoir_endmember<br>
+        </td>
+        <td valign="top">Required entries: <b>name,</b> &nbsp;of an impermeable
+ rock. The rock name must correspond to a rock defined in the&nbsp;  <a
+ href="rock_fluid_properties.html">rock_fluid_properties</a> section. <br>
+        </td>
+      </tr>
+       
+  </tbody>  
+</table>
+   
+<p><br>
+  </p>
+  <br>
+ <br>
+</body>
+</html>

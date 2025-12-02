@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  
+<parameters><parameter>
+      <name>mincdp</name>
+      <value>124</value>
+    </parameter><parameter>
+      <name>inccdp</name>
+      <value>1</value>
+    </parameter><parameter>
+      <name>ncdp</name>
+      <value>1358</value>
+    </parameter><parameter>
+      <name>minep</name>
+      <value>2200</value>
+    </parameter><parameter>
+      <name>incep</name>
+      <value>1</value>
+    </parameter><parameter>
+      <name>nep</name>
+      <value>310</value>
+    </parameter><parameter>
+      <name>project_path</name>
+      <value>/home/ahglim/disk152/brazil</value>
+    </parameter><parameter>
+      <name>output_filename</name>
+      <value>hilb_seismic</value>
+    </parameter><parameter>
+      <name>input_seismic_filename</name>
+      <value>seismic/part1_seismic.sgy</value>
+    </parameter><parameter>
+      <name>input_filenames</name>
+      <value>/home/ahglim/disk152/brazil/seismic/list_of_files.txt</value>
+    </parameter><parameter>
+      <name>one_for_big_endian_box</name>
+      <value substitution_string="">1</value>
+    </parameter></parameters><unix_command run_in_background="false" substitution_string="cd ${project_path}"/><bhpio>
+    <delete substitution_string="">yes</delete><pathlist substitution_string="int_datasets/${output_filename}.dat">myfile.dat</pathlist><filename substitution_string="${output_filename}">myfile</filename>
+  </bhpio><cp run_in_background="false" substitution_string="int_datasets/default.dat int_datasets/${output_filename}.dat"/><segyread>
+    <endian substitution_string="${one_for_big_endian_box}">1</endian><trmax substitution_string="">1</trmax><trmin substitution_string="">1</trmin><tape substitution_string="${input_seismic_filename}">/dev/rmt0</tape>
+  </segyread><suchw><operators>
+      <operator>
+        <output_key substitution_string="">ep</output_key>
+        <input_key1 substitution_string="">fldr</input_key1>
+        <input_key2>cdp</input_key2>
+        <a>0</a>
+        <b>1</b>
+        <c>0</c>
+        <d>1</d>
+      </operator>
+    </operators></suchw><bhpwritecube>
+    <init substitution_string="">yes</init><size substitution_string="">500</size><keys>
+      <key>
+        <header_word substitution_string="">cdp</header_word>
+        <minimum_value substitution_string="${mincdp}">0</minimum_value>
+        <increment substitution_string="${inccdp}">1</increment>
+        <number_of_bins substitution_string="${ncdp}">1</number_of_bins>
+      </key><key>
+        <header_word substitution_string="">ep</header_word>
+        <minimum_value substitution_string="${minep}">0</minimum_value>
+        <increment substitution_string="${incep}">1</increment>
+        <number_of_bins substitution_string="${nep}">1</number_of_bins>
+      </key>
+    </keys><pathlist substitution_string="int_datasets/${output_filename}.dat">fname.dat</pathlist><filename substitution_string="${output_filename}">fname</filename>
+  </bhpwritecube><scatter>
+    
+  <scatter_parameter>
+      <name substitution_string="">input_seismic_filename</name>
+      
+    <listfile substitution_string="${input_filenames}">/home/ahglim/disk152/brazil/seismic/list_of_files.txt</listfile></scatter_parameter></scatter><unix_command run_in_background="false" substitution_string="cd ${project_path}"/><segyread>
+    <endian substitution_string="${one_for_big_endian_box}">1</endian><tape substitution_string="${input_seismic_filename}">/dev/rmt0</tape>
+  </segyread><suchw><operators>
+      <operator>
+        <output_key substitution_string="">ep</output_key>
+        <input_key1 substitution_string="">fldr</input_key1>
+        <input_key2>cdp</input_key2>
+        <a>0</a>
+        <b>1</b>
+        <c>0</c>
+        <d>1</d>
+      </operator>
+    </operators></suchw><suhilb/><sugain><scale substitution_string="">-1.0</scale></sugain><bhpwritecube>
+    <rule substitution_string="">replace</rule><size substitution_string="">500</size><keys>
+      <key>
+        <header_word substitution_string="">cdp</header_word>
+        <minimum_value substitution_string="${mincdp}">0</minimum_value>
+        <increment substitution_string="${inccdp}">1</increment>
+        <number_of_bins substitution_string="${ncdp}">1</number_of_bins>
+      </key><key>
+        <header_word substitution_string="">ep</header_word>
+        <minimum_value substitution_string="${minep}">0</minimum_value>
+        <increment substitution_string="${incep}">1</increment>
+        <number_of_bins substitution_string="${nep}">1</number_of_bins>
+      </key>
+    </keys><pathlist substitution_string="int_datasets/${output_filename}.dat">fname.dat</pathlist><filename substitution_string="${output_filename}">fname</filename>
+  </bhpwritecube><gather/></script>

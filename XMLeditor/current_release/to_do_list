@@ -1,0 +1,42 @@
+To Do:
+1. finish scripting capability 
+2. add schema name to XML -- is his thing broken on this feature?
+3. add free form / relaxed mode
+4. getRelevantExpression() doesn't work just right -- doesn't know which
+	way to go down w/same name
+5. edit multiple nodes at once?  (just for scripting maybe?)
+6. select new windows?
+7. inform user when there's no window but they tried to do something
+8. figure out how to make gather etc. uneditable
+
+Concerns:
+1. How will extensions possibly break DEditDataType?  Should I bring
+	everything into DEditDataType so it is easy to expand there and no 
+	other class has to know how it works?
+2. I can generate default leaves, but it might be made a little cleaner
+3. It might be useful to have grammar checking on subtrees.  But will this 
+	have to be done by yours truly?  How do I use Acceptor?
+4. Insert is grossly inefficient, and paste kinda is too.  Someday it might 
+	be worth my while to clean them up
+5. clean up code / optimize code
+6. add any more bells and whistles?
+7. maybe just maybe remove knowledge of org.w3c.dom.Node from DEditor.java?
+	It would leave us with nothing but java. at javax. in DEditor.java...
+8. getRequiredSubElements() should work now, but will it really work in 
+	all cases???
+
+***  One possibility to consider for the whole PotentialSubElements() thing 
+	(and maybe Required) is to, instead of giving the user element names 
+	to pick from, have them satisfy a sequence, a choice, etc. but give 
+	them helpful names.  For example, if you hit a choice of elements, 
+	the user would get the names of the elements to pick from, just like 
+	now.  But if given a choice of sequences of elements, the user picks 
+	a sequence to satisfy, dilineated to them as name1-name2-name3 or 
+	something like that.  The tricky part here is figuring out what is 
+	satisfied and what isn't because you should give the user as deep an 
+	option as possible so that no existing names appear in the choice 
+	they are given.
+
+Bug list:
+
+    empty (for now)

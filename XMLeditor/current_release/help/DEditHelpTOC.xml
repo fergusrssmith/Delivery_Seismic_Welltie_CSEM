@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='ISO-8859-1'  ?>
+<!DOCTYPE toc
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+<toc version="1.0">
+    <tocitem text="XML Editor">
+        <tocitem text="Introduction" target="introhtml"/>
+        <tocitem text="&quot;File&quot; Options">
+            <tocitem text="New" target="new_xml"/>
+	    <tocitem text="Open" target="open_xml"/>
+	    <tocitem text="Save" target="save_xml"/>
+	</tocitem>
+	<tocitem text="&quot;Edit&quot; Options">
+	    <tocitem text="Insert">
+	        <tocitem text="Insert Above" target="insert_above"/>
+		<tocitem text="Insert As Sub-Item" target="insert_child"/>
+		<tocitem text="Insert Below" target="insert_below"/>
+	    </tocitem>
+	    <tocitem text="Switch" target="switch"/>
+	    <tocitem text="Copy" target="copy"/>
+	    <tocitem text="Cut" target="cut"/>
+	    <tocitem text="Paste">
+	        <tocitem text="Paste Above" target="paste_above"/>
+		<tocitem text="Paste As Sub-Item" target="paste_child"/>
+		<tocitem text="Paste Below" target="paste_below"/>
+	    </tocitem>
+	</tocitem>
+	<tocitem text="User-Interface Components">
+	  <tocitem text="The XML Tree" target="tree"/>
+	  <tocitem text="The Status Message" target="status"/>
+	  <tocitem text="The XML Text Window" target="text"/>
+    </tocitem>
+    <tocitem text="Adding Help Information" target="adding_help"/>
+    <tocitem text="Adding Plugins" target="adding_plugins"/>
+    <tocitem text="How the Schema Code Works" target="schema_rambling"/>
+</toc>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <parameters>
+    <parameter>
+      <name>cdp</name>
+      <value>4554</value>
+    </parameter>
+    <parameter>
+      <name>ep</name>
+      <value>2401</value>
+    </parameter>
+    <parameter>
+      <name>t_end</name>
+      <value>5.0</value>
+    </parameter>
+    <parameter>
+      <name>t_start</name>
+      <value>3.9</value>
+    </parameter>
+    <parameter>
+      <name>tmp</name>
+      <value>tmp4</value>
+    </parameter>
+    <parameter>
+      <name>wavelet_filename</name>
+      <value>Tests/wavelet.su</value>
+    </parameter>
+    <parameter>
+      <name>project_directory</name>
+      <value>/home/ahglim/disk152/typhoon</value>
+    </parameter>
+    <parameter>
+      <name>seismic_filename</name>
+      <value>seismic_small</value>
+    </parameter>
+    <parameter>
+      <name>input_realisations</name>
+      <value>inversion_output_post_north</value>
+    </parameter>
+    <parameter>
+      <name substitution_string="">t_end_plus</name>
+      <value substitution_string="">${t_end}+0.1</value>
+    </parameter>
+    <parameter>
+      <name substitution_string="">t_start_minus</name>
+      <value substitution_string="">${t_start}-0.1</value>
+    </parameter>
+  </parameters>
+  <unix_command run_in_background="false" substitution_string="cd ${project_directory}"/>
+  <bhpread>
+    <keys>
+      <key>
+        <name>ep</name>
+        <range substitution_string="${ep}">0</range>
+      </key>
+      <key>
+        <name substitution_string="">cdp</name>
+        <range substitution_string="${cdp}">0</range>
+      </key>
+    </keys>
+    <pathlist substitution_string="int_datasets/${seismic_filename}.dat">myfile.dat</pathlist>
+    <filename substitution_string="${seismic_filename}">myfile</filename>
+  </bhpread>
+  
+  <suwind>
+    <tmax substitution_string="${t_end}">0.0</tmax>
+    <tmin substitution_string="${t_start}">0.0</tmin>
+  </suwind>
+  <P_file run_in_background="false" substitution_string="${tmp}/seismic.su">myfile</P_file><bhpread>
+    <endian substitution_string="">1</endian>
+    <keys>
+      <key>
+        <name>ep</name>
+        <range substitution_string="${ep}">0</range>
+      </key>
+      <key>
+        <name substitution_string="">cdp</name>
+        <range substitution_string="${cdp}">0</range>
+      </key>
+      <key>
+        <name substitution_string="">mark</name>
+        <range substitution_string="">*</range>
+      </key>
+    </keys>
+    <pathlist substitution_string="int_datasets/${input_realisations}.dat">myfile.dat</pathlist>
+    <filename substitution_string="${input_realisations}">myfile</filename>
+  </bhpread>
+  
+<deliveryAnalyser>
+    <s>
+      <t_start_in_seconds substitution_string="`echo ${t_start_minus} | bc`">0</t_start_in_seconds>
+      <t_end_in_seconds substitution_string="`echo ${t_end_plus} | bc`">1</t_end_in_seconds>
+      <reflection_coefficient>R_near</reflection_coefficient>
+      <wavelet_filename substitution_string="${wavelet_filename}">wavelet_filename.su</wavelet_filename>
+    </s>
+  </deliveryAnalyser>
+  <suwind>
+    <tmax substitution_string="${t_end}">0.0</tmax>
+    <tmin substitution_string="${t_start}">0.0</tmin>
+  </suwind><P_file run_in_background="false" substitution_string="${tmp}/model_seismic.su">myfile</P_file><unix_command_P substitution_string="cat ${tmp}/seismic.su ${tmp}/model_seismic.su">cat</unix_command_P><P_unix_command run_in_background="false" substitution_string="">suxgraph reverse=1 linewidth=5,1</P_unix_command><rm run_in_background="false" substitution_string="${tmp}/seismic.su"/><rm run_in_background="false" substitution_string="${tmp}/model_seismic.su"/></script>

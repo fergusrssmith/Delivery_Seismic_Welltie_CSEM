@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>property_indices</title>
+      
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+</head>
+  <body>
+ 
+<h3><big><big><u>Property_indices</u></big></big></h3>
+   	 	  
+<p>Links to the property entries in the prior input traces. If any layer property&nbsp;
+in the<a href="model_description.html"> <br>
+ model_description</a> &nbsp;section <i>varies_areally,</i> it must have
+a corresponding entry in this<br>
+ section. In principle, just about any property can vary on a trace-by-trace 
+<br>
+ basis. In practice, only a few of these variations probably really matter, 
+<br>
+ and these are what must go into the prior traces. You will want<br>
+ links for <i>time_link,</i> probably<i> depth_link,</i> and possibly <i>net_to_gross_link.</i> 
+Kriged <br>
+ constraints on thickness might come in through the <i>thickness_link.</i> 
+<br>
+ Known wet areas could have <i>probabiliity_of_oil=0</i> etc to simplify
+the <br>
+ inversion.<br>
+ </p>
+ 
+<p>The prior traces have a set of blocks for varying properties. the last 
+block is<br>
+ always time. The number here must be the block number for the property in 
+question.<br>
+ the inverter can ignore bad values (-999.0) in the input traces.<br>
+ </p>
+ 
+<p>There are are large list of possible links here in the schema. Many are 
+<i>very</i> unlikely to be<br>
+ needed. Not all are implemented, but<br>
+ the important ones probably are.<br>
+  </p>
+ <br>
+</body>
+</html>

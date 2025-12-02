@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+ <xsd:include schemaLocation="bhpcommon.xsd"/>
+  
+ <xsd:complexType name="sugainType">
+   <xsd:all>
+     <xsd:element name="panel" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="tpow" type="subbable_float" minOccurs="0" default="0.0"/>
+     <xsd:element name="epow" type="subbable_float" minOccurs="0" default="0.0"/>
+     <xsd:element name="gpow" type="subbable_float" minOccurs="0" default="1.0"/>
+     <xsd:element name="agc" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="gagc" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="wagc" type="subbable_float" minOccurs="0" default="0.5"/>
+     <xsd:element name="trap" type="subbable_float" minOccurs="0" default="0.0"/>
+     <xsd:element name="clip" type="subbable_float" minOccurs="0" default="0.0"/>
+     <xsd:element name="qclip" type="subbable_float" minOccurs="0" default="1.0"/>
+     <xsd:element name="qbal" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="pbal" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="mbal" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="scale" type="subbable_float" minOccurs="0" default="1.0"/>
+     <xsd:element name="bias" type="subbable_float" minOccurs="0" default="0.0"/>
+     <xsd:element name="jon" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="verbose" type="bitBoolType" minOccurs="0" default="0"/>
+     <xsd:element name="tmpdir" type="subbable_string" minOccurs="0" default=""/>
+   </xsd:all>
+ </xsd:complexType>
+</xsd:schema> 

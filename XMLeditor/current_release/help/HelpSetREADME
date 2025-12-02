@@ -1,0 +1,96 @@
+This README briefly explains how to set up a help set and incorporate it into 
+the editor, presumably as part of a plugin.  
+
+-- Required Files --
+First you will need the files which specify how to structure and where to find 
+the corresponding html files with the actual help content.  The first file you 
+need is the HelpSet file itself, "name".hs.  For simplicity's sake just copy 
+any file with that extension that you can find.  In the file you will need 
+only change a few lines:
+
+<title><!-- Put your title here --></title>
+
+<mapref location="Map.jhm"/>  
+<!-- replace Map.jhm with the name of your mapfile -->
+
+<view>
+    <name>TOC</name>
+    <label>Table Of Contents</label>
+    <type>javax.help.TOCView</type>
+    <data><!-- Put the path to your table of contents file here --></data>
+</view>
+
+<view>
+    <name>Index</name>
+    <label>Index</label>
+    <type>javax.help.IndexView</type>
+    <data><!-- Put the path to your index file here --></data>
+</view>
+
+The index and TOC (Table of Contents) files should be .xml files.  Again if 
+you copy a file ending in TOC.xml or Index.xml and just change it and you 
+should be fine.  The important part of these files are lines like
+
+<tocitem text="&quot;File&quot; Options">
+    <!-- tocitem inside tocitem for tree hierarchy -->
+    <tocitem text="New" target="new_xml"/>
+    <tocitem text="Open" target="open_xml"/>
+    <tocitem text="Save" target="save_xml"/>
+</tocitem>
+
+and 
+
+<indexitem text="Open" target="open_xml"/>
+
+In particular target="" refers to the string ID of one of the help files.  The 
+map file ("name".jhm) converts ID's to filenames (or rather, URLs).  Copy a 
+map file and then change lines like this:
+
+<mapID target="open_xml" url="filemenu/open_xml.html" />
+
+so that the target is one of your ID's and the URL is the appropriate help 
+file for that target.  If you are using the perl script for generation, then 
+just remember this filename as you'll need it when you make your generation 
+file.  (See "Generation of HTML from templates using Perl" below.)
+
+-- Incorporating Help --
+New help sets can be included via the command line if a plugin supports it. 
+The standard editor does not provide support for additional help sets.  The 
+script editor always includes $XMLEDITHOME/plugins/help/script/ScriptHelp.hs, 
+and supports additional help sets with the "script-hs=" command line argument, 
+to be followed immediately by the path (relative or absolute) to a help set 
+which you want included.  Now that help set will be viewable in the Java Help
+window.  For delivery, the process is the same except the always-included help
+set is $XMLEDITHOME/plugins/help/delivery/DeliveryHelp.hs and the argument 
+for including additional help sets is "deliv-hs=".  ScriptHelp.hs and 
+DeliveryHelp.hs should be added to if and only if the help files added deal 
+with the core functionality of the script or delivery plugin and not with a 
+particular xml file.  In those cases adding a separate help set with 
+"script-hs=" or "deliv-hs=" would be best.
+
+-- Generation of HTML from templates using Perl --
+The Perl script build_help_html.pl generates html files as per the user's 
+specifications given a fixed filename for the template file and the content 
+file.  The template file is an HTML file with comments in key locations where 
+significant content will be added.  The content file is an ASCII text file 
+from which the contents of specific HTML files are gathered.  It should 
+conform to the following pattern:
+
+             -- generate_html.txt --
+1 line       The name of the file to generate (relative or absolute)
+1 line       The title to appear in the html
+1 line       The text to appear descriping the title (all on one line)
+0..n lines   Additional lines designating parameters or other sub-info
+1 blank line	
+repeat
+
+The template file and the content file should reside in the same directory as 
+the .hs, .jhm, TOC, and index files, and should be called template.html and 
+generate_html.txt, respectively.  Then, in that directory, run 
+$XMLEDITHOME/help/build_help_html.pl.  Now that all the files are complete, 
+run jhindexer in that same directory listing after it the names of all 
+directories in which your help .html files reside (including . if you put 
+any .html files there).  For now, jhindexer resides in 
+~ahryat/jh1.1/javahelp/bin.  Also, be warned it uses ksh so you must have 
+that shell to run it.
+

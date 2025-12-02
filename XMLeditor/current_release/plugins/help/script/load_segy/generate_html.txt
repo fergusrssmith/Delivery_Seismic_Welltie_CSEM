@@ -1,0 +1,25 @@
+html/introduction.html
+Introduction to SEGY loader into BHPIO
+The program loads a list of segy files into a BHPIO random accesed dataset.  The program expects the inline and crossline numbers to be in header words cdp and fldr.  It also expects rfc data and will rotate it 90 degrees into quadrature phase.  It will copy the fldr header word to ep and index the file by cdp and ep.
+
+html/script_parameters.html
+SEGY loader Parameters
+The parameters for SEGY loading are:
+<b>mincdp</b> : minimum cdp of seismic dataset (for bhpwritecube)
+<b>inccdp</b> : cdp increment of seismic dataset (for bhpwritecube)
+<b>ncdp</b> : number of cdp of seismic dataset (for bhpwritecube)
+<b>minep</b> : minimum ep of seismic dataset (for bhpwritecube)
+<b>incep</b> : ep increment of seismic dataset (for bhpwritecube)
+<b>nedp</b> : number of ep of seismic dataset (for bhpwritecube)
+<b>project_path</b> : the name of the project directory where all of the input and output files will be stored (top level for relative pathing)
+<b>output_filename</b> : output  BHPIO indexed seismic dataset name (project_path/int_datasets/output_filename.dat)
+<b>input_seismic_filename</b> : an example segy file to use to set up the header block for the BHPIO file  (project_path/input_seismic_filename)
+<b>input_filenames</b> : name of the ascii file that contains the list of segy files to load.  There should be one filename per line.  The path for this file and for the segy files should be relative to project_path.
+<b>one_for_big_endian</b> : set to 1 if input segy files are big endian, set to 0 if input segy files are little endian
+
+html/flow.html
+SEGY loader Job Flow
+This job flow requires a file (project_path/int_datasets/default.dat) with a list of directories where the output BHPIO datasets can be stored.
+
+
+

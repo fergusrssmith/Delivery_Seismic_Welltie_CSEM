@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='ISO-8859-1'  ?>
+<!DOCTYPE index
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/index_1_0.dtd">
+<index version="1.0">
+    <indexitem text="Introduction" target="scriptintro"/>
+    <indexitem text="Editing Parameters" target="parameters"/>
+    <indexitem text="Including Parameters From Other Files" target="include"/>
+    <indexitem text="View Script" target="show_script"/>
+    <indexitem text="Generate Scripts" target="generate_script"/>
+    <indexitem text="Execute Scripts" target="execute_script"/>
+    <indexitem text="Show Script Window" target="show_script_window"/>
+    <indexitem text="Job Output Window" target="job_output_window"/>
+    <indexitem text="Adding Commands" target="adding_commands"/>
+    <!-- commands -->
+    <!-- solos -->
+    <indexitem text="unix_command" target="unix_command"/>
+    <indexitem text="bhpio" target="bhpio"/>
+    <indexitem text="cp" target="cp"/>
+    <indexitem text="rm" target="rm"/>
+    <indexitem text="bhptranspose" target="bhptranspose"/>
+    <indexitem text="script_text" target="script_text"/>
+    <indexitem text="scatter" target="scatter"/>
+    <indexitem text="gather" target="gather"/>
+    <indexitem text="delivery" target="delivery"/>
+    <!-- starters -->
+    <indexitem text="segyread" target="segyread"/>
+    <indexitem text="bhpread" target="bhpread"/>
+    <indexitem text="unix_command_P" target="unix_command_P"/>
+    <indexitem text="file_P" target="file_P"/>
+    <!-- middlemen -->
+    <indexitem text="P_unix_command_P" target="P_unix_command_P"/>
+    <indexitem text="sushw" target="sushw"/>
+    <indexitem text="bhploadhdr" target="bhploadhdr"/>
+    <indexitem text="bhpintegrate" target="bhpintegrate"/>
+    <indexitem text="bhpstorehdr" target="bhpstorehdr"/>
+    <indexitem text="bhphorizon" target="bhphorizon"/>
+    <indexitem text="suhilb" target="suhilb"/>
+    <indexitem text="suclean" target="suclean"/>
+    <indexitem text="suswapbytes" target="suswapbytes"/>
+    <indexitem text="suchw" target="suchw"/>
+    <indexitem text="sugain" target="sugain"/>
+    <indexitem text="suwind" target="suwind"/>
+    <indexitem text="deliveryAnalyser" target="deliveryAnalyser"/>
+    <!-- enders -->
+    <indexitem text="P_unix_command" target="P_unix_command"/>
+    <indexitem text="P_file" target="P_file"/>
+    <indexitem text="surange" target="surange"/>
+    <indexitem text="suximage" target="suximage"/>
+    <indexitem text="bhpwritecube" target="bhpwritecube"/>
+</index>
