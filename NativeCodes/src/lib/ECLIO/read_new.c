@@ -776,7 +776,7 @@ int r_gridUnit(FILE *f, ECL *ecl)
     scrubRecord(buffer, ECL_TRINKETS, ' ');
     status = sscanf(buffer, sf, units, map);
     if (status < 1) strncpy(units, DEFAULT_L_UNITS, TOKEN_LENGTH);
-    if (status < 2) strncpy(map, "MAP", TOKEN_LENGTH);
+    if (status < 2) strncpy(map, "MAP", 5);
     return s_gridUnit(ecl, units, map);
   }
   eclError(routine,1,"Unexpected EOF\n");
