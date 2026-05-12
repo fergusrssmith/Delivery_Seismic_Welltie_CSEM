@@ -140,7 +140,7 @@ public class InversionAnalyser
 
   public static final String NET_HARD_KEYWORD = "net-hard";
   public static final String PHIE_KEYWORD = "phi_e";
-
+  public static final String NET_IMPERMEABLE_KEYWORD = "net-impermeable";
   /**
 	 Useful keys for fast mapping
   */
@@ -157,7 +157,8 @@ public class InversionAnalyser
   public static final int NET_GAS_KEY =10;
   public static final int NET_HARD_KEY=11;
   public static final int PHIE_KEY=12;
-
+  public static final int NET_IMPERMEABLE_KEY=13;
+  
   public static final float LAYER_CAKE_DEFAULT_DT = 0.001f;
 
 
@@ -372,11 +373,14 @@ public class InversionAnalyser
 		keyWords.add(THICKNESS_KEYWORD);
 		keyWordsMap.put(THICKNESS_KEYWORD,new Integer(THICKNESS_KEY));
 	  
-		// net sand per layer
+		// net sand per layer , and net nonres
 		if (MF.reducedPropertyList.contains("NG"))
 		  {
 			keyWords.add(NET_SAND_KEYWORD);
 			keyWordsMap.put(NET_SAND_KEYWORD,new Integer(NET_SAND_KEY));
+			// nonres
+			keyWords.add(NET_IMPERMEABLE_KEYWORD);
+			keyWordsMap.put(NET_IMPERMEABLE_KEYWORD,new Integer(NET_IMPERMEABLE_KEY));
 		  }
 		// net hard-rock per layer
 		if (MF.reducedPropertyList.contains("NG_hard"))
@@ -5359,6 +5363,7 @@ public class InversionAnalyser
 			case InversionAnalyser.NET_LSG_KEY:
 			case InversionAnalyser.NET_GAS_KEY:
 			case InversionAnalyser.NET_HARD_KEY:
+			case InversionAnalyser.NET_IMPERMEABLE_KEY:
 			  {
 				// It's a special combination requiring some calculation. 
 				// We need to set up this stuff.....
@@ -5549,6 +5554,13 @@ public class InversionAnalyser
 				value = 0.0005*(double)((values[refIndx_t+1] - values[refIndx_t]) * values[refIndx_vp_eff] * values[refIndx_NG]);
 				break;
 			  }
+			case InversionAnalyser.NET_IMPERMEABLE_KEY:
+			  {
+				// net nonres = thickness x (1-NG) = = (t_below - t_above) x vp_eff x (1-NG)
+				// times in ms too x factor of 1/2 since times are two-way...
+				value = 0.0005*(double)((values[refIndx_t+1] - values[refIndx_t]) * values[refIndx_vp_eff] * (1.0-values[refIndx_NG]));
+				break;
+			  }		
 			case InversionAnalyser.NET_HARD_KEY:
 			  {
 				// net-hard = thickness x NG_hard = = (t_below - t_above) x vp_eff x NG_hard
