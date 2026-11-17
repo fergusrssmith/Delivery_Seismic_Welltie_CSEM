@@ -44,6 +44,13 @@ rough picks, and compare the posterior thickness, pinch-out probability and
 gas probability with the truth. It is committed with its outputs; re-run it
 with `jupyter notebook examples/synthetic_wedge.ipynb` (about two minutes).
 
+`examples/fluid_contacts.ipynb` is a harder example from the original Java
+distribution (`Simple3LayerContactsTestProblem`): a dipping sand crossing
+gas-oil and oil-brine contacts. It rebuilds the known ground truth, inverts
+with the contacts known, then starts from wrong contact depths to show the
+seismic finding the true ones, and why depth control matters (about eight
+minutes).
+
 ## Data formats
 
 | Kind | HDF5 (`.h5`) / NumPy (`.npz`) contents | SEG-Y |

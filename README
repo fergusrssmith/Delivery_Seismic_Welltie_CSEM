@@ -13,6 +13,7 @@ SEG-Y files.
 
   python/README.md                        how to install and run it
   python/examples/synthetic_wedge.ipynb   step-by-step tutorial notebook
+  python/examples/fluid_contacts.ipynb    gas/oil/brine contacts with known truth
 
 The wavelet extractor and the CSEM codes are not yet ported. The original
 Java, C and Fortran code below is unchanged, and its README follows.
