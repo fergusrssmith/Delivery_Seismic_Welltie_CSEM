@@ -173,7 +173,13 @@ def build_seismic_model(
         raise NotImplementedError("wavelets with differing sample intervals")
 
     t_start = min(t_first - w.reach_after for w in wavelets)
-    t_start = math.ceil(t_start * 1e3 - 1e-9) / 1e3
+    tr0 = traces[0]
+    if abs(tr0.dt - dt) < 1e-12:
+        # put the modelling grid on the seismic's own samples, so neither the
+        # data nor the synthetic has to be interpolated between grids
+        t_start = tr0.t0 + math.floor((t_start - tr0.t0) / dt + 1e-9) * dt
+    else:
+        t_start = math.ceil(t_start * 1e3 - 1e-9) / 1e3  # Java Delivery: whole ms
     t_end = max(t_last + w.reach_before for w in wavelets)
     ns = 1 + int(math.ceil((t_end - t_start) / dt - 1e-9))
     n = _next_pow2(ns)

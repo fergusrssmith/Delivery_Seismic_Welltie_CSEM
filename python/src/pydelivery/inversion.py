@@ -1,6 +1,8 @@
 """Trace-by-trace inversion driver and result containers."""
 from __future__ import annotations
 
+import os
+
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -37,10 +39,47 @@ class TraceResult:
     rw_acceptance: float = 0.0
     jump_acceptance: float = 0.0
     header: dict = field(default_factory=dict)
+    vectors: list = field(default_factory=list, repr=False)  # raw model vector per sample
 
     @property
     def n_samples(self) -> int:
         return len(self.samples["t_base"])
+
+    def time_traces(self, times, stack: int = 0, keep: int = 1,
+                    rng: np.random.Generator | None = None) -> dict[str, np.ndarray]:
+        """Posterior impedance and synthetic traces sampled at ``times``.
+
+        Returns the posterior mean of ``Zp``, ``Zs`` and the synthetic of
+        ``stack`` (``*_mean``, shape (n_times,)), and ``keep`` individual
+        realisations (``*_samples``, shape (keep, n_times)). The mean
+        synthetic equals the wavelet convolved with the mean reflectivity.
+        Needs the raw model vectors, so it works on results returned by
+        :meth:`Inversion.run`, not on results read back from a file.
+        """
+        if not self.vectors:
+            raise ValueError("no model vectors stored with these results")
+        rng = rng or np.random.default_rng(0)
+        times = np.asarray(times, dtype=float)
+        sums = {}
+        picks = set(rng.choice(self.n_samples, size=min(keep, self.n_samples), replace=False).tolist())
+        kept: dict[str, list] = {}
+        mode_idx = self.samples["mode"]
+        for j, mo in enumerate(self.modes):
+            idx = np.flatnonzero(mode_idx == j)
+            if not len(idx):
+                continue
+            tr = mo.model.time_traces(np.stack([self.vectors[i] for i in idx]), times)
+            for name in ("Zp", "Zs", f"synthetic_{stack}"):
+                if name not in tr:
+                    continue
+                key = "synthetic" if name.startswith("synthetic") else name
+                sums[key] = sums.get(key, 0.0) + tr[name].sum(axis=0)
+                for row, i in enumerate(idx):
+                    if i in picks:
+                        kept.setdefault(key, []).append(tr[name][row])
+        out = {f"{k}_mean": v / self.n_samples for k, v in sums.items()}
+        out.update({f"{k}_samples": np.array(v) for k, v in kept.items()})
+        return out
 
     def fluid_state_probabilities(self) -> dict[str, float]:
         """Posterior probability of each fluid combination (e.g. 'bgb')."""
@@ -145,7 +184,7 @@ def invert_trace(cfg: ModelConfig, seismic: SeismicModel | None, n_samples: int 
                        thin=thin, ignore_seismic=ignore_seismic)
     samples = _collect(modes, chain.mode, chain.m, cfg, seismic)
     return TraceResult(samples, states, modes, chain.rw_acceptance, chain.jump_acceptance,
-                       dict(header or {}))
+                       dict(header or {}), list(chain.m))
 
 
 @dataclass
@@ -185,18 +224,42 @@ class Inversion:
         return cfg, seis
 
     def run(self, n_samples: int = 100, traces=None, seed: int | None = None,
-            **kwargs) -> list[TraceResult]:
-        rng = np.random.default_rng(seed)
-        results = []
-        for i in (range(self.n_traces) if traces is None else traces):
-            cfg, seis = self.trace_setup(i)
-            header = self.stacks[0][i].header
-            results.append(invert_trace(cfg, seis, n_samples, rng, header=header, **kwargs))
-        return results
+            n_jobs: int = 1, **kwargs) -> list[TraceResult]:
+        """Invert the given traces (default: all).
+
+        Each trace gets its own random stream derived from ``seed``, so results
+        are the same whatever ``n_jobs`` is. ``n_jobs`` > 1 runs traces in
+        parallel processes; -1 uses every CPU.
+        """
+        traces = list(range(self.n_traces) if traces is None else traces)
+        seeds = np.random.SeedSequence(seed).spawn(len(traces))
+        jobs = [(self, i, n_samples, s, kwargs) for i, s in zip(traces, seeds)]
+        if n_jobs == -1:
+            n_jobs = os.cpu_count() or 1
+        if n_jobs <= 1 or len(jobs) <= 1:
+            return [_run_one(j) for j in jobs]
+        from concurrent.futures import ProcessPoolExecutor
+
+        with ProcessPoolExecutor(max_workers=n_jobs, mp_context=_mp_context()) as ex:
+            return list(ex.map(_run_one, jobs, chunksize=max(1, len(jobs) // (4 * n_jobs))))
 
     def save(self, path, results: list[TraceResult]) -> None:
         """Write results to .h5 or .npz."""
         write_results(path, results, self.cfg)
+
+
+def _run_one(job) -> TraceResult:
+    inv, i, n_samples, seed, kwargs = job
+    cfg, seis = inv.trace_setup(i)
+    return invert_trace(cfg, seis, n_samples, np.random.default_rng(seed),
+                        header=inv.stacks[0][i].header, **kwargs)
+
+
+def _mp_context():
+    import multiprocessing as mp
+
+    # fork is fastest and works inside notebooks; fall back where unavailable
+    return mp.get_context("fork") if "fork" in mp.get_all_start_methods() else mp.get_context()
 
 
 __all__ = ["Inversion", "TraceResult", "invert_trace", "write_results"]

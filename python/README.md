@@ -39,17 +39,24 @@ pytest
 ## Tutorial
 
 `examples/synthetic_wedge.ipynb` walks through a complete run step by step:
-build a gas sand wedge that pinches out, make its seismic, invert it from
-rough picks, and compare the posterior thickness, pinch-out probability and
-gas probability with the truth. It is committed with its outputs; re-run it
-with `jupyter notebook examples/synthetic_wedge.ipynb` (about two minutes).
+build a 200-trace gas sand wedge that pinches out, make its seismic, invert it
+from rough picks, and check it with the standard QC display (true impedance,
+input seismic, estimated impedance, synthetic from the estimate, residual)
+before looking at thickness, pinch-out and gas probabilities. It is committed
+with its outputs; re-run it with `jupyter notebook examples/synthetic_wedge.ipynb`
+(about five minutes on four cores).
 
 `examples/fluid_contacts.ipynb` is a harder example from the original Java
 distribution (`Simple3LayerContactsTestProblem`): a dipping sand crossing
 gas-oil and oil-brine contacts. It rebuilds the known ground truth, inverts
 with the contacts known, then starts from wrong contact depths to show the
-seismic finding the true ones, and why depth control matters (about eight
-minutes).
+seismic finding the true ones, and why depth control matters. It includes
+the same QC display (about three minutes on four cores).
+
+For your own QC, `pydelivery.qc.posterior_sections(results, times)` returns
+posterior-mean impedance and synthetic sections, and `pydelivery.qc.plot_qc`
+draws the five panels. `Inversion.run(..., n_jobs=-1)` inverts traces in
+parallel.
 
 ## Data formats
 

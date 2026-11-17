@@ -662,6 +662,37 @@ class StateModel:
         res = np.nan_to_num(np.concatenate(parts, axis=1), nan=1e6, posinf=1e6, neginf=-1e6)
         return Evaluation(res, p["valid"], self.Jp.shape[0], n_seis)
 
+    def time_traces(self, m: np.ndarray, times: np.ndarray) -> dict[str, np.ndarray]:
+        """Impedance and synthetic seismic sampled at ``times`` (seconds) for a
+        batch of model vectors: the traces used in a standard inversion QC.
+
+        Returns ``Zp`` and ``Zs`` (batch, n_times): P and S impedance of the
+        layer (or contact sub-layer) at each time, with the top layer extended
+        upwards and the bottom layer downwards; and ``synthetic_<k>`` per stack
+        (zero outside the modelled window).
+        """
+        m = np.atleast_2d(m)
+        times = np.asarray(times, dtype=float)
+        p = self.physical(m)
+        Zp_iv = p["iv_vp"] * p["iv_rho"]
+        Zs_iv = p["iv_vs"] * p["iv_rho"]
+        present = p["iv_present"]
+        first = np.argmax(present, axis=1)
+        rows = np.arange(len(m))
+        Zp = np.repeat(Zp_iv[rows, first][:, None], len(times), axis=1)
+        Zs = np.repeat(Zs_iv[rows, first][:, None], len(times), axis=1)
+        for k in range(present.shape[1]):
+            below = present[:, k, None] & (times[None, :] >= p["iv_t"][:, k, None])
+            Zp = np.where(below, Zp_iv[:, k, None], Zp)
+            Zs = np.where(below, Zs_iv[:, k, None], Zs)
+        out = {"Zp": Zp, "Zs": Zs}
+        if self.seismic is not None:
+            grid = self.seismic.t_start + self.seismic.dt * np.arange(self.seismic.ns)
+            for k, syn in enumerate(self.synthetics(m)):
+                out[f"synthetic_{k}"] = np.stack(
+                    [np.interp(times, grid, row, left=0.0, right=0.0) for row in syn])
+        return out
+
     def synthetics(self, m: np.ndarray) -> list[np.ndarray]:
         """Synthetic trace(s) on the model time grid, one array per stack."""
         p = self.physical(m)

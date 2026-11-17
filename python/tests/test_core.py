@@ -76,3 +76,49 @@ def test_prior_fluid_odds_without_seismic(tmp_path):
     cfg, seis = inv.trace_setup(0)
     r = invert_trace(cfg, seis, 3000, np.random.default_rng(2), ignore_seismic=True)
     assert r.fluid_probabilities()[1][3] == pytest.approx(0.5, abs=0.06)
+
+
+def test_parallel_runs_match_serial_and_time_traces():
+    inv = Inversion.from_files(NG_WEDGE / "ModelDescription.xml", NG_WEDGE / "prior_traces.su")
+    kw = dict(traces=[0, 7, 14], seed=3, burn_in=100, thin=5, n_chains=16)
+    serial = inv.run(40, **kw)
+    parallel = inv.run(40, n_jobs=2, **kw)
+    for a, b in zip(serial, parallel):
+        np.testing.assert_allclose(a.samples["t"], b.samples["t"])
+    # posterior impedance / synthetic traces on the data grid
+    s = inv.stacks[0]
+    times = s.t0[0] + s.dt * np.arange(s.n_samples)
+    tt = serial[1].time_traces(times, keep=2)
+    assert tt["Zp_mean"].shape == times.shape and tt["Zp_samples"].shape == (2, len(times))
+    # the mean synthetic fits the (noise-free) data to within the declared noise
+    window = (times > 1.85) & (times < 2.05)
+    resid = s.data[7][window] - tt["synthetic_mean"][window]
+    assert np.sqrt(np.mean(resid**2)) < inv.cfg.stacks[0].noise_rms
+    # impedance above the model is the top layer's, below it the bottom layer's
+    r = serial[1]
+    assert tt["Zp_mean"][0] == pytest.approx(r.mean("Z_eff")[0], rel=1e-6)
+    assert tt["Zp_mean"][-1] == pytest.approx(r.mean("Z_eff")[2], rel=1e-6)
+
+
+def test_time_scan_never_worse_than_picks(tmp_path):
+    # truth: gas sand 20 ms thick; the base pick is 15 ms too deep
+    from pydelivery.modes import _fit, starting_points
+
+    truth = lambda m: _with_times(m, 1.900, 1.920)  # noqa: E731
+    xml = write_case(tmp_path, three_layer().replace("<time>1960</time>", "<time>1935</time>"),
+                     "bgb", truth_m=truth)
+    inv = Inversion.from_files(xml)
+    cfg, seis = inv.trace_setup(0)
+    model = StateModel(cfg, next(s for s in enumerate_fluid_states(cfg) if s.label == "bgb"), seis)
+    best = {}
+    for scan in (False, True):
+        fits = [_fit(model, s, False) for s in starting_points(model, np.random.default_rng(0), 0, scan)]
+        best[scan] = min((f for f in fits if f is not None), key=lambda f: f[1])
+    assert best[True][1] <= best[False][1] + 1e-9
+    assert model.evaluate(best[True][0][None]).seismic_nll[0] < 0.5
+
+
+def _with_times(model, top, base):
+    m = model.prior_mean.copy()
+    m[model.index[("t", 1)]], m[model.index[("t", 2)]] = top, base
+    return m

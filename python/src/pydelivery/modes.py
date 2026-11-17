@@ -85,12 +85,43 @@ def _fit(model: StateModel, start: np.ndarray, ignore_seismic: bool,
     return m, f
 
 
+def time_scan_starts(model: StateModel, rng: np.random.Generator, n_scan: int = 2000,
+                     n_keep: int = 3, min_separation: float = 0.002) -> list[np.ndarray]:
+    """Global search over the layer times (paper section 4.2).
+
+    The seismic misfit is strongly multi-modal in the layer times (loop
+    skipping), so a local optimiser started from the picked times can lock
+    onto a wrong cycle. Draw ``n_scan`` sets of layer times from their prior,
+    with every other parameter at its prior mean, score them all in one
+    batched call, and return the best ``n_keep`` well-separated ones as
+    starting points.
+    """
+    mu, C = model.prior_mean, model.prior_cov
+    ti = np.unique(model.time_index[model.time_index >= 0])
+    if not len(ti):
+        return []
+    L = np.linalg.cholesky(C[np.ix_(ti, ti)])
+    x = np.repeat(mu[None, :], n_scan, axis=0)
+    x[:, ti] = mu[ti] + rng.standard_normal((n_scan, len(ti))) @ L.T
+    f = model.evaluate(x).nll
+    starts: list[np.ndarray] = []
+    for k in np.argsort(f):
+        if not np.isfinite(f[k]) or len(starts) == n_keep:
+            break
+        if all(np.max(np.abs(x[k, ti] - s[ti])) > min_separation for s in starts):
+            starts.append(x[k])
+    return starts
+
+
 def starting_points(model: StateModel, rng: np.random.Generator,
-                    n_random: int = 0) -> list[np.ndarray]:
+                    n_random: int = 0, time_scan: bool = True) -> list[np.ndarray]:
     """Prior mean, one pinched-out start per layer that could plausibly pinch
-    out, and optionally a few random draws from the prior."""
+    out, the best layer-time configurations from a global time scan (when
+    there is seismic), and optionally a few random draws from the prior."""
     mu, C = model.prior_mean, model.prior_cov
     starts = [mu.copy()]
+    if time_scan and model.seismic is not None:
+        starts.extend(time_scan_starts(model, rng))
     ti = model.time_index
     for i in range(model.nl):
         a, b = ti[i], ti[i + 1]
@@ -114,7 +145,7 @@ def starting_points(model: StateModel, rng: np.random.Generator,
 def find_modes(model: StateModel, state_index: int, rng: np.random.Generator,
                n_random_starts: int = 0, ignore_seismic: bool = False) -> list[Mode]:
     modes: list[Mode] = []
-    for start in starting_points(model, rng, n_random_starts):
+    for start in starting_points(model, rng, n_random_starts, time_scan=not ignore_seismic):
         fit = _fit(model, start, ignore_seismic)
         if fit is None:
             continue
