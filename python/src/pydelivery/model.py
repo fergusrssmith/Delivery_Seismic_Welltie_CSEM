@@ -313,6 +313,27 @@ class StateModel:
                         if kb in index and kt in index and kb != kt:
                             factor([(kb, 1.0), (kt, -1.0)], 0.0, sigma)
 
+        # ---- lateral coupling to neighbouring traces (experimental) ---------
+        # Gaussian pulls of chosen variables towards the neighbours' values,
+        # set by pydelivery.lateral. They act like extra data, so they are
+        # left out of the prior's normalising determinant.
+        n_own = len(factors)
+        self.lateral_keys = []
+        lat = getattr(cfg, "lateral", None)
+        if lat:
+            # a multivariate Gaussian N(mean, cov) over lat["keys"]; keep the
+            # keys this fluid state has (marginalise the rest) and add it as
+            # whitened residual rows  L^T (x - mean)  with  L L^T = cov^-1
+            keep = [k for k, key in enumerate(lat["keys"]) if key in index]
+            if keep:
+                cov = np.asarray(lat["cov"])[np.ix_(keep, keep)]
+                mean = np.asarray(lat["mean"])[keep]
+                Lw = np.linalg.cholesky(np.linalg.inv(cov))
+                keys = [lat["keys"][k] for k in keep]
+                for row in Lw.T:
+                    factor([(key, a) for key, a in zip(keys, row) if a != 0.0], float(row @ mean), 1.0)
+                self.lateral_keys = keys
+
         self.defaults = dflt
         self.dim = len(self.keys)
         self.index = index
@@ -328,7 +349,8 @@ class StateModel:
         self.prior_precision = self.Jp.T @ self.Jp
         self.prior_mean = np.linalg.solve(self.prior_precision, self.Jp.T @ self.cp)
         self.prior_cov = np.linalg.inv(self.prior_precision)
-        self.logdet_prior_cov = -np.linalg.slogdet(self.prior_precision)[1]
+        own = self.Jp[:n_own]
+        self.logdet_prior_cov = -np.linalg.slogdet(own.T @ own)[1]
 
         self._slot_idx = {}
         for name in LAYER_PROPS:

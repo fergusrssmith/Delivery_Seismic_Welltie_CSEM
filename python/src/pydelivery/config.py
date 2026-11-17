@@ -231,6 +231,9 @@ class ModelConfig:
     links: dict[str, int] = field(default_factory=dict)  # tag -> 1-based block
     varying: set[tuple[str, int]] = field(default_factory=set)  # (tag, layer)
     base_dir: Path = Path(".")
+    # experimental lateral coupling: model key -> (target value, sigma), set
+    # per trace by pydelivery.lateral
+    lateral: dict = field(default_factory=dict)
 
     @property
     def n_layers(self) -> int:

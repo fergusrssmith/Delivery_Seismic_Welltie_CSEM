@@ -5,3 +5,4 @@ __pycache__/
 !tests/data/*.su
 examples/wedge_data/
 examples/contacts_data/
+examples/lateral_data/
