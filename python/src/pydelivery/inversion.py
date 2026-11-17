@@ -86,11 +86,26 @@ class TraceResult:
         counts = np.bincount(self.samples["state"], minlength=len(self.states))
         return {s.label: c / self.n_samples for s, c in zip(self.states, counts)}
 
-    def fluid_probabilities(self) -> np.ndarray:
-        """(n_layers, 4) posterior probability of brine/oil/lsg/gas per layer
-        (in contacts mode: of the dominant fluid of each layer)."""
+    def fluid_probabilities(self, present_only: bool = True) -> np.ndarray:
+        """Posterior probability of each fluid in each layer.
+
+        By default (``present_only=True``) a fluid is only counted in samples
+        where its layer has non-zero thickness, and the result has five
+        columns, [absent, brine, oil, lsg, gas], summing to one per layer. A
+        pinched-out layer has no fluid: its fluid label then just repeats the
+        prior, because it does not affect the seismic.
+
+        ``present_only=False`` returns the raw labels (n_layers, 4), as the
+        Java Delivery outputs do. In contacts mode the fluid is the dominant
+        one in each layer.
+        """
         ft = self.samples["fluid_type"].astype(int)
-        return np.stack([(ft == k).mean(axis=0) for k in range(4)], axis=1)
+        if not present_only:
+            return np.stack([(ft == k).mean(axis=0) for k in range(4)], axis=1)
+        t = np.column_stack([self.samples["t"], self.samples["t_base"]])
+        present = np.diff(t, axis=1) > 0
+        cols = [(~present).mean(axis=0)] + [((ft == k) & present).mean(axis=0) for k in range(4)]
+        return np.stack(cols, axis=1)
 
     def pinchout_probability(self) -> np.ndarray:
         """Posterior probability that each layer has zero thickness."""

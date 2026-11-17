@@ -43,7 +43,7 @@ def main(xml, prior, java_path, layer, n=2000):
         jt = j[:, col["t"]:col["t"] + nl + 1]
         jp = (np.diff(jt, axis=1) <= 0).mean(axis=0)
         pt = 1e3 * r.samples["t"][:, layer]
-        print(f"{i + 1:3d} | {r.fluid_probabilities()[layer]} {jf} | "
+        print(f"{i + 1:3d} | {r.fluid_probabilities(present_only=False)[layer]} {jf} | "
               f"{r.mean('NG')[layer]:.3f} {j[:, col['NG'] + layer].mean():.3f} | "
               f"{pt.mean():.1f}+-{pt.std():.1f} {jt[:, layer].mean():.1f}+-{jt[:, layer].std():.1f} | "
               f"{r.mean('S_oil')[layer]:.3f} {j[:, col['S_oil'] + layer].mean():.3f} | "

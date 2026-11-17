@@ -60,10 +60,10 @@ def test_pinchout_has_finite_probability(tmp_path):
 def test_seismic_identifies_fluid(tmp_path, truth):
     inv = Inversion.from_files(write_case(tmp_path, three_layer(), truth))
     r = inv.run(2000, seed=1)[0]
-    p = r.fluid_probabilities()[1]
+    p = r.fluid_probabilities()[1]  # [absent, brine, oil, lsg, gas]
     # brine in softer sand and gas in stiffer sand give similar amplitudes,
     # so about 10% ambiguity remains whichever is the truth
-    assert p[3 if truth == "bgb" else 0] > 0.8
+    assert p[4 if truth == "bgb" else 1] > 0.8
     laplace = {}
     for mo in r.modes:
         laplace[mo.model.state.label] = laplace.get(mo.model.state.label, 0.0) + mo.weight
@@ -75,7 +75,20 @@ def test_prior_fluid_odds_without_seismic(tmp_path):
     inv = Inversion.from_files(write_case(tmp_path, three_layer()))
     cfg, seis = inv.trace_setup(0)
     r = invert_trace(cfg, seis, 3000, np.random.default_rng(2), ignore_seismic=True)
-    assert r.fluid_probabilities()[1][3] == pytest.approx(0.5, abs=0.06)
+    assert r.fluid_probabilities()[1][4] == pytest.approx(0.5, abs=0.06)
+
+
+def test_fluid_probability_ignores_pinched_out_layers(tmp_path):
+    # sand usually pinched out and no seismic: the raw label stays at the 50/50
+    # prior, but gas *present* is only as likely as the sand itself
+    cfg = load_config(write_case(tmp_path, three_layer()))
+    cfg.layers[1].time = 1.955
+    r = invert_trace(cfg, None, 2000, np.random.default_rng(0), ignore_seismic=True)
+    absent, brine, oil, lsg, gas = r.fluid_probabilities()[1]
+    assert absent + brine + oil + lsg + gas == pytest.approx(1.0)
+    assert absent == pytest.approx(r.pinchout_probability()[1])
+    assert r.fluid_probabilities(present_only=False)[1][3] == pytest.approx(0.5, abs=0.06)
+    assert gas == pytest.approx(0.5 * (1 - absent), abs=0.06)
 
 
 def test_parallel_runs_match_serial_and_time_traces():

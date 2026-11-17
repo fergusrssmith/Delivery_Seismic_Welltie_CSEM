@@ -46,20 +46,22 @@ def _summary(a: argparse.Namespace) -> int:
     res = read_results(a.results)
     s = res["samples"]
     t = np.concatenate([s["t"], s["t_base"][..., None]], axis=2)
-    pinch = (np.diff(t, axis=2) <= 0).mean(axis=1)
+    present = np.diff(t, axis=2) > 0
+    pinch = (~present).mean(axis=1)
     ft = s["fluid_type"].astype(int)
     names = res["layer_names"] or [str(k + 1) for k in range(ft.shape[2])]
     if a.property is not None and a.property not in s:
         raise SystemExit(f"no property '{a.property}' in {a.results}; have {sorted(s)}")
     prop = s[a.property] if a.property else None
-    head = "trace  layer             " + "  ".join(f"P({n})" for n in FLUID_NAMES) + "  P(pinch)"
+    # a fluid only counts where its layer has non-zero thickness
+    head = "trace  layer             " + "  ".join(f"P({n})" for n in FLUID_NAMES) + "  P(absent)"
     if prop is not None:
         head += f"  {a.property} P10/P50/P90"
     print(head)
     labels = res["headers"].get("tracl", np.arange(1, ft.shape[0] + 1))
     for k in range(ft.shape[0]):
         for layer in range(ft.shape[2]):
-            pf = [(ft[k, :, layer] == j).mean() for j in range(4)]
+            pf = [((ft[k, :, layer] == j) & present[k, :, layer]).mean() for j in range(4)]
             line = (f"{int(labels[k]):5d}  {layer + 1:2d} {names[layer][:14]:14s} "
                     + "  ".join(f"{p:8.3f}" for p in pf) + f"  {pinch[k, layer]:8.3f}")
             if prop is not None and prop.ndim == 3:
