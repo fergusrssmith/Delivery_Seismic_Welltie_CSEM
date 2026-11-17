@@ -124,21 +124,26 @@ def model_facies(cfg) -> list[dict]:
     return out
 
 
-def facies_present(results, facies: list[dict], layer: int, min_fraction: float = 0.05) -> list[dict]:
-    """Facies the inversion says are present: impermeable facies always, and a
-    sand-fluid facies if it is the single most probable outcome of ``layer``
-    at no fewer than ``min_fraction`` of the traces."""
+def facies_present(results, facies: list[dict], layer: int, min_probability: float = 0.5,
+                   min_fraction: float = 0.05) -> list[dict]:
+    """Facies the inversion says are present.
+
+    Impermeable facies always count. A sand-fluid facies counts if its
+    posterior probability in ``layer`` exceeds ``min_probability`` (default:
+    more likely than not) at no fewer than ``min_fraction`` of the traces, so
+    a facies that is only marginally likely at one or two traces does not
+    get a cluster of its own.
+    """
     from .fluids import FLUID_NAMES
 
     probs = np.array([r.fluid_probabilities()[layer] for r in results])  # absent, b, o, l, g
-    best = np.argmax(probs, axis=1)
     keep = []
     for f in facies:
         if not f["permeable"]:
             keep.append(f)
             continue
         col = 1 + FLUID_NAMES.index(f["fluid"])
-        if np.mean(best == col) >= min_fraction:
+        if np.mean(probs[:, col] > min_probability) >= min_fraction:
             keep.append(f)
     return keep
 

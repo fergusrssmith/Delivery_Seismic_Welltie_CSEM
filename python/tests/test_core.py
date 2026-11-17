@@ -152,3 +152,23 @@ def test_kmeans_facies_names_clusters_by_nearest_facies():
     # three clusters on two facies: two clusters share a name rather than mislabel
     names3, _, nearest3 = classify_facies(Zp, Zs, facies + [{"name": "brine sand", "Zp": 6.5e6, "Zs": 3.2e6}])
     assert (names3[300:] == 1).all() and (names3[:300] == 0).all()
+
+
+def test_facies_present_needs_majority_probability():
+    from pydelivery.qc import facies_present
+
+    class R:  # minimal stand-in for TraceResult
+        def __init__(self, p):
+            self.p = p
+
+        def fluid_probabilities(self):
+            return np.array([[1, 0, 0, 0, 0], self.p])
+
+    facies = [{"name": "shale", "permeable": False},
+              {"name": "sand + brine", "permeable": True, "fluid": "brine"},
+              {"name": "sand + gas", "permeable": True, "fluid": "gas"}]
+    # gas sand > 0.5 at 60 of 100 traces; brine sand most likely (0.45) at 30 traces but never > 0.5,
+    # and > 0.5 at only 2 traces
+    res = [R([0, 0.1, 0, 0, 0.9])] * 60 + [R([0.35, 0.45, 0, 0, 0.2])] * 30 + \
+          [R([0.4, 0.6, 0, 0, 0])] * 2 + [R([1, 0, 0, 0, 0])] * 8
+    assert [f["name"] for f in facies_present(res, facies, layer=1)] == ["shale", "sand + gas"]
