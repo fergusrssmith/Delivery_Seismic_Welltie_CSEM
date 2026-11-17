@@ -93,6 +93,10 @@ stacks (5-15°, 15-25°, 25-35°) and inverts them simultaneously, against the
 5-15° stack alone. It shows what the far angles add: the shear contrast and
 the sand's vp/vs become constrained by the data rather than by the
 rock-physics prior, which is what makes an AI-SI cross-plot meaningful.
+`examples/brine_sand_avo.ipynb` repeats this with the wedge filled with
+brine, which has the same P impedance as shale: from the near stack alone the
+sand's thickness and extent are poorly determined, while the partial stacks
+map it nearly to its tip (thickness error 6.4 ms → 2.0 ms).
 
 For your own QC, `pydelivery.qc.posterior_sections(results, times)` returns
 posterior-mean impedance and synthetic sections, and `pydelivery.qc.plot_qc`
