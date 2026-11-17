@@ -62,3 +62,21 @@ def test_results_file(tmp_path):
         assert back["fluid_states"] == [["bbb"], ["bbb"]]
         assert back["layer_names"][1] == "reservoir"
         np.testing.assert_allclose(back["samples"]["t"][1], res[1].samples["t"])
+
+
+def test_describe_tables():
+    pytest.importorskip("pandas")
+    from pydelivery.describe import describe
+
+    inv = Inversion.from_files(CONTACTS / "ModelDescription.xml", CONTACTS / "prior_traces.su")
+    t = describe(inv.cfg, inv.priors)
+    for key in ("seismic", "framework", "mixture", "trends", "fluids", "layer_fluids",
+                "fluid_states", "contacts", "per_trace", "implied"):
+        assert key in t and not t[key].empty, key
+    implied = t["implied"]
+    # contacts mode lists each fluid the reservoir can hold; gas is the softest
+    z = implied.loc["2. reservoir"]["P impedance"]
+    assert set(z.index) == {"brine", "oil", "gas"} and z["gas"] < z["oil"] < z["brine"]
+    # per-trace times reported in ms whatever the input units
+    times = t["per_trace"][t["per_trace"]["prior table entry"] == "time"]
+    assert times["min"].min() > 1000

@@ -14,6 +14,7 @@ dependencies = ["numpy>=1.24", "h5py>=3.8"]
 [project.optional-dependencies]
 test = ["pytest"]
 plot = ["matplotlib"]
+notebook = ["matplotlib", "pandas", "jupyter"]
 
 [project.scripts]
 pydelivery = "pydelivery.cli:main"
