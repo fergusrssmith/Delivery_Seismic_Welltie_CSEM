@@ -66,23 +66,29 @@ def describe(cfg: ModelConfig, priors: dict | None = None) -> dict:
     # ---- seismic ------------------------------------------------------------
     rows = []
     for k, s in enumerate(cfg.stacks):
-        if s.angle is not None:
+        if s.min_angle is not None:
+            rms = math.degrees(math.sqrt(s.angle_terms()[0]))
+            angle = f"{math.degrees(s.min_angle):g}-{math.degrees(s.max_angle):g}° (rms {rms:.1f}°)"
+        elif s.angle is not None:
             angle = f"{math.degrees(s.angle):.1f}° (fixed)"
         else:
             rms = math.degrees(math.sqrt(s.offset_mean_square) / (s.reflector_time * s.stack_velocity))
             angle = f"≈{rms:.1f}° (from offsets, Dix)"
+        by_angle = s.angle_range is not None
         rows.append({
             "stack": s.name, "seismic file": s.filename, "wavelet file": s.wavelet_filename,
-            "offsets (m)": f"{s.min_offset:g} - {s.max_offset:g}",
-            "reflector time (ms)": f"{1000 * s.reflector_time:g}",
-            "stack velocity (m/s)": f"{s.stack_velocity:g}",
-            "mean incidence angle": angle,
+            "angles": angle,
+            "offsets (m)": "-" if by_angle else f"{s.min_offset:g} - {s.max_offset:g}",
+            "reflector time (ms)": "-" if by_angle else f"{1000 * s.reflector_time:g}",
+            "stack velocity (m/s)": "-" if by_angle else f"{s.stack_velocity:g}",
             "noise RMS": f"{s.noise_rms:g}",
             "window above/below (ms)": (f"{_ms(s.time_above) or 'wavelet'} / {_ms(s.time_below) or 'wavelet'}"),
         })
     out["seismic"] = pd.DataFrame(rows).set_index("stack")
     out["seismic"].attrs["note"] = (
-        f"AVO intercept scale A = {_pm(cfg.A, cfg.sigma_A)}, gradient scale B = "
+        f"{len(cfg.stacks)} stack(s), inverted jointly. Reflectivity: "
+        + ("Delivery's small-angle form" if cfg.reflectivity == "delivery" else "Aki-Richards (linearised)")
+        + f". AVO intercept scale A = {_pm(cfg.A, cfg.sigma_A)}, gradient scale B = "
         f"{_pm(cfg.B, cfg.sigma_B)}{' (B tied to A)' if cfg.sync_B_from_A else ''}. "
         "Noise RMS sets how closely the synthetic must fit the data: smaller "
         "noise makes the seismic dominate the prior.")
@@ -306,21 +312,29 @@ def implied_properties(cfg: ModelConfig):
                      "vp (m/s)": round(vp), "vs (m/s)": round(vs), "density": _sig(rho),
                      "P impedance": _sig(vp * rho)})
     df = pd.DataFrame(rows)
-    # reflection at each layer top, against the layer above with its most likely fluid
-    rcs = []
-    for (i, fluid) in sorted(best):
-        vp2, vs2, rho2, _ = best[(i, fluid)]
-        if i == 0:
-            rcs.append(np.nan)
-            continue
-        above = [v for (j, f), v in best.items() if j == i - 1]
-        vp1, vs1, rho1, _ = max(above, key=lambda v: v[3])
-        if s.angle is not None:
-            th = cfg.B * s.angle ** 2
-        else:
-            th = cfg.B * vp1 ** 2 / (s.stack_velocity ** 4 * s.reflector_time ** 2 / s.offset_mean_square)
-        rcs.append(float(reflection_coefficient(rho1, vp1, vs1, rho2, vp2, vs2, cfg.A, th)))
-    df["reflection at top"] = ["-" if not np.isfinite(r) else f"{r:+.3f}" for r in rcs]
+    # reflection at each layer top, per stack, against the layer above with its
+    # most likely fluid
+    for s in cfg.stacks:
+        rcs = []
+        for (i, fluid) in sorted(best):
+            vp2, vs2, rho2, _ = best[(i, fluid)]
+            if i == 0:
+                rcs.append(np.nan)
+                continue
+            above = [v for (j, f), v in best.items() if j == i - 1]
+            vp1, vs1, rho1, _ = max(above, key=lambda v: v[3])
+            terms = s.angle_terms()
+            if terms is None:
+                th2 = vp1 ** 2 / (s.stack_velocity ** 4 * s.reflector_time ** 2 / s.offset_mean_square)
+                s2, t2 = min(th2, 0.99), min(th2, 0.99) / (1 - min(th2, 0.99))
+            else:
+                th2, s2, t2 = terms
+            if cfg.reflectivity == "delivery":
+                s2 = t2 = th2
+            rcs.append(float(np.ravel(reflection_coefficient(
+                rho1, vp1, vs1, rho2, vp2, vs2, cfg.A, cfg.B * s2, cfg.B * t2))[0]))
+        col = "reflection at top" if len(cfg.stacks) == 1 else f"reflection at top: {s.name}"
+        df[col] = ["-" if not np.isfinite(r) else f"{r:+.3f}" for r in rcs]
     df = df.set_index(["layer", "fluid"])
     df.attrs["note"] = (
         "Prior-mean properties after mixing and fluid substitution. The "

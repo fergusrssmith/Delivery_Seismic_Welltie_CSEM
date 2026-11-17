@@ -82,13 +82,21 @@ def effective_properties(NG, phi, vp_s, vs_s, vp_imp, vs_imp, rho_imp,
     return vp, vs, rho, valid
 
 
-def reflection_coefficient(rho1, vp1, vs1, rho2, vp2, vs2, A, theta_sq):
-    """Small-contrast P-P reflection coefficient to second order in angle.
+def reflection_coefficient(rho1, vp1, vs1, rho2, vp2, vs2, A, sin_sq, tan_sq=None):
+    """Small-contrast (linearised) P-P reflection coefficient.
 
-    Layer 1 is above layer 2. ``theta_sq`` is the squared incidence angle
-    (already scaled by the AVO gradient factor B); ``A`` scales the
-    intercept.
+    Layer 1 is above layer 2::
+
+        R = A * (drho + dvp) / 2 + tan2 * dvp / 2 - 2 beta^2 sin2 (drho + 2 dvs)
+
+    with relative contrasts d* and beta = vs/vp (interface averages). With
+    ``sin_sq = tan_sq = theta^2`` this is Delivery's small-angle form (Gunning
+    & Glinsky eq. 22); with the true sin^2 and tan^2 it is the Aki-Richards
+    linearisation, better for angles beyond about 25-30 degrees. Both are
+    already scaled by the AVO gradient factor B. ``A`` scales the intercept.
     """
+    if tan_sq is None:
+        tan_sq = sin_sq
     with np.errstate(divide="ignore", invalid="ignore"):
         vp_bar = 0.5 * (vp1 + vp2)
         vs_bar = 0.5 * (vs1 + vs2)
@@ -96,5 +104,5 @@ def reflection_coefficient(rho1, vp1, vs1, rho2, vp2, vs2, A, theta_sq):
         d_vp = (vp2 - vp1) / vp_bar
         d_vs = np.where(vs_bar > 0, (vs2 - vs1) / vs_bar, 0.0)
         beta = vs_bar / vp_bar
-        r = A * 0.5 * (d_rho + d_vp) + theta_sq * (0.5 * d_vp - 2.0 * beta**2 * (d_rho + 2.0 * d_vs))
+        r = A * 0.5 * (d_rho + d_vp) + 0.5 * tan_sq * d_vp - 2.0 * beta**2 * sin_sq * (d_rho + 2.0 * d_vs)
     return np.nan_to_num(r)

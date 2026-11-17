@@ -639,7 +639,8 @@ class StateModel:
             vp, vs, rho = p["iv_vp"][:, k], p["iv_vs"][:, k], p["iv_rho"][:, k]
             both = pk & have
             if both.any():
-                r = reflection_coefficient(a_rho, a_vp, a_vs, rho, vp, vs, p["A"], sm.theta_sq(a_vp, p["B"]))
+                s2, t2 = sm.angle_terms(a_vp, p["B"])
+                r = reflection_coefficient(a_rho, a_vp, a_vs, rho, vp, vs, p["A"], s2, t2)
                 rc[:, k] = np.where(both, r, 0.0)
             a_vp = np.where(pk, vp, a_vp)
             a_vs = np.where(pk, vs, a_vs)

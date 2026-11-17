@@ -93,17 +93,31 @@ class StackModel:
     G: np.ndarray  # (n_err, ns) synthetic at error points = G @ R
     observed: np.ndarray  # (n_err,) seismic interpolated to the error points
     scale: float  # correction / noise_rms
-    theta_sq_denominator: float  # Dix: theta^2 = vp^2 / this
+    theta_sq_denominator: float  # Dix: theta^2 = vp^2 / this (offset-defined stacks)
     wavelet: Wavelet
     stack: Stack
     use: np.ndarray  # (n_err,) False inside seismic-likelihood exclusion windows
     times: np.ndarray  # (n_err,) times of the error points
+    correction: float = 1.0  # error-sampling correction for this stack's wavelet
+    reflectivity: str = "delivery"
 
     def theta_sq(self, vp_above: np.ndarray, B: np.ndarray) -> np.ndarray:
         """Squared incidence angle times the AVO gradient factor B."""
-        if self.stack.angle is not None:
-            return B * self.stack.angle**2
-        return B * vp_above**2 / self.theta_sq_denominator
+        return self.angle_terms(vp_above, B)[0]
+
+    def angle_terms(self, vp_above: np.ndarray, B: np.ndarray):
+        """(sin^2-like, tan^2-like) angle terms for the reflectivity, both
+        scaled by B. Delivery's form uses theta^2 for both."""
+        terms = self.stack.angle_terms()
+        if terms is not None:
+            th2, s2, t2 = terms
+        else:
+            th2 = vp_above**2 / self.theta_sq_denominator  # Dix: an estimate of sin^2
+            s2 = np.minimum(th2, 0.99)
+            t2 = s2 / (1.0 - s2)
+        if self.reflectivity == "delivery":
+            return B * th2, B * th2
+        return B * s2, B * t2
 
 
 @dataclass
@@ -114,12 +128,11 @@ class SeismicModel:
     ns: int
     stacks: list[StackModel]
     n_err: int
-    correction: float
 
     @property
     def effective_n(self) -> float:
-        """Equivalent number of independent measurements."""
-        return self.n_err * self.correction
+        """Equivalent number of independent measurements (all stacks)."""
+        return float(sum(len(s.times) * s.correction for s in self.stacks))
 
     def reflectivity(self, t_ref: np.ndarray, rc: np.ndarray) -> np.ndarray:
         """Project spikes ``rc`` at times ``t_ref`` (both (batch, n)) on the grid."""
@@ -184,13 +197,14 @@ def build_seismic_model(
     ns = 1 + int(math.ceil((t_end - t_start) / dt - 1e-9))
     n = _next_pow2(ns)
 
-    dt_err, correction = error_sampling_interval(wavelets[0])
-    delta_j = int(round(dt_err / dt))
     windows = exclusion_windows(cfg, wavelets)
 
     stack_models = []
     n_err = 0
     for stack, tr, w in zip(cfg.stacks, traces, wavelets):
+        # each stack samples its misfit at its own wavelet's independent interval
+        dt_err, correction = error_sampling_interval(w)
+        delta_j = int(round(dt_err / dt))
         t_above = w.reach_after if stack.time_above is None else stack.time_above
         t_below = w.reach_before if stack.time_below is None else stack.time_below
         if t_above > w.reach_after + 1e-12 or t_below > w.reach_before + 1e-12:
@@ -214,15 +228,19 @@ def build_seismic_model(
         observed = tr.data[i] * (1.0 - wt) + tr.data[i + 1] * wt
         wp = w.padded(n)
         G = wp[(j[:, None] - np.arange(ns)[None, :]) % n]
-        denom = stack.stack_velocity**4 * stack.reflector_time**2 / stack.offset_mean_square
+        if stack.angle_range is None:
+            denom = stack.stack_velocity**4 * stack.reflector_time**2 / stack.offset_mean_square
+        else:
+            denom = math.inf
         use = np.ones(n_coarse, dtype=bool)
         for a, b in windows:
             use &= ~((t > a) & (t < b))
         stack_models.append(
-            StackModel(G, observed, correction / stack.noise_rms, denom, w, stack, use, t)
+            StackModel(G, observed, correction / stack.noise_rms, denom, w, stack, use, t,
+                       correction, cfg.reflectivity)
         )
         n_err += n_coarse
-    return SeismicModel(t_start, t_end, dt, ns, stack_models, n_err, correction)
+    return SeismicModel(t_start, t_end, dt, ns, stack_models, n_err)
 
 
 def exclusion_windows(cfg: ModelConfig, wavelets: list[Wavelet]) -> list[tuple[float, float]]:

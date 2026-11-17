@@ -73,7 +73,7 @@ FLUIDS = """
 
 def model_xml(layers, *, t_base=2100, sigma_t_base=5, noise=0.005, stacks=None, avo="",
               extra="", output="<density_ordering>full</density_ordering>", vp_float="",
-              phi_float="", wavelet=NG_WEDGE / "near-wavelet.su"):
+              phi_float="", wavelet=NG_WEDGE / "near-wavelet.su", angles=None, seismic_attrs=""):
     """Assemble a model XML. ``layers`` are layer XML strings; the last must be
     a bottom_layer without its t_base (added here)."""
     layers = list(layers)
@@ -83,6 +83,12 @@ def model_xml(layers, *, t_base=2100, sigma_t_base=5, noise=0.005, stacks=None, 
     if stacks is None:
         stacks = [""]
     stack_xml = ""
+    if angles is not None:  # partial-angle stacks, e.g. [(5, 15), (15, 25)]
+        for k, (a, b) in enumerate(angles):
+            stack_xml += (f'<stack><name>a{a}-{b}</name><filename>stack{k}.h5</filename>'
+                          f'<min_angle>{a}</min_angle><max_angle>{b}</max_angle>'
+                          f'<wavelet><filename>{wavelet}</filename><noise_rms>{noise}</noise_rms></wavelet></stack>')
+        stacks = []
     for k, attrs in enumerate(stacks):
         lo, hi = (0, 1200) if k == 0 else (1500, 3000)
         stack_xml += (f'<stack{attrs}><name>s{k}</name><filename>stack{k}.h5</filename>'
@@ -91,7 +97,7 @@ def model_xml(layers, *, t_base=2100, sigma_t_base=5, noise=0.005, stacks=None, 
                       f'<wavelet><filename>{wavelet}</filename><noise_rms>{noise}</noise_rms></wavelet></stack>')
     return f"""<?xml version="1.0"?>
 <inversion>
-  <seismic_data>{stack_xml}<AVO_terms{avo}><A>1.0</A><B>1.0</B></AVO_terms></seismic_data>
+  <seismic_data{seismic_attrs}>{stack_xml}<AVO_terms{avo}><A>1.0</A><B>1.0</B></AVO_terms></seismic_data>
   <model_description>{''.join(layers)}</model_description>
   {extra}
   <rock_fluid_properties>

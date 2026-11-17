@@ -168,6 +168,9 @@ class Stack:
     time_above: float | None = None  # seconds
     time_below: float | None = None
     angle: float | None = None  # constant-angle stack, radians
+    # partial-angle stack: incidence-angle range in radians (pydelivery extension)
+    min_angle: float | None = None
+    max_angle: float | None = None
 
     @property
     def offset_mean_square(self) -> float:
@@ -175,6 +178,31 @@ class Stack:
         if a == b:
             return a * a
         return (b**3 - a**3) / (3.0 * (b - a))
+
+    @property
+    def angle_range(self) -> tuple[float, float] | None:
+        """(min, max) incidence angle in radians if the stack is defined by
+        angles (a range or a constant angle), else None (offsets + Dix)."""
+        if self.min_angle is not None:
+            return self.min_angle, self.max_angle
+        if self.angle is not None:
+            return self.angle, self.angle
+        return None
+
+    def angle_terms(self) -> tuple[float, float, float] | None:
+        """Stack averages of theta^2, sin^2(theta) and tan^2(theta) over a
+        uniform spread of angles in the stack's range (None for offset-defined
+        stacks, whose angle depends on the velocity above each interface)."""
+        r = self.angle_range
+        if r is None:
+            return None
+        a, b = r
+        if b - a < 1e-9:
+            return a * a, math.sin(a) ** 2, math.tan(a) ** 2
+        th2 = (b**3 - a**3) / (3.0 * (b - a))
+        s2 = 0.5 - (math.sin(2 * b) - math.sin(2 * a)) / (4.0 * (b - a))
+        t2 = (math.tan(b) - math.tan(a)) / (b - a) - 1.0
+        return th2, s2, t2
 
 
 @dataclass
@@ -222,6 +250,9 @@ class ModelConfig:
     B: float = 1.0
     sigma_B: float = 0.0
     sync_B_from_A: bool = False
+    # "delivery": Delivery's small-angle reflectivity (theta^2 terms);
+    # "aki-richards": linearised Aki-Richards with sin^2 / tan^2 terms
+    reflectivity: str = "delivery"
     density_ordering: str = "full"
     post_ordering_probabilities: bool = False
     master_depth_layer: int = 0  # 0-based
@@ -355,29 +386,52 @@ def load_config(xml_path) -> ModelConfig:
             if float(ang) >= 90:
                 raise ValueError("constant stack angle must be in [0, 90) degrees")
             angle = math.radians(float(ang))
+        a_min, a_max = _opt(s, "min_angle"), _opt(s, "max_angle")
+        if (a_min is None) != (a_max is None):
+            raise ValueError("a partial-angle stack needs both <min_angle> and <max_angle>")
+        if a_min is not None and not 0 <= a_min <= a_max < 90:
+            raise ValueError("stack angles must satisfy 0 <= min_angle <= max_angle < 90 degrees")
+        by_angle = a_min is not None or angle is not None
         stacks.append(Stack(
-            name=_text(s, "name", "stack"),
+            name=_text(s, "name", f"stack{len(stacks) + 1}"),
             filename=_text(s, "filename"),
             wavelet_filename=_text(w, "filename"),
             min_offset=_num(s, "min_offset", 0.0),
             max_offset=_num(s, "max_offset", 0.0),
-            reflector_time=1e-3 * _num(s, "reflector_time"),
-            stack_velocity=_num(s, "stack_velocity"),
+            reflector_time=1e-3 * _num(s, "reflector_time", 0.0 if by_angle else None),
+            stack_velocity=_num(s, "stack_velocity", 0.0 if by_angle else None),
+            min_angle=None if a_min is None else math.radians(a_min),
+            max_angle=None if a_max is None else math.radians(a_max),
             noise_rms=float(noise.text.split()[0]),
             time_above=None if ta is None else 1e-3 * float(ta.text),
             time_below=None if tb is None else 1e-3 * float(tb.text),
             angle=angle,
         ))
-    if not 1 <= len(stacks) <= 2:
-        raise ValueError("expected one or two <stack> entries")
-    if len(stacks) == 2 and stacks[0].offset_mean_square > stacks[1].offset_mean_square:
-        stacks.reverse()  # near stack first, as in the Java code
+    if not stacks:
+        raise ValueError("expected at least one <stack> entry")
+    names = [s.name for s in stacks]
+    if len(set(names)) != len(names):
+        raise ValueError(f"stack names must be unique, got {names}")
+    stack_elems = dict(zip(names, sd.findall("stack")))
+
+    def nearness(s):  # order stacks from near to far, as Java Delivery does
+        terms = s.angle_terms()
+        if terms is not None:
+            return terms[0]
+        return s.offset_mean_square / max(s.stack_velocity * s.reflector_time, 1e-12) ** 2
+
+    stacks.sort(key=nearness)
     varying: set[tuple[str, int]] = set()
-    for k, s in zip(("near", "far"), sd.findall("stack")):
-        w = s.find("wavelet")
+    for k, s in enumerate(stacks):
+        w = stack_elems[s.name].find("wavelet")
         e = _first(w, "noise_rms", "signal_to_noise")
         if _flag(e, "varies_areally"):
-            varying.add((f"{k}_stack_noise_rms", 0))
+            varying.add((f"noise_rms_{s.name}", 0))
+            if len(stacks) <= 2:  # Java Delivery's names for the prior-trace links
+                varying.add((f"{('near', 'far')[k]}_stack_noise_rms", 0))
+    reflectivity = sd.get("reflectivity", "delivery").strip().lower()
+    if reflectivity not in ("delivery", "aki-richards"):
+        raise ValueError(f"unknown reflectivity '{reflectivity}' (use delivery or aki-richards)")
     avo = sd.find("AVO_terms")
     sync_B = _flag(avo, "synchronise_B_from_A")
     A, sigma_A = _num(avo, "A", 1.0), _num(avo, "sigma_A", 0.0)
@@ -509,7 +563,7 @@ def load_config(xml_path) -> ModelConfig:
     cfg = ModelConfig(
         layers=layers, t_base=t_base, sigma_t_base=sigma_t_base, stacks=stacks,
         fluids=fluids, rocks=rocks, A=A, sigma_A=sigma_A, B=B, sigma_B=sigma_B,
-        sync_B_from_A=sync_B, density_ordering=ordering,
+        sync_B_from_A=sync_B, reflectivity=reflectivity, density_ordering=ordering,
         post_ordering_probabilities=post, master_depth_layer=master_depth,
         links=links, varying=varying, base_dir=xml_path.parent)
     cfg.fluid_units = _parse_fluid_units(root, cfg)
@@ -715,9 +769,15 @@ def apply_prior_trace(cfg: ModelConfig, table: dict[str, np.ndarray], i: int) ->
                     setattr(c, "depth" if tag == "contact_depth" else "sigma_depth", abs(v))
         elif tag in ("near_stack_noise_rms", "near_stack_signal_to_noise",
                      "far_stack_noise_rms", "far_stack_signal_to_noise"):
-            k = 0 if tag.startswith("near") else 1
-            if k < len(out.stacks) and np.isfinite(row[0]):
+            k = 0 if tag.startswith("near") else len(out.stacks) - 1
+            if np.isfinite(row[0]):
                 out.stacks[k].noise_rms = abs(row[0])
+        elif tag.startswith("noise_rms_"):
+            hit = [s for s in out.stacks if s.name == tag[len("noise_rms_"):]]
+            if not hit:
+                raise ValueError(f"prior table entry '{tag}': no stack of that name")
+            if np.isfinite(row[0]):
+                hit[0].noise_rms = abs(row[0])
         elif tag in ("A", "sigma_A", "B", "sigma_B"):
             if np.isfinite(row[0]):
                 setattr(out, tag, abs(row[0]))
