@@ -58,7 +58,9 @@ inversion of the wedge with `pydelivery.lateral`, which adds a spatially
 correlated prior on rock properties along a line, the Bayesian counterpart of
 spatial (Laplacian) regularisation. It removes most of the trace-to-trace
 striping without changing the fit, the geometry or the fluid and pinch-out
-answers (about 13 minutes).
+answers. A K-means facies classification of the results (`pydelivery.qc.
+classify_facies`) tests whether the striping changes the interpretation; here
+it does not (about 13 minutes).
 
 For your own QC, `pydelivery.qc.posterior_sections(results, times)` returns
 posterior-mean impedance and synthetic sections, and `pydelivery.qc.plot_qc`
