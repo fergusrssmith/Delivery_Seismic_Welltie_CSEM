@@ -94,7 +94,7 @@ def starting_points(model: StateModel, rng: np.random.Generator,
     ti = model.time_index
     for i in range(model.nl):
         a, b = ti[i], ti[i + 1]
-        if a < 0 or b < 0:
+        if a < 0 or b < 0 or a == b:  # fixed, or tied by a forced pinch-out
             continue
         thick = mu[b] - mu[a]
         sd_thick = np.sqrt(max(C[a, a] + C[b, b] - 2.0 * C[a, b], 0.0))
@@ -134,7 +134,7 @@ def find_modes(model: StateModel, state_index: int, rng: np.random.Generator,
         p = model.physical(m)
         log_mass = -f + 0.5 * np.linalg.slogdet(cov)[1] - 0.5 * model.logdet_prior_cov
         modes.append(Mode(state_index, model, m, cov, chol, f, float(ev.seismic_nll[0]),
-                          float(log_mass), tuple(bool(x) for x in p["present"][0])))
+                          float(log_mass), tuple(bool(x) for x in (p["t"][0, 1:] > p["t"][0, :-1]))))
     return modes
 
 

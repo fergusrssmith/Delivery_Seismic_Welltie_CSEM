@@ -14,7 +14,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from .config import ModelConfig, Stack
-from .su import Trace, read_su
+from .io import Trace, read_wavelet
 
 SAMPLE_TIME_MAGIC_CONSTANT = 0.253  # error-sampling interval = this / f_peak
 MEAN_TO_PEAK_FREQUENCY_RATIO_RICKER = 1.124
@@ -56,15 +56,15 @@ class Wavelet:
 
 
 def load_wavelet(path) -> Wavelet:
-    tr = read_su(path)[0]
-    if tr.ns < 2 or tr.header["dt"] == 0:
+    """Read a wavelet (.h5, .npz, .sgy or legacy .su). Its start time ``t0``
+    must be <= 0: samples before time zero are the precursor."""
+    ts = read_wavelet(path)
+    if ts.n_samples < 2 or ts.dt <= 0:
         raise ValueError(f"bad wavelet file {path}")
-    dt = tr.dt
-    f1 = tr.header["delrt"] * 1e-3 if tr.header["delrt"] != 0 else tr.header["f1"]
-    n_neg = -int(round(f1 / dt))
-    if not 0 <= n_neg < tr.ns:
-        raise ValueError(f"wavelet {path} does not straddle time zero (f1={f1})")
-    return Wavelet(np.asarray(tr.data, dtype=float), dt, n_neg)
+    n_neg = -int(round(ts.t0[0] / ts.dt))
+    if not 0 <= n_neg < ts.n_samples:
+        raise ValueError(f"wavelet {path} does not straddle time zero (t0={ts.t0[0]})")
+    return Wavelet(np.asarray(ts.data[0], dtype=float), ts.dt, n_neg)
 
 
 def _next_pow2(n: int) -> int:
@@ -96,6 +96,14 @@ class StackModel:
     theta_sq_denominator: float  # Dix: theta^2 = vp^2 / this
     wavelet: Wavelet
     stack: Stack
+    use: np.ndarray  # (n_err,) False inside seismic-likelihood exclusion windows
+    times: np.ndarray  # (n_err,) times of the error points
+
+    def theta_sq(self, vp_above: np.ndarray, B: np.ndarray) -> np.ndarray:
+        """Squared incidence angle times the AVO gradient factor B."""
+        if self.stack.angle is not None:
+            return B * self.stack.angle**2
+        return B * vp_above**2 / self.theta_sq_denominator
 
 
 @dataclass
@@ -172,6 +180,7 @@ def build_seismic_model(
 
     dt_err, correction = error_sampling_interval(wavelets[0])
     delta_j = int(round(dt_err / dt))
+    windows = exclusion_windows(cfg, wavelets)
 
     stack_models = []
     n_err = 0
@@ -200,8 +209,40 @@ def build_seismic_model(
         wp = w.padded(n)
         G = wp[(j[:, None] - np.arange(ns)[None, :]) % n]
         denom = stack.stack_velocity**4 * stack.reflector_time**2 / stack.offset_mean_square
+        use = np.ones(n_coarse, dtype=bool)
+        for a, b in windows:
+            use &= ~((t > a) & (t < b))
         stack_models.append(
-            StackModel(G, observed, correction / stack.noise_rms, denom, w, stack)
+            StackModel(G, observed, correction / stack.noise_rms, denom, w, stack, use, t)
         )
         n_err += n_coarse
     return SeismicModel(t_start, t_end, dt, ns, stack_models, n_err, correction)
+
+
+def exclusion_windows(cfg: ModelConfig, wavelets: list[Wavelet]) -> list[tuple[float, float]]:
+    """Time windows excluded from the seismic misfit (vertical model stacking).
+
+    For an XML range (start_layer, end_layer) the window runs from 3 prior
+    sigma plus the wavelet's positive-time length above the start layer's top
+    to 3 sigma plus the negative-time length below the top of the layer after
+    end_layer (or t_base), as in Java Delivery.
+    """
+    nl = cfg.n_layers
+    after = max(w.reach_after for w in wavelets)
+    before = max(w.reach_before for w in wavelets)
+    out = []
+    for start, end in cfg.exclusions:
+        if start <= 0:
+            a = math.inf
+        else:
+            lay = cfg.layers[start - 1]
+            a = lay.time - after - 3.0 * lay.sigma_time
+        if end > nl:
+            b = -math.inf
+        elif end < nl:
+            lay = cfg.layers[end]
+            b = lay.time + before + 3.0 * lay.sigma_time
+        else:
+            b = cfg.t_base + before + 3.0 * cfg.sigma_t_base
+        out.append((a, b))
+    return out

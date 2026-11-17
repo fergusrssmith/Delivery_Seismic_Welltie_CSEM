@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pydelivery"
-version = "0.1.0"
+version = "0.2.0"
 description = "Python port of Delivery: Bayesian trace-based seismic inversion with discrete fluid states and pinch-outs"
 readme = "README.md"
 license = { text = "GPL-2.0-or-later" }
 requires-python = ">=3.10"
-dependencies = ["numpy>=1.24"]
+dependencies = ["numpy>=1.24", "h5py>=3.8"]
 
 [project.optional-dependencies]
 test = ["pytest"]
