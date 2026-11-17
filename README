@@ -1,3 +1,27 @@
+ABOUT THIS FORK
+================================================================
+
+This repository is a fork of CSIRO's Delivery code
+(https://github.com/csiro/Delivery_Seismic_Welltie_CSEM).
+
+It adds an AI-assisted rewrite of the seismic inverter ("delivery") in
+Python, in the python/ folder. The rewrite was made with Claude (Anthropic)
+and checked against the original Java code on its example problems. It keeps
+Delivery's discrete geology (fluid states, fluid contacts, pinch-outs), runs
+without Java or Seismic Unix, and reads and writes HDF5, NumPy (.npz) and
+SEG-Y files.
+
+  python/README.md                        how to install and run it
+  python/examples/synthetic_wedge.ipynb   step-by-step tutorial notebook
+
+The wavelet extractor and the CSEM codes are not yet ported. The original
+Java, C and Fortran code below is unchanged, and its README follows.
+Delivery and its method are the work of James Gunning (CSIRO / BHP
+Billiton); licence terms are as in the original (GPL).
+
+================================================================
+
+
 INTRODUCTION
 ---------------------------------------------------------------- 
 
