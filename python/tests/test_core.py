@@ -135,3 +135,20 @@ def _with_times(model, top, base):
     m = model.prior_mean.copy()
     m[model.index[("t", 1)]], m[model.index[("t", 2)]] = top, base
     return m
+
+
+def test_kmeans_facies_names_clusters_by_nearest_facies():
+    from pydelivery.qc import classify_facies, kmeans
+
+    rng = np.random.default_rng(0)
+    X = np.concatenate([rng.normal(0, 0.1, (200, 2)), rng.normal(3, 0.1, (100, 2))])
+    lab, C = kmeans(X, 2)
+    assert sorted(np.bincount(lab)) == [100, 200]
+    facies = [{"name": "shale", "Zp": 6.6e6, "Zs": 2.6e6}, {"name": "gas sand", "Zp": 5.3e6, "Zs": 3.0e6}]
+    Zp = np.concatenate([rng.normal(6.6e6, 2e4, 300), rng.normal(5.3e6, 2e4, 50)])
+    Zs = np.concatenate([rng.normal(2.6e6, 1e4, 300), rng.normal(3.0e6, 1e4, 50)])
+    names, C, nearest = classify_facies(Zp, Zs, facies)
+    assert (names[:300] == 0).all() and (names[300:] == 1).all()
+    # three clusters on two facies: two clusters share a name rather than mislabel
+    names3, _, nearest3 = classify_facies(Zp, Zs, facies + [{"name": "brine sand", "Zp": 6.5e6, "Zs": 3.2e6}])
+    assert (names3[300:] == 1).all() and (names3[:300] == 0).all()
