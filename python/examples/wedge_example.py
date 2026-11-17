@@ -111,12 +111,14 @@ def ricker(f, dt=0.004, half=16):
     return t, (1 - 2 * (np.pi * f * t) ** 2) * np.exp(-(np.pi * f * t) ** 2)
 
 
-def build_wedge(work, n_traces=200, seed=42, noise=0.01, angles=None, frequencies=None):
+def build_wedge(work, n_traces=200, seed=42, noise=0.01, angles=None, frequencies=None, fluid="gas"):
     """Write the wedge project into ``work``; return a dict with the truth.
 
     With ``angles`` (a list of (min, max) degrees) the data are partial-angle
     stacks; ``frequencies`` gives each stack's Ricker peak frequency (default
     30 Hz falling by 3 Hz per stack, as far stacks are usually lower band).
+    ``fluid`` is the true pore fluid of the sand, "gas" or "brine" (the prior
+    still allows both).
     """
     work = Path(work)
     work.mkdir(exist_ok=True)
@@ -159,7 +161,8 @@ def build_wedge(work, n_traces=200, seed=42, noise=0.01, angles=None, frequencie
         cfg_i = apply_prior_trace(cfg, table, i)
         blank = TraceSet(np.zeros((1, ns)), dt, t0)[0]
         seis = build_seismic_model(cfg_i, [blank] * n_stacks, w)
-        gas = next(s for s in enumerate_fluid_states(cfg_i) if s.label == "bgb")
+        label = {"gas": "bgb", "brine": "bbb"}[fluid]
+        gas = next(s for s in enumerate_fluid_states(cfg_i) if s.label == label)
         model = StateModel(cfg_i, gas, seis)
         m = model.prior_mean.copy()
         m[model.index[("t", 1)]] = top_true[i]
