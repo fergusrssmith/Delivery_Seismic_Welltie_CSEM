@@ -338,8 +338,8 @@ def implied_properties(cfg: ModelConfig):
     df = df.set_index(["layer", "fluid"])
     df.attrs["note"] = (
         "Prior-mean properties after mixing and fluid substitution. The "
-        "reflection column shows how strongly each layer/fluid combination "
-        "would show up in the near stack: this is what lets the seismic tell "
+        "reflection columns show how strongly each layer/fluid combination "
+        "would show up in each stack: this is what lets the seismic tell "
         "the cases apart.")
     return df
 
