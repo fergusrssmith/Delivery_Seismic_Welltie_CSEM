@@ -53,6 +53,13 @@ with the contacts known, then starts from wrong contact depths to show the
 seismic finding the true ones, and why depth control matters. It includes
 the same QC display (about three minutes on four cores).
 
+`examples/lateral_continuity.ipynb` (experimental) compares trace-by-trace
+inversion of the wedge with `pydelivery.lateral`, which adds a spatially
+correlated prior on rock properties along a line, the Bayesian counterpart of
+spatial (Laplacian) regularisation. It removes most of the trace-to-trace
+striping without changing the fit, the geometry or the fluid and pinch-out
+answers (about 13 minutes).
+
 For your own QC, `pydelivery.qc.posterior_sections(results, times)` returns
 posterior-mean impedance and synthetic sections, and `pydelivery.qc.plot_qc`
 draws the five panels. `Inversion.run(..., n_jobs=-1)` inverts traces in
