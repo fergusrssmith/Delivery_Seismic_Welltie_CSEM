@@ -25,6 +25,32 @@ geology of that model. It does not replace it with a generic smooth inversion.
 | **Multi-modality** | `modes.py` finds local modes for every fluid state, including deliberately pinched-out starts, with Laplace masses. |
 | **Jumps between fluid states** | `sampler.py`: reversible-jump, mode-jumping MCMC (paper section 4.3, Appendix 6). |
 
+## Seismic stacks
+
+Any number of PP stacks can be inverted together. A stack is defined either
+as Delivery defines it, by an offset range plus a reflector time and stacking
+velocity (the angle follows from Dix), or by an **angle range**, as partial
+stacks are usually delivered:
+
+```xml
+<seismic_data reflectivity="aki-richards">
+  <stack>
+    <name>near</name><filename>near.sgy</filename>
+    <min_angle>5</min_angle><max_angle>15</max_angle>
+    <wavelet><filename>near_wavelet.h5</filename><noise_rms>0.01</noise_rms></wavelet>
+  </stack>
+  <stack>... mid 15-25 ...</stack>
+  <stack>... far 25-35 ...</stack>
+</seismic_data>
+```
+
+Each stack has its own wavelet and noise level (the noise can vary trace by
+trace through `noise_rms_<stack name>` in the prior table). Stacks are put in
+order near to far. `reflectivity` is `delivery` (the default: the original
+small-angle form, θ² for both sin²θ and tan²θ) or `aki-richards` (sin²θ and
+tan²θ averaged over the stack's angles), which is the better choice beyond
+about 25°.
+
 PS (converted-wave) stacks are not supported. Depth self-consistency is not
 implemented; it is also switched off in the Java build.
 
@@ -62,9 +88,16 @@ answers. A K-means facies classification of the results (`pydelivery.qc.
 classify_facies`) tests whether the striping changes the interpretation; here
 it does not (about 13 minutes).
 
+`examples/partial_stacks.ipynb` records the same wedge as three partial-angle
+stacks (5-15°, 15-25°, 25-35°) and inverts them simultaneously, against the
+5-15° stack alone. It shows what the far angles add: the shear contrast and
+the sand's vp/vs become constrained by the data rather than by the
+rock-physics prior, which is what makes an AI-SI cross-plot meaningful.
+
 For your own QC, `pydelivery.qc.posterior_sections(results, times)` returns
 posterior-mean impedance and synthetic sections, and `pydelivery.qc.plot_qc`
-draws the five panels. `Inversion.run(..., n_jobs=-1)` inverts traces in
+draws the five panels; `pydelivery.qc.plot_stack_qc` shows input, synthetic
+and residual for every stack. `Inversion.run(..., n_jobs=-1)` inverts traces in
 parallel.
 
 ## Data formats
@@ -73,7 +106,7 @@ parallel.
 |---|---|---|
 | Seismic stack | `data` (n_traces, n_samples), `dt` (s), `t0` (s, per trace), optional `headers/…` | yes |
 | Wavelet | same, one trace, `t0` < 0 (the precursor) | yes, if `t0` is a whole number of ms |
-| Prior table (areally varying priors) | one array per XML tag: `time` (n_traces, n_layers + 1, ms, base last), `net_to_gross` (n_traces, n_layers), `contact_depth` (n_traces, n_contacts), `near_stack_noise_rms` (n_traces,), … NaN = use the XML value | no |
+| Prior table (areally varying priors) | one array per XML tag: `time` (n_traces, n_layers + 1, ms, base last), `net_to_gross` (n_traces, n_layers), `contact_depth` (n_traces, n_contacts), `noise_rms_<stack>` or `near_stack_noise_rms` (n_traces,), … NaN = use the XML value | no |
 | Results | `samples/<property>` (n_traces, n_samples, n_layers) or (n_traces, n_samples), `headers/…`, `fluid_states`, layer names | no |
 
 The model itself stays in the Delivery `ModelDescription.xml` format; its

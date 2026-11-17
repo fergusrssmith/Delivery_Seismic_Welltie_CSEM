@@ -75,6 +75,44 @@ def plot_qc(times, seismic, Z_true, Z_est, synthetic, *, x=None, Z_sample=None,
     return fig, {"rms_seismic": rms(seismic), "rms_residual": rms(residual)}
 
 
+def plot_stack_qc(times, seismic: dict, synthetic: dict, *, x=None, time_range=None, title=None):
+    """One row per stack: input seismic, synthetic of the estimate, residual.
+
+    ``seismic`` and ``synthetic`` map stack name to (n_traces, n_times)
+    arrays. All panels share one amplitude scale, so stacks with stronger
+    AVO response look stronger. Returns (figure, {name: residual RMS}).
+    """
+    import matplotlib.pyplot as plt
+
+    names = list(seismic)
+    t_ms = 1000 * np.asarray(times)
+    n = next(iter(seismic.values())).shape[0]
+    x = np.arange(1, n + 1) if x is None else np.asarray(x)
+    half = 0.5 * (t_ms[1] - t_ms[0])
+    extent = [x[0] - 0.5, x[-1] + 0.5, t_ms[-1] + half, t_ms[0] - half]
+    clip = np.percentile(np.abs(np.concatenate([seismic[k].ravel() for k in names])), 99)
+    fig, axes = plt.subplots(len(names), 3, figsize=(15, 3.2 * len(names)), sharex=True, sharey=True,
+                             squeeze=False)
+    rms = {}
+    for row, k in zip(axes, names):
+        res = seismic[k] - synthetic[k]
+        rms[k] = float(np.sqrt(np.mean(res**2)))
+        for ax, (label, d) in zip(row, [("input", seismic[k]), ("synthetic", synthetic[k]),
+                                        (f"residual (RMS {rms[k]:.3g})", res)]):
+            ax.imshow(d.T, aspect="auto", cmap="seismic_r", vmin=-clip, vmax=clip, extent=extent,
+                      interpolation="nearest")
+            ax.set_title(f"{k}: {label}", fontsize=10)
+        row[0].set_ylabel("time (ms)")
+    if time_range is not None:
+        axes[0, 0].set_ylim(1000 * time_range[1], 1000 * time_range[0])
+    for ax in axes[-1]:
+        ax.set_xlabel("trace")
+    if title:
+        fig.suptitle(title, fontsize=12)
+    fig.tight_layout()
+    return fig, rms
+
+
 # ----------------------------------------------------------------------------
 # facies classification
 
