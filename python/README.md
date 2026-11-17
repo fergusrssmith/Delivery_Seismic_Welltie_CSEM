@@ -36,6 +36,14 @@ pip install -e .[test]      # numpy and h5py
 pytest
 ```
 
+## Tutorial
+
+`examples/synthetic_wedge.ipynb` walks through a complete run step by step:
+build a gas sand wedge that pinches out, make its seismic, invert it from
+rough picks, and compare the posterior thickness, pinch-out probability and
+gas probability with the truth. It is committed with its outputs; re-run it
+with `jupyter notebook examples/synthetic_wedge.ipynb` (about two minutes).
+
 ## Data formats
 
 | Kind | HDF5 (`.h5`) / NumPy (`.npz`) contents | SEG-Y |
